@@ -20,7 +20,7 @@ export default function StudentLife() {
             />
 
             {/* Daily Life at Anushtan */}
-            <section id="daily" className="py-20 bg-anushtan-ivory">
+            <section id="daily" className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="The Daily Rhythm" />
                     <p className="text-lg text-anushtan-charcoal/80 leading-relaxed">
@@ -30,7 +30,7 @@ export default function StudentLife() {
             </section>
 
             {/* Physical Education & Sports */}
-            <section id="sports" className="py-20 bg-white">
+            <section id="sports" className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Physical Education & Sports" />
                     <p className="text-lg text-anushtan-charcoal/80 leading-relaxed">
@@ -40,7 +40,7 @@ export default function StudentLife() {
             </section>
 
             {/* Cultural & Experiential Learning */}
-            <section id="culture" className="py-20 bg-anushtan-ivory">
+            <section id="culture" className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Cultural & Experiential Learning" />
                     <p className="text-lg text-anushtan-charcoal/80 leading-relaxed mb-6">

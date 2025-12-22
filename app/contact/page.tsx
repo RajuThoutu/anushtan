@@ -20,7 +20,7 @@ export default function Contact() {
             />
 
             {/* Contact Details */}
-            <section id="details" className="py-20 bg-anushtan-ivory">
+            <section id="details" className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                     <div className="p-6">
                         <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon">Address</h3>
@@ -48,7 +48,7 @@ export default function Contact() {
             </section>
 
             {/* Schedule a Visit Form */}
-            <section id="visit" className="py-20 bg-white">
+            <section id="visit" className="py-20 bg-transparent">
                 <div className="container-custom max-w-2xl mx-auto">
                     <SectionHeader title="Schedule a Visit" />
                     <div className="bg-anushtan-ivory p-8 rounded-lg border border-anushtan-border text-center text-anushtan-charcoal/50 py-16">
@@ -58,7 +58,7 @@ export default function Contact() {
             </section>
 
             {/* Map */}
-            <section id="map" className="py-20 bg-anushtan-ivory">
+            <section id="map" className="py-20 bg-transparent">
                 <div className="container-custom">
                     <SectionHeader title="Location" />
                     <div className="h-96 bg-white rounded-lg flex items-center justify-center text-anushtan-charcoal/30 border border-anushtan-border">

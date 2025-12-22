@@ -16,7 +16,7 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center bg-anushtan-ivory overflow-hidden">
+      <section className="relative min-h-[80vh] flex items-center justify-center bg-transparent overflow-hidden">
         <div className="container-custom relative z-10 text-center">
           <h1 className="font-heading text-5xl md:text-7xl font-bold text-anushtan-maroon mb-6 leading-tight">
             Anushtan Indic School
@@ -36,7 +36,7 @@ export default function Home() {
       </section>
 
       {/* Quote Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-transparent">
         <div className="container-custom max-w-4xl mx-auto text-center">
           <blockquote className="font-heading text-2xl md:text-3xl italic text-anushtan-charcoal mb-6 relative px-8">
             <span className="absolute left-0 top-0 text-6xl text-anushtan-gold opacity-30">“</span>
@@ -53,7 +53,7 @@ export default function Home() {
       </section>
 
       {/* Institutional Overview */}
-      <section className="py-20 bg-anushtan-ivory">
+      <section className="py-20 bg-transparent">
         <div className="container-custom">
           <SectionHeader title="Institutional Overview" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -80,7 +80,7 @@ export default function Home() {
       </section>
 
       {/* Campus */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-transparent">
         <div className="container-custom">
           <SectionHeader title="Campus Environment" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">

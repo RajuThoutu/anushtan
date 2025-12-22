@@ -21,7 +21,7 @@ export default function Academics() {
             />
 
             {/* Learning Domains */}
-            <section className="py-20 bg-anushtan-ivory">
+            <section className="py-20 bg-transparent">
                 <div className="container-custom">
                     <SectionHeader title="Learning Domains" />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -50,7 +50,7 @@ export default function Academics() {
             </section>
 
             {/* Grade-Wise Weightage */}
-            <section className="py-20 bg-white">
+            <section className="py-20 bg-transparent">
                 <div className="container-custom">
                     <SectionHeader title="Curriculum Emphasis" />
                     <div className="overflow-x-auto bg-white rounded-lg border border-anushtan-border">
@@ -97,7 +97,7 @@ export default function Academics() {
             </section>
 
             {/* Assessment & Evaluation */}
-            <section className="py-20 bg-anushtan-ivory">
+            <section className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Assessment & Evaluation" />
                     <p className="text-lg text-anushtan-charcoal/80 leading-relaxed">

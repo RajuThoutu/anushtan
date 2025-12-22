@@ -15,7 +15,7 @@ export default function Campus() {
             />
 
             {/* Campus as a Silent Teacher */}
-            <section id="environment" className="py-20 bg-surface">
+            <section id="environment" className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Campus as a Silent Teacher" />
                     <p className="text-lg text-text/80 leading-relaxed mb-8">
@@ -25,7 +25,7 @@ export default function Campus() {
             </section>
 
             {/* Facilities */}
-            <section id="facilities" className="py-20 bg-background">
+            <section id="facilities" className="py-20 bg-transparent">
                 <div className="container-custom">
                     <SectionHeader title="Facilities" />
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -46,7 +46,7 @@ export default function Campus() {
             </section>
 
             {/* Gallery */}
-            <section id="gallery" className="py-20 bg-surface">
+            <section id="gallery" className="py-20 bg-transparent">
                 <div className="container-custom">
                     <SectionHeader title="Gallery" />
                     <div className="h-96 bg-background border border-text/10 rounded-lg flex items-center justify-center text-text/30">

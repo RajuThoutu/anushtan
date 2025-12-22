@@ -20,7 +20,7 @@ export default function TeachersCommunity() {
             />
 
             {/* Role of Teachers & Acharyas */}
-            <section id="acharyas" className="py-20 bg-anushtan-ivory">
+            <section id="acharyas" className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Role of Teachers" />
                     <p className="text-lg text-anushtan-charcoal/80 leading-relaxed max-w-3xl mx-auto mb-12">
@@ -30,7 +30,7 @@ export default function TeachersCommunity() {
             </section>
 
             {/* Parent Partnership */}
-            <section id="parents" className="py-20 bg-white">
+            <section id="parents" className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Parent Partnership" />
                     <p className="text-lg text-anushtan-charcoal/80 leading-relaxed mb-8">
@@ -40,7 +40,7 @@ export default function TeachersCommunity() {
             </section>
 
             {/* Community Engagement */}
-            <section id="community" className="py-20 bg-anushtan-ivory">
+            <section id="community" className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Community Engagement" />
                     <p className="text-lg text-anushtan-charcoal/80 leading-relaxed mb-8">

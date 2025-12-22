@@ -20,7 +20,7 @@ export default function About() {
             />
 
             {/* Why Anushtan Exists */}
-            <section className="py-20 bg-anushtan-ivory">
+            <section className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Institutional Vision" />
                     <p className="text-lg text-anushtan-charcoal/80 leading-relaxed mb-8">
@@ -30,7 +30,7 @@ export default function About() {
             </section>
 
             {/* Vision of the Student */}
-            <section className="py-20 bg-white">
+            <section className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="The Student Profile" />
                     <ul className="space-y-4">
@@ -55,7 +55,7 @@ export default function About() {
             </section>
 
             {/* Philosophy */}
-            <section className="py-20 bg-anushtan-ivory">
+            <section className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Educational Philosophy" />
                     <p className="text-lg text-anushtan-charcoal/80 leading-relaxed mb-6">

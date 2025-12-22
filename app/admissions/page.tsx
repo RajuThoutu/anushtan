@@ -21,7 +21,7 @@ export default function Admissions() {
             />
 
             {/* Admission Process */}
-            <section id="process" className="py-20 bg-anushtan-ivory">
+            <section id="process" className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Admission Process" />
                     <div className="space-y-6">
@@ -46,7 +46,7 @@ export default function Admissions() {
             </section>
 
             {/* Eligibility */}
-            <section id="eligibility" className="py-20 bg-white">
+            <section id="eligibility" className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Eligibility" />
                     <p className="text-lg text-anushtan-charcoal/80 leading-relaxed mb-8">
@@ -56,7 +56,7 @@ export default function Admissions() {
             </section>
 
             {/* Fee Structure */}
-            <section id="fees" className="py-20 bg-anushtan-ivory">
+            <section id="fees" className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Fee Structure" />
                     <p className="text-lg text-anushtan-charcoal/80 leading-relaxed mb-8">
@@ -66,7 +66,7 @@ export default function Admissions() {
             </section>
 
             {/* FAQs */}
-            <section id="faqs" className="py-20 bg-white">
+            <section id="faqs" className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="FAQs" />
                     <div className="space-y-6">
