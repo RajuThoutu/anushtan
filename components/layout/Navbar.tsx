@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { Button } from "../ui/Button";
 
@@ -22,9 +23,7 @@ export function Navbar() {
             <div className="container-custom flex h-20 items-center justify-between">
                 {/* Logo Placeholder */}
                 <Link href="/" className="flex items-center gap-2">
-                    <div className="h-10 w-10 bg-primary/20 flex items-center justify-center rounded-full text-primary font-bold text-xs">
-                        [LOGO]
-                    </div>
+                    <Image src="/logo.jpg" alt="Anushtan Logo" width={40} height={40} className="rounded-full object-contain" />
                     <span className="font-heading text-xl font-bold text-secondary">
                         Anushtan
                     </span>

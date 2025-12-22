@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react";
 
 export function Footer() {
@@ -8,9 +9,7 @@ export function Footer() {
                 {/* Brand */}
                 <div className="col-span-1 md:col-span-1">
                     <div className="flex items-center gap-2 mb-4">
-                        <div className="h-8 w-8 bg-white/10 flex items-center justify-center rounded-full text-xs">
-                            [LOGO]
-                        </div>
+                        <Image src="/logo.jpg" alt="Anushtan Logo" width={32} height={32} className="rounded-full object-contain bg-white" />
                         <span className="font-heading text-xl font-bold">Anushtan</span>
                     </div>
                     <p className="text-white/80 text-sm leading-relaxed mb-6">
