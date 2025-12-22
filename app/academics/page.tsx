@@ -4,74 +4,98 @@ import { Hero } from "@/components/sections/Hero";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Card } from "@/components/ui/Card";
 
-export default function AcademicsPage() {
+export default function Academics() {
     return (
         <>
             <Navbar />
             <Hero
                 title="Academics"
-                subtitle="A rigorous curriculum designed to foster intellectual curiosity and deep understanding."
-                background="bg-primary/5"
+                subtitle="Curriculum framework, learning domains, grade progression, and assessment approach."
+                background="bg-primary"
             />
 
-            <section className="py-24 bg-background">
+            {/* Learning Domains */}
+            <section className="py-20 bg-surface">
                 <div className="container-custom">
-                    <SectionHeader title="Curriculum Framework" />
-                    <p className="text-center max-w-3xl mx-auto text-text/80 mb-16">
-                        [Overview placeholder: We follow a blended curriculum that integrates [Board Name] standards with Indic knowledge systems.]
-                    </p>
-
-                    <div className="space-y-12">
-                        {/* Primary */}
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-                            <div className="md:col-span-5 bg-surface h-64 rounded-lg flex items-center justify-center border border-text/10">[IMAGE_PRIMARY]</div>
-                            <div className="md:col-span-7">
-                                <h3 className="font-heading text-2xl font-bold mb-4 text-primary">Primary Years (Grades 1-5)</h3>
-                                <p className="text-text/70 mb-4">[Placeholder description of the primary years methodology, focusing on play, inquiry, and foundational skills.]</p>
-                                <ul className="list-disc list-inside text-text/70 space-y-1">
-                                    <li>Language & Storytelling</li>
-                                    <li>Mathematics in Nature</li>
-                                    <li>Arts & Movement</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        {/* Middle */}
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-                            <div className="md:col-span-7 order-2 md:order-1">
-                                <h3 className="font-heading text-2xl font-bold mb-4 text-primary">Middle Years (Grades 6-8)</h3>
-                                <p className="text-text/70 mb-4">[Placeholder description of middle years, introducing more structured subjects and critical thinking.]</p>
-                                <ul className="list-disc list-inside text-text/70 space-y-1">
-                                    <li>Sciences & Laboratory</li>
-                                    <li>History & Civics</li>
-                                    <li>Classical Languages</li>
-                                </ul>
-                            </div>
-                            <div className="md:col-span-5 order-1 md:order-2 bg-surface h-64 rounded-lg flex items-center justify-center border border-text/10">[IMAGE_MIDDLE]</div>
-                        </div>
-
-                        {/* Secondary */}
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-                            <div className="md:col-span-5 bg-surface h-64 rounded-lg flex items-center justify-center border border-text/10">[IMAGE_SECONDARY]</div>
-                            <div className="md:col-span-7">
-                                <h3 className="font-heading text-2xl font-bold mb-4 text-primary">Secondary Years (Grades 9-12)</h3>
-                                <p className="text-text/70 mb-4">[Placeholder description of secondary education, focusing on board exams, career guidance, and deep subject matter expertise.]</p>
-                                <ul className="list-disc list-inside text-text/70 space-y-1">
-                                    <li>Advanced Sciences & Commerce</li>
-                                    <li>Research Projects</li>
-                                    <li>Leadership Development</li>
-                                </ul>
-                            </div>
-                        </div>
+                    <SectionHeader title="Learning Domains" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <Card>
+                            <h3 className="font-heading text-xl font-bold mb-2">Academic Foundations</h3>
+                            <p className="text-text/70">Mathematics, sciences, languages, and analytical thinking.</p>
+                        </Card>
+                        <Card>
+                            <h3 className="font-heading text-xl font-bold mb-2">Physical Education</h3>
+                            <p className="text-text/70">Daily sports, yoga, fitness, stamina, teamwork.</p>
+                        </Card>
+                        <Card>
+                            <h3 className="font-heading text-xl font-bold mb-2">Cultural Learning</h3>
+                            <p className="text-text/70">Values, heritage, tradition integrated into daily life.</p>
+                        </Card>
+                        <Card>
+                            <h3 className="font-heading text-xl font-bold mb-2">Experiential Learning</h3>
+                            <p className="text-text/70">Nature, agriculture, community exposure, projects.</p>
+                        </Card>
+                        <Card>
+                            <h3 className="font-heading text-xl font-bold mb-2">Inner Discipline</h3>
+                            <p className="text-text/70">Mindfulness, reflection, routines, self-regulation.</p>
+                        </Card>
                     </div>
                 </div>
             </section>
 
-            <section className="py-24 bg-surface">
-                <div className="container-custom text-center">
-                    <SectionHeader title="Assessment Approach" />
-                    <p className="text-text/80 max-w-3xl mx-auto">
-                        [Placeholder describing continuous comprehensive evaluation, moving away from rote memorization towards understanding and application.]
+            {/* Grade-Wise Weightage */}
+            <section className="py-20 bg-background">
+                <div className="container-custom">
+                    <SectionHeader title="Grade-Wise Weightage" />
+                    <div className="overflow-x-auto bg-surface rounded-lg shadow-sm border border-border">
+                        <table className="w-full text-left border-collapse">
+                            <thead>
+                                <tr className="bg-primary/5 border-b border-border">
+                                    <th className="p-4 font-heading font-bold text-secondary">Grade Band</th>
+                                    <th className="p-4 font-heading font-bold text-secondary">Academics</th>
+                                    <th className="p-4 font-heading font-bold text-secondary">Physical</th>
+                                    <th className="p-4 font-heading font-bold text-secondary">Cultural</th>
+                                    <th className="p-4 font-heading font-bold text-secondary">Experiential</th>
+                                    <th className="p-4 font-heading font-bold text-secondary">Inner Discipline</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr className="border-b border-border hover:bg-background/50">
+                                    <td className="p-4 font-medium">Primary (1–5)</td>
+                                    <td className="p-4">35%</td>
+                                    <td className="p-4">25%</td>
+                                    <td className="p-4">20%</td>
+                                    <td className="p-4">10%</td>
+                                    <td className="p-4">10%</td>
+                                </tr>
+                                <tr className="border-b border-border hover:bg-background/50">
+                                    <td className="p-4 font-medium">Middle (6–8)</td>
+                                    <td className="p-4">45%</td>
+                                    <td className="p-4">20%</td>
+                                    <td className="p-4">15%</td>
+                                    <td className="p-4">10%</td>
+                                    <td className="p-4">10%</td>
+                                </tr>
+                                <tr className="hover:bg-background/50">
+                                    <td className="p-4 font-medium">Secondary (9–12)</td>
+                                    <td className="p-4">55%</td>
+                                    <td className="p-4">15%</td>
+                                    <td className="p-4">10%</td>
+                                    <td className="p-4">10%</td>
+                                    <td className="p-4">10%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            {/* Assessment & Evaluation */}
+            <section className="py-20 bg-surface">
+                <div className="container-custom max-w-4xl mx-auto">
+                    <SectionHeader title="Assessment & Evaluation" />
+                    <p className="text-lg text-text/80 leading-relaxed">
+                        Assessment supports growth through conceptual understanding, continuous observation, constructive feedback, and structured exams without fear-based pressure.
                     </p>
                 </div>
             </section>

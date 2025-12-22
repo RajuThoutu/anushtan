@@ -1,14 +1,26 @@
-@import "tailwindcss";
+```css @import "tailwindcss";
 
 :root {
-  /* Brand Colors */
-  --color-primary: #C46A1A;    /* Saffron */
-  --color-secondary: #6B1F1A;  /* Deep Maroon */
-  --color-accent: #B89B5E;     /* Muted Gold */
-  --color-background: #FBF6EF; /* Warm Ivory */
-  --color-surface: #FFFFFF;    /* White */
-  --color-text: #2B2B2B;       /* Charcoal */
-  
+  --background: #FBF6EF;
+  /* Ivory */
+  --foreground: #2B2B2B;
+  /* Charcoal */
+
+  --primary: #C46A1A;
+  /* Saffron */
+  --primary-foreground: #ffffff;
+
+  --secondary: #6B1F1A;
+  /* Maroon */
+  --secondary-foreground: #ffffff;
+
+  --accent: #B89B5E;
+  /* Gold */
+  --accent-foreground: #2B2B2B;
+
+  --surface: #ffffff;
+  --border: #e5e5e5;
+
   /* Layout */
   --radius: 0.5rem;
 }
