@@ -1,65 +1,190 @@
-import Image from "next/image";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+import { Hero } from "@/components/sections/Hero";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { ArrowRight, BookOpen, User, MapPin, Sparkles } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+      <Navbar />
+
+      {/* 1) Hero Section */}
+      <Hero
+        title="Anushtan Indic School"
+        subtitle="Where timeless wisdom meets modern excellence. Creating the next generation of conscious leaders."
+        align="center"
+        background="bg-background"
+      >
+        <Button size="lg" href="/admissions">Apply Now</Button>
+        <Button size="lg" variant="outline" href="/about">Discover Our Vision</Button>
+      </Hero>
+
+      {/* 2) Vivekananda Quote Section */}
+      <section className="bg-secondary py-20 text-white relative overflow-hidden">
+        <div className="container-custom grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="order-2 lg:order-1">
+            <blockquote className="font-heading text-3xl md:text-4xl italic leading-relaxed mb-6">
+              "Education is the manifestation of the perfection already in man."
+            </blockquote>
+            <cite className="block text-xl font-medium text-amber-200 not-italic">
+              — Swami Vivekananda
+            </cite>
+          </div>
+          <div className="order-1 lg:order-2 h-80 lg:h-full bg-white/10 rounded-lg flex items-center justify-center border border-white/20">
+            <span className="text-white/50 text-center px-4">[VIVEKANANDA_IMAGE_HERE]</span>
+          </div>
+        </div>
+      </section>
+
+      {/* 3) Why Anushtan Exists */}
+      <section className="py-24 bg-surface">
+        <div className="container-custom">
+          <SectionHeader title="Why Anushtan Exists" subtitle="Bridging the gap between cultural roots and future capabilities." />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card hoverEffect className="text-center">
+              <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary"><Sparkles /></div>
+              <h3 className="font-heading text-xl font-bold mb-2">Character First</h3>
+              <p className="text-sm text-text/70">[Short description about character building]</p>
+            </Card>
+            <Card hoverEffect className="text-center">
+              <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary"><BookOpen /></div>
+              <h3 className="font-heading text-xl font-bold mb-2">Academic Rigor</h3>
+              <p className="text-sm text-text/70">[Short description about academic excellence]</p>
+            </Card>
+            <Card hoverEffect className="text-center">
+              <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary"><User /></div>
+              <h3 className="font-heading text-xl font-bold mb-2">Holistic Growth</h3>
+              <p className="text-sm text-text/70">[Short description about physical and mental growth]</p>
+            </Card>
+            <Card hoverEffect className="text-center">
+              <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary"><MapPin /></div>
+              <h3 className="font-heading text-xl font-bold mb-2">Global Vision</h3>
+              <p className="text-sm text-text/70">[Short description about global perspective]</p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* 4) Educational Philosophy Snapshot */}
+      <section className="py-24 bg-background">
+        <div className="container-custom">
+          <SectionHeader title="Our Educational Philosophy" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="p-6 border-l-4 border-primary bg-surface/50">
+              <h4 className="font-heading text-xl font-bold mb-2">The Integrated Self</h4>
+              <p className="text-text/70">[Placeholder text about integrating mind, body, and spirit in education.]</p>
+            </div>
+            <div className="p-6 border-l-4 border-secondary bg-surface/50">
+              <h4 className="font-heading text-xl font-bold mb-2">Learning by Doing</h4>
+              <p className="text-text/70">[Placeholder text about experiential and hands-on learning methodologies.]</p>
+            </div>
+            <div className="p-6 border-l-4 border-accent bg-surface/50">
+              <h4 className="font-heading text-xl font-bold mb-2">Rooted Modernity</h4>
+              <p className="text-text/70">[Placeholder text about combining traditional wisdom with modern science.]</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5) Curriculum Overview */}
+      <section className="py-24 bg-surface">
+        <div className="container-custom">
+          <SectionHeader title="Curriculum Overview" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="flex flex-col h-full">
+              <div className="h-40 bg-background mb-4 rounded flex items-center justify-center text-text/30">[IMAGE]</div>
+              <h3 className="font-heading text-2xl font-bold mb-2">Primary Years</h3>
+              <p className="text-text/70 mb-6 flex-grow">Foundational learning through play, stories, and observation.</p>
+              <Link href="/academics" className="text-primary font-medium inline-flex items-center gap-2 hover:underline">
+                Learn More <ArrowRight size={16} />
+              </Link>
+            </Card>
+            <Card className="flex flex-col h-full">
+              <div className="h-40 bg-background mb-4 rounded flex items-center justify-center text-text/30">[IMAGE]</div>
+              <h3 className="font-heading text-2xl font-bold mb-2">Middle Years</h3>
+              <p className="text-text/70 mb-6 flex-grow">Exploration, critical thinking, and disciplined study habits.</p>
+              <Link href="/academics" className="text-primary font-medium inline-flex items-center gap-2 hover:underline">
+                Learn More <ArrowRight size={16} />
+              </Link>
+            </Card>
+            <Card className="flex flex-col h-full">
+              <div className="h-40 bg-background mb-4 rounded flex items-center justify-center text-text/30">[IMAGE]</div>
+              <h3 className="font-heading text-2xl font-bold mb-2">Secondary Years</h3>
+              <p className="text-text/70 mb-6 flex-grow">Advanced concepts, leadership, and preparation for the world.</p>
+              <Link href="/academics" className="text-primary font-medium inline-flex items-center gap-2 hover:underline">
+                Learn More <ArrowRight size={16} />
+              </Link>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* 6) Student Life Preview */}
+      <section className="py-24 bg-background">
+        <div className="container-custom grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <SectionHeader title="Life at Anushtan" align="left" />
+            <p className="text-lg text-text/80 mb-6">
+              More than just classes. A vibrant community of learners growing together in a serene environment.
+            </p>
+            <ul className="space-y-4 mb-8">
+              <li className="flex items-center gap-3"><span className="h-2 w-2 rounded-full bg-primary" /> Daily Yoga & Meditation</li>
+              <li className="flex items-center gap-3"><span className="h-2 w-2 rounded-full bg-primary" /> Performing Arts & Culture</li>
+              <li className="flex items-center gap-3"><span className="h-2 w-2 rounded-full bg-primary" /> Sports & Physical Fitness</li>
+              <li className="flex items-center gap-3"><span className="h-2 w-2 rounded-full bg-primary" /> Community Service</li>
+            </ul>
+            <Button href="/student-life" variant="outline">Explore Student Life</Button>
+          </div>
+          <div className="h-96 bg-surface border border-text/10 rounded-lg flex items-center justify-center">
+            <span className="text-text/30">[STUDENT_LIFE_COLLAGE_PLACEHOLDER]</span>
+          </div>
+        </div>
+      </section>
+
+      {/* 7) Teachers & Acharyas */}
+      <section className="py-24 bg-surface">
+        <div className="container-custom text-center max-w-4xl mx-auto">
+          <SectionHeader title="Our Acharyas" />
+          <p className="text-lg text-text/80 leading-relaxed mb-8">
+            Our teachers are mentors guiding students on their path of discovery. They combine academic expertise with deep empathy and cultural understanding.
+            [Placeholder for a short paragraph about the role of teachers at Anushtan.]
           </p>
+          <Button href="/teachers-community">Meet Our Faculty</Button>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* 8) Campus Preview */}
+      <section className="py-24 bg-background">
+        <div className="container-custom">
+          <SectionHeader title="The Campus" subtitle="A silent teacher inspiring peace and focus." />
+          <div className="h-64 md:h-96 bg-surface border border-text/10 rounded-lg flex items-center justify-center mb-8">
+            <span className="text-text/30">[CAMPUS_GALLERY_STRIP_PLACEHOLDER]</span>
+          </div>
+          <div className="text-center">
+            <Button href="/campus" variant="outline">Tour Our Campus</Button>
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* 9) Admissions CTA Band */}
+      <section className="bg-secondary text-white py-20 text-center">
+        <div className="container-custom">
+          <h2 className="font-heading text-4xl font-bold mb-6">Begin Your Journey</h2>
+          <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
+            Admissions are open for the upcoming academic year. Join a community dedicated to excellence.
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Button href="/admissions" className="bg-white text-secondary hover:bg-white/90">Apply Now</Button>
+            <Button href="/contact" variant="outline" className="text-white border-white hover:bg-white/10">Contact Us</Button>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </>
   );
 }
