@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "./Button"; // Reusing cn utility
+import { cn } from "./Button";
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
     hoverEffect?: boolean;
@@ -11,8 +11,8 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
             <div
                 ref={ref}
                 className={cn(
-                    "bg-surface rounded-lg border border-primary/10 p-6 shadow-sm",
-                    hoverEffect && "transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:border-primary/30",
+                    "bg-white rounded-lg border border-anushtan-border p-6 shadow-sm",
+                    hoverEffect && "transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:border-anushtan-maroon/20",
                     className
                 )}
                 {...props}
