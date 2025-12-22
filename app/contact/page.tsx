@@ -47,7 +47,7 @@ export default function Contact() {
                 <div className="container-custom max-w-2xl mx-auto">
                     <SectionHeader title="Schedule a Visit" />
                     <div className="bg-surface p-8 rounded-lg shadow-sm border border-primary/10 text-center text-text/50 py-16">
-                        {{ FORM: VISIT_REQUEST }}
+                        {"{{FORM:VISIT_REQUEST}}"}
                     </div>
                 </div>
             </section>

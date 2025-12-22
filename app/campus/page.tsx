@@ -50,7 +50,7 @@ export default function Campus() {
                 <div className="container-custom">
                     <SectionHeader title="Gallery" />
                     <div className="h-96 bg-background border border-text/10 rounded-lg flex items-center justify-center text-text/30">
-                        {{ GALLERY: CAMPUS }}
+                        {"{{GALLERY:CAMPUS}}"}
                     </div>
                 </div>
             </section>
