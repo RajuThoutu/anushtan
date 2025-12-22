@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import Image from "next/image";
 
 const navLinks = [
     { name: "Home", href: "/" },
@@ -20,9 +21,15 @@ export function Navbar() {
     return (
         <nav className="sticky top-0 z-50 w-full border-b border-anushtan-border bg-anushtan-ivory/95 backdrop-blur-md">
             <div className="container-custom flex h-20 items-center justify-between">
-                <Link href="/" className="flex items-center gap-2">
-                    <div className="h-10 w-10 flex items-center justify-center font-bold text-anushtan-maroon bg-anushtan-maroon/10 rounded">
-                        {"{{IMAGE:LOGO}}"}
+                <Link href="/" className="flex items-center gap-3">
+                    <div className="relative h-10 w-10 overflow-hidden rounded-full border border-anushtan-maroon/20">
+                        <Image
+                            src="/logo.jpg"
+                            alt="Anushtan Logo"
+                            fill
+                            className="object-cover"
+                            sizes="40px"
+                        />
                     </div>
                     <span className="font-heading text-xl font-bold text-anushtan-maroon tracking-tight">
                         Anushtan

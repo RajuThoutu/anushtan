@@ -1,12 +1,24 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
     return (
         <footer className="bg-anushtan-charcoal text-anushtan-ivory py-16">
             <div className="container-custom grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-white/10 pb-12">
                 <div className="col-span-1 md:col-span-1">
-                    <Link href="/" className="font-heading text-2xl font-bold text-anushtan-ivory mb-6 block">
-                        Anushtan
+                    <Link href="/" className="flex items-center gap-3 mb-6">
+                        <div className="relative h-8 w-8 overflow-hidden rounded-full border border-white/20">
+                            <Image
+                                src="/logo.jpg"
+                                alt="Anushtan Logo"
+                                fill
+                                className="object-cover"
+                                sizes="32px"
+                            />
+                        </div>
+                        <span className="font-heading text-xl font-bold text-anushtan-ivory">
+                            Anushtan
+                        </span>
                     </Link>
                     <p className="text-anushtan-ivory/70 mb-6 text-sm leading-relaxed">
                         An institutional approach to education integrating academics, physical vitality, cultural grounding, and inner discipline.
