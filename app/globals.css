@@ -1,45 +1,53 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FBF6EF;
-  /* Ivory */
-  --foreground: #2B2B2B;
-  /* Charcoal */
+  /* Strict Anushtan Tokens */
+  --anushtan-saffron: #C46A1A;
+  --anushtan-maroon: #6B1F1A;
+  --anushtan-ivory: #FBF6EF;
+  --anushtan-charcoal: #2B2B2B;
+  --anushtan-gold: #B89B5E;
+  --anushtan-border: rgba(43, 43, 43, 0.15);
 
-  --primary: #C46A1A;
-  /* Saffron */
+  /* Semantic Mappings */
+  --background: var(--anushtan-ivory);
+  --foreground: var(--anushtan-charcoal);
+
+  --primary: var(--anushtan-maroon);
   --primary-foreground: #ffffff;
 
-  --secondary: #6B1F1A;
-  /* Maroon */
+  --secondary: var(--anushtan-saffron);
   --secondary-foreground: #ffffff;
 
-  --accent: #B89B5E;
-  /* Gold */
-  --accent-foreground: #2B2B2B;
+  --accent: var(--anushtan-gold);
+  --accent-foreground: var(--anushtan-charcoal);
 
   --surface: #ffffff;
-  --border: #e5e5e5;
-
-  /* Layout */
-  --radius: 0.5rem;
+  --border: var(--anushtan-border);
 }
 
 @theme {
-  --color-primary: var(--color-primary);
-  --color-secondary: var(--color-secondary);
-  --color-accent: var(--color-accent);
-  --color-background: var(--color-background);
-  --color-surface: var(--color-surface);
-  --color-text: var(--color-text);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-text: var(--foreground);
+  --color-border: var(--border);
 
-  --font-heading: var(--font-playfair), serif;
-  --font-body: Georgia, serif;
+  --color-anushtan-saffron: var(--anushtan-saffron);
+  --color-anushtan-maroon: var(--anushtan-maroon);
+  --color-anushtan-ivory: var(--anushtan-ivory);
+  --color-anushtan-charcoal: var(--anushtan-charcoal);
+  --color-anushtan-gold: var(--anushtan-gold);
+
+  --font-heading: "Playfair Display", serif;
+  --font-body: "Georgia", serif;
 }
 
 body {
-  background-color: var(--color-background);
-  color: var(--color-text);
+  background-color: var(--background);
+  color: var(--foreground);
   font-family: var(--font-body);
 }
 

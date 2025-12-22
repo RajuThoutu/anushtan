@@ -1,72 +1,61 @@
 import Link from "next/link";
-import Image from "next/image";
-import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react";
 
 export function Footer() {
     return (
-        <footer className="bg-secondary text-white pt-16 pb-8">
-            <div className="container-custom grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-                {/* Brand */}
+        <footer className="bg-anushtan-charcoal text-anushtan-ivory py-16">
+            <div className="container-custom grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-white/10 pb-12">
                 <div className="col-span-1 md:col-span-1">
-                    <div className="flex items-center gap-2 mb-4">
-                        <Image src="/logo.jpg" alt="Anushtan Logo" width={32} height={32} className="rounded-full object-contain bg-white" />
-                        <span className="font-heading text-xl font-bold">Anushtan</span>
-                    </div>
-                    <p className="text-white/80 text-sm leading-relaxed mb-6">
-                        An institution dedicated to reviving the timeless wisdom of India
-                        while embracing the best of modern education.
+                    <Link href="/" className="font-heading text-2xl font-bold text-anushtan-ivory mb-6 block">
+                        Anushtan
+                    </Link>
+                    <p className="text-anushtan-ivory/70 mb-6 text-sm leading-relaxed">
+                        An institutional approach to education integrating academics, physical vitality, cultural grounding, and inner discipline.
                     </p>
                     <div className="flex gap-4">
-                        <a href="#" className="text-white/60 hover:text-white"><Facebook size={20} /></a>
-                        <a href="#" className="text-white/60 hover:text-white"><Instagram size={20} /></a>
-                        <a href="#" className="text-white/60 hover:text-white"><Twitter size={20} /></a>
+                        <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-xs">FB</div>
+                        <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-xs">IG</div>
+                        <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-xs">YT</div>
                     </div>
                 </div>
 
-                {/* Quick Links */}
                 <div>
-                    <h3 className="font-heading font-semibold text-lg mb-6">Quick Links</h3>
-                    <ul className="space-y-3 text-sm text-white/80">
-                        <li><Link href="/about" className="hover:text-amber-200">About Us</Link></li>
-                        <li><Link href="/academics" className="hover:text-amber-200">Academics</Link></li>
-                        <li><Link href="/teachers-community" className="hover:text-amber-200">Leadership</Link></li>
-                        <li><Link href="/features" className="hover:text-amber-200">Features</Link></li>
+                    <h4 className="font-heading font-bold text-lg mb-6 text-anushtan-gold">Quick Links</h4>
+                    <ul className="space-y-3 text-sm">
+                        <li><Link href="/about" className="text-anushtan-ivory/70 hover:text-anushtan-saffron transition-colors">About</Link></li>
+                        <li><Link href="/academics" className="text-anushtan-ivory/70 hover:text-anushtan-saffron transition-colors">Academics</Link></li>
+                        <li><Link href="/student-life" className="text-anushtan-ivory/70 hover:text-anushtan-saffron transition-colors">Student Life</Link></li>
+                        <li><Link href="/teachers-community" className="text-anushtan-ivory/70 hover:text-anushtan-saffron transition-colors">Teachers & Community</Link></li>
                     </ul>
                 </div>
 
-                {/* Admissions */}
                 <div>
-                    <h3 className="font-heading font-semibold text-lg mb-6">Admissions</h3>
-                    <ul className="space-y-3 text-sm text-white/80">
-                        <li><Link href="/admissions" className="hover:text-amber-200">Apply Now</Link></li>
-                        <li><Link href="/admissions#fees" className="hover:text-amber-200">Fee Structure</Link></li>
-                        <li><Link href="/admissions#faq" className="hover:text-amber-200">FAQs</Link></li>
-                        <li><Link href="/contact" className="hover:text-amber-200">Schedule Visit</Link></li>
+                    <h4 className="font-heading font-bold text-lg mb-6 text-anushtan-gold">Explore</h4>
+                    <ul className="space-y-3 text-sm">
+                        <li><Link href="/campus" className="text-anushtan-ivory/70 hover:text-anushtan-saffron transition-colors">Campus</Link></li>
+                        <li><Link href="/admissions" className="text-anushtan-ivory/70 hover:text-anushtan-saffron transition-colors">Admissions</Link></li>
+                        <li><Link href="/contact" className="text-anushtan-ivory/70 hover:text-anushtan-saffron transition-colors">Contact</Link></li>
                     </ul>
                 </div>
 
-                {/* Contact */}
                 <div>
-                    <h3 className="font-heading font-semibold text-lg mb-6">Contact Us</h3>
-                    <ul className="space-y-4 text-sm text-white/80">
-                        <li className="flex gap-3">
-                            <MapPin size={18} className="shrink-0 text-amber-200" />
-                            <span>123 Knowledge Park, [City], [State], India - 500000</span>
-                        </li>
-                        <li className="flex gap-3">
-                            <Phone size={18} className="shrink-0 text-amber-200" />
-                            <span>+91 98765 43210</span>
-                        </li>
-                        <li className="flex gap-3">
-                            <Mail size={18} className="shrink-0 text-amber-200" />
-                            <span>admissions@anushtanschool.edu</span>
-                        </li>
-                    </ul>
+                    <h4 className="font-heading font-bold text-lg mb-6 text-anushtan-gold">Visit Us</h4>
+                    <address className="not-italic text-anushtan-ivory/70 space-y-2 text-sm">
+                        <p>Anushtan Indic School</p>
+                        <p>[Address Line 1]</p>
+                        <p>[City, State, Zip]</p>
+                        <div className="mt-4">
+                            <p>admissions@anushtanschool.edu</p>
+                            <p>+91 000 000 0000</p>
+                        </div>
+                    </address>
                 </div>
             </div>
-
-            <div className="container-custom border-t border-white/10 pt-8 text-center text-sm text-white/40">
+            <div className="container-custom pt-8 flex flex-col md:flex-row justify-between items-center text-anushtan-ivory/40 text-sm">
                 <p>&copy; {new Date().getFullYear()} Anushtan Indic School. All rights reserved.</p>
+                <div className="flex gap-6 mt-4 md:mt-0">
+                    <span>Privacy Policy</span>
+                    <span>Terms of Use</span>
+                </div>
             </div>
         </footer>
     );
