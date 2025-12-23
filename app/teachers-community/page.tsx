@@ -15,37 +15,97 @@ export default function TeachersCommunity() {
             <Navbar />
             <Hero
                 title="Teachers & Community"
-                subtitle="Role of teachers as Acharyas, parent partnership, and community engagement."
+                subtitle="Educators entrusted with the responsibility of guiding intellectual, ethical, and personal development."
                 background="bg-anushtan-maroon"
             />
 
-            {/* Role of Teachers & Acharyas */}
-            <section id="acharyas" className="py-20 bg-transparent">
+            {/* Teachers at Anushtan */}
+            <section className="py-16 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
-                    <SectionHeader title="Role of Teachers" />
-                    <p className="text-lg text-anushtan-charcoal/80 leading-relaxed max-w-3xl mx-auto mb-12">
-                        Teachers at Anushtan serve as mentors (`Acharyas`). They guide students through academic competence, disciplined conduct, and their own lived example.
-                    </p>
+                    <SectionHeader title="Teachers at Anushtan" />
+                    <div className="text-lg text-anushtan-charcoal/80 leading-relaxed space-y-6">
+                        <p>
+                            Teachers at Anushtan are educators entrusted with the responsibility of guiding intellectual, ethical, and personal development.
+                        </p>
+                        <p>
+                            Their role extends beyond instruction to mentorship, modeling conduct, and supporting the overall growth of each student.
+                        </p>
+                    </div>
                 </div>
             </section>
 
-            {/* Parent Partnership */}
-            <section id="parents" className="py-20 bg-transparent">
+            {/* The Role of the Acharya */}
+            <section className="py-16 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
-                    <SectionHeader title="Parent Partnership" />
-                    <p className="text-lg text-anushtan-charcoal/80 leading-relaxed mb-8">
-                        Parents are viewed as partners in the educational journey. We expect alignment with the school's routines, values, and restrictions on digital consumption to ensure a coherent environment for the child.
-                    </p>
+                    <SectionHeader title="The Role of the Acharya" />
+                    <div className="text-lg text-anushtan-charcoal/80 leading-relaxed space-y-6">
+                        <p>
+                            The concept of the Acharya reflects the traditional understanding of the teacher as a guide who supports learning through example, discipline, care, and clarity.
+                        </p>
+                        <p>
+                            At Anushtan, teachers are encouraged to cultivate presence, patience, and responsibility in their interactions with students.
+                        </p>
+                    </div>
                 </div>
             </section>
 
-            {/* Community Engagement */}
-            <section id="community" className="py-20 bg-transparent">
+            {/* Teacher Development & Responsibility */}
+            <section className="py-16 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
-                    <SectionHeader title="Community Engagement" />
-                    <p className="text-lg text-anushtan-charcoal/80 leading-relaxed mb-8">
-                        Students engage with society through participation, responsibility, and service-oriented exposure. Education is not isolated from the community it serves.
-                    </p>
+                    <SectionHeader title="Teacher Development & Responsibility" />
+                    <div className="text-lg text-anushtan-charcoal/80 leading-relaxed space-y-6">
+                        <p>
+                            Teachers engage in continuous reflection and professional growth to refine their understanding of pedagogy, child development, and subject knowledge.
+                        </p>
+                        <p>
+                            The school emphasizes responsibility, integrity, and consistency in teaching practice.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            {/* The School Community */}
+            <section className="py-16 bg-transparent">
+                <div className="container-custom max-w-4xl mx-auto">
+                    <SectionHeader title="The School Community" />
+                    <div className="text-lg text-anushtan-charcoal/80 leading-relaxed space-y-6">
+                        <p>
+                            Anushtan is a learning community where teachers, students, families, and staff participate in a shared educational process.
+                        </p>
+                        <p>
+                            The community is grounded in mutual respect, cooperation, and a shared commitment to learning and development.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            {/* Family Partnership */}
+            <section className="py-16 bg-transparent">
+                <div className="container-custom max-w-4xl mx-auto">
+                    <SectionHeader title="Family Partnership" />
+                    <div className="text-lg text-anushtan-charcoal/80 leading-relaxed space-y-6">
+                        <p>
+                            Families are regarded as partners in the educational journey of the child.
+                        </p>
+                        <p>
+                            Regular communication, shared understanding, and alignment of values support continuity between home and school environments.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            {/* Culture of Respect & Learning */}
+            <section className="py-16 bg-transparent">
+                <div className="container-custom max-w-4xl mx-auto">
+                    <SectionHeader title="Culture of Respect & Learning" />
+                    <div className="text-lg text-anushtan-charcoal/80 leading-relaxed space-y-6">
+                        <p>
+                            The institutional culture at Anushtan is shaped by respect for individuals, commitment to learning, and responsibility toward the community and environment.
+                        </p>
+                        <p>
+                            This culture supports emotional safety, intellectual curiosity, and ethical conduct.
+                        </p>
+                    </div>
                 </div>
             </section>
 
