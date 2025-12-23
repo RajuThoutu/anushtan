@@ -23,7 +23,7 @@ export default function About() {
             <section className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Overview" />
-                    <div className="text-lg text-anushtan-charcoal/80 leading-relaxed space-y-6">
+                    <div className="text-lg text-[#2B2B2B] leading-relaxed space-y-6 bg-[rgba(196,106,26,0.08)] border-l-4 border-anushtan-saffron p-6">
                         <p>
                             Anushtan Indic School is an educational institution designed to integrate academic learning with cultural grounding and holistic development.
                         </p>
@@ -38,7 +38,7 @@ export default function About() {
             <section className="py-20 bg-transparent">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="The Purpose of Anushtan" />
-                    <div className="text-lg text-anushtan-charcoal/80 leading-relaxed space-y-6">
+                    <div className="text-lg text-[#2B2B2B] leading-relaxed space-y-6 bg-[rgba(196,106,26,0.08)] border-l-4 border-anushtan-saffron p-6">
                         <p>
                             The purpose of Anushtan is to create an educational environment where learning is meaningful, disciplined, and rooted in context.
                         </p>
