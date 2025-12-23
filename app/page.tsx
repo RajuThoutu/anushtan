@@ -55,25 +55,43 @@ export default function Home() {
       {/* Institutional Overview */}
       <section className="py-20 bg-transparent">
         <div className="container-custom">
-          <SectionHeader title="Institutional Overview" />
+          <SectionHeader
+            title="Institutional Overview"
+            subtitle="Anushtan Indic School is structured around three foundational commitments that guide all academic, cultural, and organizational decisions."
+          />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="border-anushtan-border bg-white">
-              <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon">Rootedness</h3>
-              <p className="text-anushtan-charcoal/80">
-                Grounded in cultural heritage and local context, providing a stable foundation for growth.
-              </p>
+            <Card className="border-anushtan-border bg-white h-full">
+              <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon">Academic Excellence</h3>
+              <div className="text-anushtan-charcoal/80 space-y-4">
+                <p>
+                  Academic excellence at Anushtan refers to the development of strong conceptual foundations, clarity of thinking, and disciplined learning habits.
+                </p>
+                <p>
+                  The emphasis is on understanding rather than rote memorization, on continuity of learning rather than fragmented preparation, and on developing intellectual confidence appropriate to each stage of childhood and adolescence.
+                </p>
+              </div>
             </Card>
-            <Card className="border-anushtan-border bg-white">
-              <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon">Vitality</h3>
-              <p className="text-anushtan-charcoal/80">
-                Emphasis on physical health, sports, and regular practice for robust development.
-              </p>
+            <Card className="border-anushtan-border bg-white h-full">
+              <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon">Cultural Rootedness</h3>
+              <div className="text-anushtan-charcoal/80 space-y-4">
+                <p>
+                  Cultural rootedness means that education is not disconnected from identity, heritage, or values.
+                </p>
+                <p>
+                  Students are gradually introduced to Bharatiya cultural traditions, languages, and ethical frameworks so that their education remains connected to their social, civilizational, and moral context while engaging with the modern world.
+                </p>
+              </div>
             </Card>
-            <Card className="border-anushtan-border bg-white">
-              <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon">Clarity</h3>
-              <p className="text-anushtan-charcoal/80">
-                Developing intellectual sharpness and independent thinking through rigorous study.
-              </p>
+            <Card className="border-anushtan-border bg-white h-full">
+              <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon">Holistic Development</h3>
+              <div className="text-anushtan-charcoal/80 space-y-4">
+                <p>
+                  Holistic development refers to the balanced cultivation of physical health, emotional stability, ethical conduct, social responsibility, and inner discipline alongside academic learning.
+                </p>
+                <p>
+                  Education at Anushtan is structured to support the whole child — body, mind, conduct, and character — rather than treating learning as a purely intellectual activity.
+                </p>
+              </div>
             </Card>
           </div>
         </div>
