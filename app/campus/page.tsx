@@ -1,17 +1,22 @@
-import { Hero } from "@/components/sections/Hero";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { Card } from "@/components/ui/Card";
+import { PageHeader } from "@/components/sections/PageHeader";
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Campus | Anushtan Indic School',
+    description: 'Eco-friendly environment, facilities, and campus life.',
+};
 
 export default function Campus() {
     return (
         <>
             <Navbar />
-            <Hero
+            <PageHeader
                 title="Campus"
-                subtitle="Campus environment, facilities, and learning spaces at Anushtan."
-                background="bg-secondary"
+                subtitle="Eco-friendly environment, facilities, and campus life."
             />
 
             {/* Campus as a Silent Teacher */}

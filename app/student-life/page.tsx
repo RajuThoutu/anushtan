@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { Hero } from "@/components/sections/Hero";
+import { PageHeader } from "@/components/sections/PageHeader";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { Metadata } from 'next';
 
@@ -13,10 +13,9 @@ export default function StudentLife() {
     return (
         <>
             <Navbar />
-            <Hero
+            <PageHeader
                 title="Student Life"
                 subtitle="Student life at Anushtan is designed to be balanced, purposeful, and developmentally appropriate."
-                background="bg-anushtan-gold"
             />
 
             {/* Life at Anushtan */}

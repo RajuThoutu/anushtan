@@ -1,22 +1,21 @@
-import { Hero } from "@/components/sections/Hero";
-import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { PageHeader } from "@/components/sections/PageHeader";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
     title: 'Contact | Anushtan Indic School',
-    description: 'Contact details, location, and campus visit scheduling.',
+    description: 'Get in touch for admissions, visits, and inquiries.',
 };
 
 export default function Contact() {
     return (
         <>
             <Navbar />
-            <Hero
-                title="Contact"
-                subtitle="Contact details and visit scheduling."
-                background="bg-anushtan-maroon"
+            <PageHeader
+                title="Contact Us"
+                subtitle="Get in touch for admissions, visits, and inquiries."
             />
 
             {/* Contact Details */}

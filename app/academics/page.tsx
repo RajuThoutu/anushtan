@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { Hero } from "@/components/sections/Hero";
+import { PageHeader } from "@/components/sections/PageHeader";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Card } from "@/components/ui/Card";
 import type { Metadata } from 'next';
@@ -14,10 +14,9 @@ export default function Academics() {
     return (
         <>
             <Navbar />
-            <Hero
+            <PageHeader
                 title="Academics"
                 subtitle="Curriculum framework, learning domains, grade progression, and assessment approach."
-                background="bg-anushtan-maroon"
             />
 
             {/* Academic Orientation */}

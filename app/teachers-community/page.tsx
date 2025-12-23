@@ -1,4 +1,4 @@
-import { Hero } from "@/components/sections/Hero";
+import { PageHeader } from "@/components/sections/PageHeader";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
@@ -13,10 +13,9 @@ export default function TeachersCommunity() {
     return (
         <>
             <Navbar />
-            <Hero
+            <PageHeader
                 title="Teachers & Community"
                 subtitle="Educators entrusted with the responsibility of guiding intellectual, ethical, and personal development."
-                background="bg-anushtan-maroon"
             />
 
             {/* Teachers at Anushtan */}

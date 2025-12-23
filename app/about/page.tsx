@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { Hero } from "@/components/sections/Hero";
+import { PageHeader } from "@/components/sections/PageHeader";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { Metadata } from 'next';
 
@@ -13,10 +13,9 @@ export default function About() {
     return (
         <>
             <Navbar />
-            <Hero
+            <PageHeader
                 title="About Anushtan Indic School"
                 subtitle="Integrating academic learning with cultural grounding and holistic development."
-                background="bg-anushtan-maroon"
             />
 
             {/* About Anushtan (Intro) */}
