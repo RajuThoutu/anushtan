@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/sections/PageHeader";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Card } from "@/components/ui/Card";
 import type { Metadata } from 'next';
+import { BookOpen, Layers } from "lucide-react";
 
 export const metadata: Metadata = {
     title: 'Academics | Anushtan Indic School',
@@ -20,11 +21,16 @@ export default function Academics() {
                 className="bg-[linear-gradient(180deg,#F1E6D4_0%,#F7F2EA_100%)]"
             />
 
-            {/* Academic Orientation */}
-            <section className="py-20 bg-[#FBF6EF] border-b border-[#8A3A32]/20">
-                <div className="container-custom max-w-4xl mx-auto">
-                    <SectionHeader title="Academic Orientation" className="mb-12" />
-                    <div className="bg-white shadow-[0_6px_18px_rgba(0,0,0,0.04)] sm:p-10 p-6 rounded-xl border border-[#8A3A32]/10">
+            <div className="container-custom py-20">
+                <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                    {/* Academic Orientation */}
+                    <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-t-4 border-anushtan-maroon p-8 h-full">
+                        <div className="flex items-start justify-between mb-6">
+                            <h2 className="font-heading text-3xl font-bold text-anushtan-maroon">
+                                Academic Orientation
+                            </h2>
+                            <BookOpen className="w-8 h-8 text-anushtan-saffron/80" />
+                        </div>
                         <div className="text-lg text-[#2B2B2B] leading-relaxed space-y-6">
                             <p>
                                 The academic program at Anushtan is designed to build strong conceptual foundations, disciplined learning habits, and intellectual clarity appropriate to each stage of development.
@@ -34,14 +40,15 @@ export default function Academics() {
                             </p>
                         </div>
                     </div>
-                </div>
-            </section>
 
-            {/* Structure of Learning */}
-            <section className="py-20 bg-[#F1E6D4] border-b border-[#8A3A32]/20">
-                <div className="container-custom max-w-4xl mx-auto">
-                    <SectionHeader title="Structure of Learning" className="mb-12" />
-                    <div className="bg-white shadow-[0_6px_18px_rgba(0,0,0,0.04)] sm:p-10 p-6 rounded-xl border border-[#8A3A32]/10">
+                    {/* Structure of Learning */}
+                    <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-t-4 border-anushtan-maroon p-8 h-full">
+                        <div className="flex items-start justify-between mb-6">
+                            <h2 className="font-heading text-3xl font-bold text-anushtan-maroon">
+                                Structure of Learning
+                            </h2>
+                            <Layers className="w-8 h-8 text-anushtan-saffron/80" />
+                        </div>
                         <div className="text-lg text-[#2B2B2B] leading-relaxed space-y-6">
                             <p>
                                 Academic learning is structured across clearly defined stages of childhood and adolescence, with each stage emphasizing different developmental needs — cognitive, emotional, physical, and social.
@@ -52,7 +59,7 @@ export default function Academics() {
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
 
             <Footer />
         </div>
