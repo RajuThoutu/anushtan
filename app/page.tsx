@@ -16,21 +16,39 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center bg-transparent overflow-hidden">
-        <div className="container-custom relative z-10 text-center">
-          <h1 className="font-heading text-5xl md:text-7xl font-bold text-anushtan-maroon mb-6 leading-tight">
+      {/* Hero Section */}
+      <section className="flex flex-col md:flex-row items-center bg-[#fdfbf7] overflow-hidden min-h-[85vh]">
+        {/* Text Side (Left) */}
+        <div className="flex-1 p-8 md:p-16 lg:pl-24 flex flex-col justify-center z-10">
+          <h1 className="font-heading text-5xl md:text-7xl font-bold text-[#632e22] mb-6 leading-tight">
             Anushtan Indic School
           </h1>
-          <p className="text-xl md:text-2xl text-anushtan-charcoal/80 max-w-3xl mx-auto mb-10 leading-relaxed font-light">
+          <p className="text-xl md:text-2xl text-[#632e22]/80 max-w-xl mb-8 leading-relaxed font-light">
             An institutional approach to education integrating academics, physical vitality, cultural grounding, and inner discipline.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button href="/admissions" className="bg-anushtan-maroon text-white hover:bg-anushtan-maroon/90 border-0">
+          <div className="flex flex-wrap gap-4">
+            <Button href="/admissions" className="bg-[#632e22] text-white hover:bg-[#632e22]/90 border-0 px-8 py-6 text-lg">
               Admissions Information
             </Button>
-            <Button href="/campus" variant="outline" className="text-anushtan-maroon border-anushtan-maroon hover:bg-anushtan-maroon/5">
+            <Button href="/campus" variant="outline" className="text-[#632e22] border-[#632e22] hover:bg-[#632e22]/5 px-8 py-6 text-lg">
               Schedule a Campus Visit
             </Button>
+          </div>
+        </div>
+
+        {/* Image Side (Right) */}
+        <div className="flex-1 flex justify-end relative h-full w-full">
+          {/* The image needs to be positioned absolutely or handled carefully to respect the flex layout while maintaining aspect ratio */}
+          <div className="relative w-full h-[65vh] md:h-[95vh] flex justify-end items-end md:items-center">
+            <img
+              src="/hero-swami.png"
+              alt="Swami Vivekananda"
+              className="h-full w-auto object-contain object-right-bottom md:object-right"
+              style={{
+                maskImage: 'linear-gradient(to right, transparent, black 15%)',
+                WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%)'
+              }}
+            />
           </div>
         </div>
       </section>
@@ -47,7 +65,7 @@ export default function Home() {
             Swami Vivekananda
           </cite>
           <div className="mt-8 flex justify-center opacity-80 font-medium text-anushtan-charcoal/30">
-            {"{{IMAGE:VIVEKANANDA}}"}
+            {/* Image moved to Hero section */}
           </div>
         </div>
       </section>
