@@ -56,18 +56,18 @@ export default function Home() {
       <section className="py-20 bg-transparent">
         <div className="container-custom">
           <SectionHeader
-            title="Institutional Overview"
-            subtitle="Anushtan Indic School is structured around three foundational commitments that guide all academic, cultural, and organizational decisions."
+            title="Why Anushtan?"
+            subtitle="As Gautama Buddha said, we need a 'Middle Path'—a balance in society. Anushtan is built to provide that balance for the modern Indian student."
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="border-anushtan-border bg-white h-full">
               <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon">Academic Excellence</h3>
               <div className="text-anushtan-charcoal/80 space-y-4">
                 <p>
-                  Academic excellence at Anushtan refers to the development of strong conceptual foundations, clarity of thinking, and disciplined learning habits.
+                  True academic excellence is not about finishing Intermediate syllabus in the 8th grade—that is destruction, not education.
                 </p>
                 <p>
-                  The emphasis is on understanding rather than rote memorization, on continuity of learning rather than fragmented preparation, and on developing intellectual confidence appropriate to each stage of childhood and adolescence.
+                  We follow the <strong>National Education Policy (NEP)</strong> standards designed by experts like Dr. Kasturirangan. Our goal is to build strong conceptual foundations in Mathematics and Sciences without exhausting the child, preparing them for competitive success (IIT/NEET) at the right age.
                 </p>
               </div>
             </Card>
@@ -75,10 +75,10 @@ export default function Home() {
               <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon">Cultural Rootedness</h3>
               <div className="text-anushtan-charcoal/80 space-y-4">
                 <p>
-                  Cultural rootedness means that education is not disconnected from identity, heritage, or values.
+                  Culture is not just rituals; it is the life force that has sustained our civilization for thousands of years.
                 </p>
                 <p>
-                  Students are gradually introduced to Bharatiya cultural traditions, languages, and ethical frameworks so that their education remains connected to their social, civilizational, and moral context while engaging with the modern world.
+                  At Anushtan, students connect with nature (organic farming, cow service) and simple living. We inculcate values like <em>Seva</em> (service) and <em>Niramdabarata</em> (simplicity), ensuring they remain rooted in their identity even as they achieve global success.
                 </p>
               </div>
             </Card>
@@ -86,10 +86,10 @@ export default function Home() {
               <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon">Holistic Development</h3>
               <div className="text-anushtan-charcoal/80 space-y-4">
                 <p>
-                  Holistic development refers to the balanced cultivation of physical health, emotional stability, ethical conduct, social responsibility, and inner discipline alongside academic learning.
+                  A student might get an IIT seat or a 1-crore package, but without holistic development, they may not know how to live happily or handle failure.
                 </p>
                 <p>
-                  Education at Anushtan is structured to support the whole child — body, mind, conduct, and character — rather than treating learning as a purely intellectual activity.
+                  We focus on Team Sports (to learn winning/losing), Life Skills (farming, cooking), and Arts. This is the "Second Segment" of our school—ensuring a child is physically, emotionally, and socially complete.
                 </p>
               </div>
             </Card>
