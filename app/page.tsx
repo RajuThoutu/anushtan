@@ -1,8 +1,11 @@
 import { Navbar } from "@/components/layout/Navbar";
+import Image from "next/image";
 import { Footer } from "@/components/layout/Footer";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { PillarsSection } from "@/components/sections/PillarsSection";
+import { VideoSection } from "@/components/sections/VideoSection";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -15,7 +18,6 @@ export default function Home() {
     <>
       <Navbar />
 
-      {/* Hero Section */}
       {/* Hero Section */}
       <section className="flex flex-col md:flex-row items-center bg-[#fdfbf7] overflow-hidden min-h-[85vh]">
         {/* Text Side (Left) */}
@@ -41,7 +43,7 @@ export default function Home() {
           {/* The image needs to be positioned absolutely or handled carefully to respect the flex layout while maintaining aspect ratio */}
           <div className="relative w-full h-[65vh] md:h-[95vh] flex justify-end items-end md:items-center">
             <img
-              src="/hero-swami.png"
+              src="/hero-swami-standing.jpg"
               alt="Swami Vivekananda"
               className="h-full w-auto object-contain object-right-bottom md:object-right"
               style={{
@@ -53,22 +55,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Quote Section */}
-      <section className="py-20 bg-transparent">
-        <div className="container-custom max-w-4xl mx-auto text-center">
-          <blockquote className="font-heading text-2xl md:text-3xl italic text-anushtan-charcoal mb-6 relative px-8">
-            <span className="absolute left-0 top-0 text-6xl text-anushtan-gold opacity-30">“</span>
-            Education is the manifestation of the perfection already in man.
-            <span className="absolute right-0 bottom-0 text-6xl text-anushtan-gold opacity-30">”</span>
-          </blockquote>
-          <cite className="block text-anushtan-saffron font-bold not-italic tracking-wider uppercase text-sm">
-            Swami Vivekananda
-          </cite>
-          <div className="mt-8 flex justify-center opacity-80 font-medium text-anushtan-charcoal/30">
-            {/* Image moved to Hero section */}
-          </div>
-        </div>
-      </section>
+      {/* Video Highlights */}
+      <VideoSection />
+
+      {/* Pillars Section (Philosophical Foundations) */}
+      <PillarsSection />
 
       {/* Institutional Overview */}
       <section className="py-20 bg-transparent">
@@ -120,8 +111,13 @@ export default function Home() {
         <div className="container-custom">
           <SectionHeader title="Campus Environment" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="h-80 bg-anushtan-ivory border border-anushtan-border rounded flex items-center justify-center text-anushtan-charcoal/30">
-              {"{{GALLERY:CAMPUS}}"}
+            <div className="relative h-96 w-full rounded-lg overflow-hidden border border-anushtan-border shadow-lg">
+              <Image
+                src="/campus-building.jpg"
+                alt="Anushtan Campus Building"
+                fill
+                className="object-cover"
+              />
             </div>
             <div>
               <h3 className="font-heading text-2xl font-bold mb-4 text-anushtan-maroon">A Silent Teacher</h3>
@@ -141,11 +137,11 @@ export default function Home() {
         <div className="container-custom">
           <h2 className="font-heading text-3xl font-bold mb-4">Admissions</h2>
           <p className="text-white/80 max-w-2xl mx-auto mb-8">
-            Admissions information and campus visit scheduling.
+            Admissions information and campus visit scheduling. Contact: +91-91103 93271
           </p>
           <div className="flex justify-center gap-4">
             <Button href="/admissions" className="bg-anushtan-saffron text-white hover:bg-anushtan-saffron/90 border-0">
-              {"{{CTA:ADMISSIONS}}"}
+              Admissions Inquiry
             </Button>
           </div>
         </div>

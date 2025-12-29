@@ -24,16 +24,14 @@ export default function Contact() {
                     <div className="p-6">
                         <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon">Address</h3>
                         <p className="text-anushtan-charcoal/80">
-                            Anushtan Indic School<br />
-                            [Street Address Placeholder]<br />
-                            [City, State, Zip]
+                            ANUSHTAN INDIC SCHOOL, Beside NINE EDUCATION<br />
+                            SIDDIPET
                         </p>
                     </div>
                     <div className="p-6">
                         <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon">Phone</h3>
                         <p className="text-anushtan-charcoal/80">
-                            +91 000 000 0000<br />
-                            +91 000 000 0000
+                            +91-91103 93271
                         </p>
                     </div>
                     <div className="p-6">
@@ -60,8 +58,27 @@ export default function Contact() {
             <section id="map" className="py-20 bg-transparent">
                 <div className="container-custom">
                     <SectionHeader title="Location" />
-                    <div className="h-96 bg-white rounded-lg flex items-center justify-center text-anushtan-charcoal/30 border border-anushtan-border">
-                        {"{{MAP:EMBED}}"}
+                    <div className="w-full h-96 bg-gray-100 rounded-lg overflow-hidden border border-anushtan-border shadow-md relative">
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            frameBorder="0"
+                            style={{ border: 0 }}
+                            src="https://maps.google.com/maps?q=Anushtan%20Indic%20School%2C%20Siddipet&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                            allowFullScreen
+                            loading="lazy"
+                            title="Anushtan Indic School Location"
+                        ></iframe>
+                        <div className="absolute bottom-4 right-4">
+                            <a
+                                href="https://maps.app.goo.gl/oCNEMU2XM3eY7Ewn6"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary h-10 px-4 py-2 bg-white text-anushtan-maroon hover:bg-gray-50 border border-anushtan-border shadow-lg text-sm"
+                            >
+                                Open in Google Maps
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>

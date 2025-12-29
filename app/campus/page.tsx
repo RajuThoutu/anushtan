@@ -3,6 +3,8 @@ import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { Card } from "@/components/ui/Card";
 import { PageHeader } from "@/components/sections/PageHeader";
+import { VideoSection } from "@/components/sections/VideoSection";
+import Image from "next/image";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -18,6 +20,9 @@ export default function Campus() {
                 title="Campus"
                 subtitle="Eco-friendly environment, facilities, and campus life."
             />
+
+            <VideoSection />
+
 
             {/* Campus as a Silent Teacher */}
             <section id="environment" className="py-20 bg-transparent">
@@ -54,8 +59,61 @@ export default function Campus() {
             <section id="gallery" className="py-20 bg-transparent">
                 <div className="container-custom">
                     <SectionHeader title="Gallery" />
-                    <div className="h-96 bg-background border border-text/10 rounded-lg flex items-center justify-center text-text/30">
-                        {"{{GALLERY:CAMPUS}}"}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {/* Lobby */}
+                        <div className="relative h-64 w-full rounded-lg overflow-hidden border border-text/10 shadow-md hover:shadow-lg transition-shadow">
+                            <Image
+                                src="/campus-lobby.jpg"
+                                alt="Anushtan Campus Lobby"
+                                fill
+                                className="object-cover hover:scale-105 transition-transform duration-500"
+                            />
+                        </div>
+                        {/* Classroom 1 */}
+                        <div className="relative h-64 w-full rounded-lg overflow-hidden border border-text/10 shadow-md hover:shadow-lg transition-shadow">
+                            <Image
+                                src="/campus-classroom-1.jpg"
+                                alt="Modern Classroom"
+                                fill
+                                className="object-cover hover:scale-105 transition-transform duration-500"
+                            />
+                        </div>
+                        {/* Tech Lab */}
+                        <div className="relative h-64 w-full rounded-lg overflow-hidden border border-text/10 shadow-md hover:shadow-lg transition-shadow">
+                            <Image
+                                src="/campus-tech-lab.jpg"
+                                alt="Computer Lab"
+                                fill
+                                className="object-cover hover:scale-105 transition-transform duration-500"
+                            />
+                        </div>
+                        {/* Science Lab */}
+                        <div className="relative h-64 w-full rounded-lg overflow-hidden border border-text/10 shadow-md hover:shadow-lg transition-shadow">
+                            <Image
+                                src="/campus-science-lab.jpg"
+                                alt="Science Lab"
+                                fill
+                                className="object-cover hover:scale-105 transition-transform duration-500"
+                            />
+                        </div>
+                        {/* Library */}
+                        <div className="relative h-64 w-full rounded-lg overflow-hidden border border-text/10 shadow-md hover:shadow-lg transition-shadow">
+                            <Image
+                                src="/campus-library.jpg"
+                                alt="Library"
+                                fill
+                                className="object-cover hover:scale-105 transition-transform duration-500"
+                            />
+                        </div>
+                        {/* Classroom 2 */}
+                        <div className="relative h-64 w-full rounded-lg overflow-hidden border border-text/10 shadow-md hover:shadow-lg transition-shadow">
+                            <Image
+                                src="/campus-classroom-2.jpg"
+                                alt="Collaborative Learning Space"
+                                fill
+                                className="object-cover hover:scale-105 transition-transform duration-500"
+                            />
+                        </div>
                     </div>
                 </div>
             </section>

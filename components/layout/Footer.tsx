@@ -52,12 +52,11 @@ export function Footer() {
                 <div>
                     <h4 className="font-heading font-bold text-lg mb-6 text-anushtan-gold">Visit Us</h4>
                     <address className="not-italic text-anushtan-ivory/70 space-y-2 text-sm">
-                        <p>Anushtan Indic School</p>
-                        <p>[Address Line 1]</p>
-                        <p>[City, State, Zip]</p>
+                        <p>ANUSHTAN INDIC SCHOOL, Beside NINE EDUCATION</p>
+                        <p>SIDDIPET</p>
                         <div className="mt-4">
+                            <p>Contact: +91-91103 93271</p>
                             <p>admissions@anushtanschool.edu</p>
-                            <p>+91 000 000 0000</p>
                         </div>
                     </address>
                 </div>
