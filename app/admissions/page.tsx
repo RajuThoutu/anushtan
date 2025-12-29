@@ -1,4 +1,4 @@
-import { Hero } from "@/components/sections/Hero";
+import { PageHeader } from "@/components/sections/PageHeader";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
@@ -14,10 +14,9 @@ export default function Admissions() {
     return (
         <>
             <Navbar />
-            <Hero
+            <PageHeader
                 title="Admissions"
                 subtitle="Admissions details will be listed here. For inquiries, call +91-91103 93271. Families may schedule a campus visit for orientation."
-                background="bg-anushtan-maroon"
             />
 
             {/* Admission Process */}
