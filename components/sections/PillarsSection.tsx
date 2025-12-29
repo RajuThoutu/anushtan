@@ -8,7 +8,7 @@ const pillars = [
         description: "Following the ideals of Swami Vivekananda, our primary goal is Man-making Education. We believe in building character, strengthening the mind, and expanding the intellect so that our students can stand on their own feet, driven by self-reliance and an indomitable spirit of service."
     },
     {
-        name: "Sri Sharada Mata",
+        name: 'Sri Sarada Devi (the "Holy Mother")',
         title: "The Sacred Kitchen of Kindness",
         quote: "I am the mother of the wicked, as I am the mother of the virtuous.",
         description: "Inspired by the holiness of Sri Sharada Devi, the Anushtan kitchen is more than a place of sustenance; it is a sanctuary of love. We serve every child with the same kindness and devotion she practiced, teaching our students that serving others with love is the highest form of worship. Our nourishment is for both the body and the soul."
