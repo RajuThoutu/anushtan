@@ -54,12 +54,25 @@ export function Navbar() {
                 </div>
 
                 {/* Mobile Menu Toggle */}
+                {/* Mobile Menu Toggle */}
                 <button
-                    className="lg:hidden p-2 text-anushtan-charcoal"
+                    className="lg:hidden flex items-center gap-2 px-3 py-2 text-anushtan-maroon hover:bg-anushtan-maroon/5 rounded-md transition-colors border border-anushtan-maroon/10"
                     onClick={() => setIsOpen(!isOpen)}
+                    aria-label="Toggle menu"
                 >
-                    <span className="sr-only">Menu</span>
-                    {isOpen ? "✕" : "☰"}
+                    <span className="font-bold text-sm uppercase tracking-wider">{isOpen ? "Close" : "Menu"}</span>
+                    {isOpen ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="4" y1="12" x2="20" y2="12"></line>
+                            <line x1="4" y1="6" x2="20" y2="6"></line>
+                            <line x1="4" y1="18" x2="20" y2="18"></line>
+                        </svg>
+                    )}
                 </button>
             </div>
 
