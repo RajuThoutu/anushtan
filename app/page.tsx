@@ -19,9 +19,9 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="flex flex-col md:flex-row items-center bg-[#fdfbf7] overflow-hidden min-h-[85vh]">
+      <section className="relative flex flex-col md:flex-row items-center bg-[#fdfbf7] overflow-hidden min-h-[85vh]">
         {/* Text Side (Left) */}
-        <div className="flex-1 p-8 md:p-16 lg:pl-24 flex flex-col justify-center z-10">
+        <div className="relative flex-1 p-8 md:p-16 lg:pl-24 flex flex-col justify-center z-10">
           <h1 className="font-heading text-5xl md:text-7xl font-bold text-[#632e22] mb-6 leading-tight">
             Anushtan Indic School
           </h1>
@@ -39,13 +39,13 @@ export default function Home() {
         </div>
 
         {/* Image Side (Right) */}
-        <div className="flex-1 flex justify-end relative h-full w-full">
+        <div className="absolute inset-0 md:static md:flex-1 flex justify-end h-full w-full z-0 md:z-auto opacity-20 md:opacity-100 pointer-events-none md:pointer-events-auto">
           {/* The image needs to be positioned absolutely or handled carefully to respect the flex layout while maintaining aspect ratio */}
-          <div className="relative w-full h-[65vh] md:h-[95vh] flex justify-end items-end md:items-center">
+          <div className="relative w-full h-full md:h-[95vh] flex justify-end items-end md:items-center">
             <img
               src="/hero-swami-standing.jpg"
               alt="Swami Vivekananda"
-              className="h-full w-auto object-contain object-right-bottom md:object-right"
+              className="h-full w-auto object-cover md:object-contain object-right-bottom md:object-right"
               style={{
                 maskImage: 'linear-gradient(to right, transparent, black 15%)',
                 WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%)'
