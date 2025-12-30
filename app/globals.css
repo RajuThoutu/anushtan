@@ -2,28 +2,34 @@
 
 :root {
   /* Strict Anushtan Tokens */
+  --anushtan-brand-primary: #6B3126;
+  --anushtan-brand-bg: #FDFBF7;
+  --anushtan-brand-accent: #D4AF37;
+  --anushtan-brand-charcoal: #333333;
+
+  /* Legacy Support (Footer) */
   --anushtan-saffron: #C46A1A;
-  --anushtan-maroon: #6B1F1A;
   --anushtan-ivory: #FBF6EF;
-  --anushtan-charcoal: #2B2B2B;
   --anushtan-gold: #B89B5E;
-  --anushtan-border: rgba(43, 43, 43, 0.15);
+  --anushtan-charcoal: #2B2B2B;
+  /* Original Footer/Charcoal Color */
 
   /* Semantic Mappings */
-  --background: var(--anushtan-ivory);
-  --foreground: var(--anushtan-charcoal);
+  --background: var(--anushtan-brand-bg);
+  --foreground: var(--anushtan-brand-charcoal);
 
-  --primary: var(--anushtan-maroon);
+  --primary: var(--anushtan-brand-primary);
   --primary-foreground: #ffffff;
 
-  --secondary: var(--anushtan-saffron);
-  --secondary-foreground: #ffffff;
+  --secondary: var(--anushtan-brand-accent);
+  --secondary-foreground: var(--anushtan-brand-charcoal);
 
-  --accent: var(--anushtan-gold);
-  --accent-foreground: var(--anushtan-charcoal);
+  --accent: var(--anushtan-brand-accent);
+  --accent-foreground: var(--anushtan-brand-charcoal);
 
   --surface: #ffffff;
-  --border: var(--anushtan-border);
+  --border: rgba(51, 51, 51, 0.15);
+  /* Charcoal with opacity */
 }
 
 @theme {
@@ -35,14 +41,19 @@
   --color-text: var(--foreground);
   --color-border: var(--border);
 
-  --color-anushtan-saffron: var(--anushtan-saffron);
-  --color-anushtan-maroon: var(--anushtan-maroon);
-  --color-anushtan-ivory: var(--anushtan-ivory);
+  --color-anushtan-primary: var(--anushtan-brand-primary);
+  --color-anushtan-bg: var(--anushtan-brand-bg);
+  --color-anushtan-accent: var(--anushtan-brand-accent);
   --color-anushtan-charcoal: var(--anushtan-charcoal);
+  /* Legacy Mapping */
+
+  /* Restored Legacy Colors for Footer */
+  --color-anushtan-ivory: var(--anushtan-ivory);
   --color-anushtan-gold: var(--anushtan-gold);
+  --color-anushtan-saffron: var(--anushtan-saffron);
 
   --font-heading: "Playfair Display", serif;
-  --font-body: "Georgia", serif;
+  --font-body: "Inter", sans-serif;
 }
 
 body {
