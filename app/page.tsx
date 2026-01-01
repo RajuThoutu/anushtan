@@ -55,12 +55,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Video Highlights */}
-      <VideoSection />
-
-      {/* Pillars Section (Philosophical Foundations) */}
-      <PillarsSection />
-
       {/* Institutional Overview */}
       <section className="py-20 bg-transparent">
         <div className="container-custom">
@@ -105,6 +99,14 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Video Highlights */}
+      <VideoSection />
+
+      {/* Pillars Section (Philosophical Foundations) */}
+      <PillarsSection />
+
+
 
       {/* Campus */}
       <section className="py-20 bg-transparent">
