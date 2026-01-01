@@ -31,14 +31,13 @@ export default function Contact() {
                     <div className="p-6">
                         <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon">Phone</h3>
                         <p className="text-anushtan-charcoal/80">
-                            +91-91103 93271
+                            +91-9044454441, +91-9044454442
                         </p>
                     </div>
                     <div className="p-6">
                         <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon">Email</h3>
                         <p className="text-anushtan-charcoal/80">
-                            admissions@anushtanschool.edu<br />
-                            info@anushtanschool.edu
+                            anushtanschool@gmail.com
                         </p>
                     </div>
                 </div>

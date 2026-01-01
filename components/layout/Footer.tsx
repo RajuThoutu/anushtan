@@ -55,8 +55,8 @@ export function Footer() {
                         <p>ANUSHTAN INDIC SCHOOL, Beside NINE EDUCATION</p>
                         <p>SIDDIPET</p>
                         <div className="mt-4">
-                            <p>Contact: +91-91103 93271</p>
-                            <p>admissions@anushtanschool.edu</p>
+                            <p>Contact: +91-9044454441, +91-9044454442</p>
+                            <p>anushtanschool@gmail.com</p>
                         </div>
                     </address>
                 </div>

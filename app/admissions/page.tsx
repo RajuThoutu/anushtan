@@ -16,7 +16,7 @@ export default function Admissions() {
             <Navbar />
             <PageHeader
                 title="Admissions"
-                subtitle="Admissions details will be listed here. For inquiries, call +91-91103 93271. Families may schedule a campus visit for orientation."
+                subtitle="Admissions details will be listed here. For inquiries, call +91-9044454441, +91-9044454442. Families may schedule a campus visit for orientation."
             />
 
             {/* Admission Process */}
@@ -51,7 +51,7 @@ export default function Admissions() {
                 <div className="container-custom">
                     <h2 className="font-heading text-3xl font-bold mb-6">Admissions Inquiry</h2>
                     <p className="text-white/80 max-w-xl mx-auto mb-8">
-                        Admissions information and campus visit scheduling. Contact: +91-91103 93271
+                        Admissions information and campus visit scheduling. Contact: +91-9044454441, +91-9044454442
                     </p>
                     <div className="flex justify-center gap-4">
                         <Button href="/contact" className="bg-anushtan-saffron text-white hover:bg-anushtan-saffron/90 border-0">

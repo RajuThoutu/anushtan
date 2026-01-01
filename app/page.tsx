@@ -137,7 +137,7 @@ export default function Home() {
         <div className="container-custom">
           <h2 className="font-heading text-3xl font-bold mb-4">Admissions</h2>
           <p className="text-white/80 max-w-2xl mx-auto mb-8">
-            Admissions information and campus visit scheduling. Contact: +91-91103 93271
+            Admissions information and campus visit scheduling. Contact: +91-9044454441, +91-9044454442
           </p>
           <div className="flex justify-center gap-4">
             <Button href="/admissions" className="bg-anushtan-saffron text-white hover:bg-anushtan-saffron/90 border-0">
