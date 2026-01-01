@@ -60,6 +60,24 @@ export default function Campus() {
                 <div className="container-custom">
                     <SectionHeader title="Gallery" />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {/* Masterplan */}
+                        <div className="relative h-64 w-full rounded-lg overflow-hidden border border-text/10 shadow-md hover:shadow-lg transition-shadow">
+                            <Image
+                                src="/campus-masterplan.jpg"
+                                alt="Campus Masterplan"
+                                fill
+                                className="object-cover hover:scale-105 transition-transform duration-500"
+                            />
+                        </div>
+                        {/* Perspective */}
+                        <div className="relative h-64 w-full rounded-lg overflow-hidden border border-text/10 shadow-md hover:shadow-lg transition-shadow">
+                            <Image
+                                src="/campus-perspective.jpg"
+                                alt="Campus Perspective"
+                                fill
+                                className="object-cover hover:scale-105 transition-transform duration-500"
+                            />
+                        </div>
                         {/* Lobby */}
                         <div className="relative h-64 w-full rounded-lg overflow-hidden border border-text/10 shadow-md hover:shadow-lg transition-shadow">
                             <Image

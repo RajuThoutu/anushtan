@@ -113,13 +113,23 @@ export default function Home() {
         <div className="container-custom">
           <SectionHeader title="Campus Environment" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="relative h-96 w-full rounded-lg overflow-hidden border border-anushtan-border shadow-lg">
-              <Image
-                src="/campus-building.jpg"
-                alt="Anushtan Campus Building"
-                fill
-                className="object-cover"
-              />
+            <div className="flex flex-col gap-4">
+              <div className="relative h-64 w-full rounded-lg overflow-hidden border border-anushtan-border shadow-lg">
+                <Image
+                  src="/campus-perspective.jpg"
+                  alt="Anushtan Campus Perspective"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="relative h-64 w-full rounded-lg overflow-hidden border border-anushtan-border shadow-lg">
+                <Image
+                  src="/campus-masterplan.jpg"
+                  alt="Anushtan Campus Masterplan"
+                  fill
+                  className="object-cover"
+                />
+              </div>
             </div>
             <div>
               <h3 className="font-heading text-2xl font-bold mb-4 text-anushtan-maroon">A Silent Teacher</h3>
