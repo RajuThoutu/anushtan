@@ -114,7 +114,7 @@ export default function Home() {
           <SectionHeader title="Campus Environment" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="flex flex-col gap-4">
-              <div className="relative h-64 w-full rounded-lg overflow-hidden border border-anushtan-border shadow-lg">
+              <div className="relative h-96 w-full rounded-lg overflow-hidden border border-anushtan-border shadow-lg">
                 <Image
                   src="/campus-building.jpg"
                   alt="Anushtan Campus Building"
