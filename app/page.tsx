@@ -116,19 +116,29 @@ export default function Home() {
             <div className="flex flex-col gap-4">
               <div className="relative h-64 w-full rounded-lg overflow-hidden border border-anushtan-border shadow-lg">
                 <Image
-                  src="/campus-perspective.jpg"
-                  alt="Anushtan Campus Perspective"
+                  src="/campus-building.jpg"
+                  alt="Anushtan Campus Building"
                   fill
                   className="object-cover"
                 />
               </div>
-              <div className="relative h-64 w-full rounded-lg overflow-hidden border border-anushtan-border shadow-lg">
-                <Image
-                  src="/campus-masterplan.jpg"
-                  alt="Anushtan Campus Masterplan"
-                  fill
-                  className="object-cover"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="relative h-48 w-full rounded-lg overflow-hidden border border-anushtan-border shadow-lg">
+                  <Image
+                    src="/campus-perspective.jpg"
+                    alt="Anushtan Campus Perspective"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="relative h-48 w-full rounded-lg overflow-hidden border border-anushtan-border shadow-lg">
+                  <Image
+                    src="/campus-masterplan.jpg"
+                    alt="Anushtan Campus Masterplan"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               </div>
             </div>
             <div>
