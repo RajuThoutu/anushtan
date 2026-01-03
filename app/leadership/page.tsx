@@ -15,10 +15,10 @@ const generatePlaceholders = (count: number, role: string) =>
 
 const chiefAdvisors = [
     {
-        id: 'bhasker-reddy',
-        name: "Bhasker Reddy Sanditi",
-        title: "Founder, Bharathiya Vidya (SBR Talks)",
-        bio: "With over 30 years of expertise in ancient Bharatiya educational culture, Bhasker Reddy Sanditi is a cornerstone of institutional excellence. He bridges traditional wisdom with modern standards, designing learning environments that mirror the discipline of the Gurukulam while fostering character-building and heritage.",
+        id: 'sbr-talks',
+        name: "SBR Talks",
+        title: "Strategic Advisor",
+        bio: "A school established with a foundation of educational values and ideology.",
         image: "/logo.jpg"
     },
     {
@@ -83,7 +83,14 @@ const directors = [
         id: 'ramu-tavutu',
         name: "Ramu Tavutu",
         title: "Global IT Leader & Product Specialist",
-        bio: "A seasoned leader with 15+ years in global IT project management and product leadership. With extensive international exposure across South Africa and the United States, Ramu specializes in educational innovations derived from studying diverse global schooling systems. He leads the integration of world-class pedagogical practices into the Anushtan framework to ensure our students are globally competitive.",
+        bio: "A seasoned leader with vast experience in global IT project management and product leadership. With extensive international exposure across South Africa and the United States, Ramu specializes in educational innovations derived from studying diverse global schooling systems. He leads the integration of world-class pedagogical practices into the Anushtan framework to ensure our students are globally competitive.",
+        image: "/logo.jpg"
+    },
+    {
+        id: 'naren-s',
+        name: "Naren S",
+        title: "Director. Physical Education",
+        bio: "Director of Physical Education, ensuring students achieve physical vitality and discipline through sports and fitness.",
         image: "/logo.jpg"
     }
 ];
