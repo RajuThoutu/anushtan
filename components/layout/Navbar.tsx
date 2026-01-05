@@ -13,7 +13,7 @@ const navLinks = [
     { name: "Student Life", href: "/student-life" },
     { name: "Teachers & Community", href: "/teachers-community" },
     { name: "Campus", href: "/campus" },
-    { name: "Contact", href: "/contact" },
+
 ];
 
 export function Navbar() {
