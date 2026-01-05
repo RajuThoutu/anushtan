@@ -53,21 +53,21 @@ const chiefAdvisors = [
 const directors = [
     {
         id: 'raju-thoutu',
-        name: "Raju Thoutu",
+        name: "Raju T",
         title: "Architect & AI Strategist",
         bio: "An Architect by profession and an AI Strategist specializing in corporate AI adoption. Bringing high-level expertise from the United States financial sector, Raju bridges the gap between cutting-edge technology and human values. Deeply rooted in Bharatiya ethos, he steers Anushtan’s strategic technological roadmap, ensuring students are future-ready yet culturally grounded.",
         image: "/logo.jpg"
     },
     {
         id: 'srikanth-bollavaram',
-        name: "Srikanth Bollavaram",
+        name: "Srikanth B",
         title: "Transformation Strategist",
         bio: "A transformation strategist with an extensive background heading digital initiatives for global MNCs across the United States and Europe. Srikanth brings international-standard corporate governance and rigorous institutional supervision to Anushtan. He specializes in architecting scalable systems of excellence, ensuring the school’s growth is guided by elite global benchmarks.",
         image: "/logo.jpg"
     },
     {
         id: 'sreedhar-bollavaram',
-        name: "Sreedhar Bollavaram",
+        name: "Sreedhar B",
         title: "Founder & Executive Director, Pratishtan Educational Services",
         bio: "Founder and Executive Director of Pratishtan Educational Services Pvt. Ltd. He brings over 15 years of experience in the software industry — with a strong background in corporate leadership and a proven track record of building & scaling startups.",
         image: "/logo.jpg"
@@ -81,7 +81,7 @@ const directors = [
     },
     {
         id: 'ramu-tavutu',
-        name: "Ramu Tavutu",
+        name: "Ramu T",
         title: "Global IT Leader & Product Specialist",
         bio: "A seasoned leader with vast experience in global IT project management and product leadership. With extensive international exposure across South Africa and the United States, Ramu specializes in educational innovations derived from studying diverse global schooling systems. He leads the integration of world-class pedagogical practices into the Anushtan framework to ensure our students are globally competitive.",
         image: "/logo.jpg"
