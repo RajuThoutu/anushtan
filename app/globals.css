@@ -1,23 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  /* Strict Anushtan Tokens */
-  --anushtan-saffron: #C46A1A;
-  --anushtan-maroon: #6B1F1A;
-  --anushtan-ivory: #FBF6EF;
-  --anushtan-charcoal: #2B2B2B;
-  --anushtan-gold: #B89B5E;
-  --anushtan-border: rgba(43, 43, 43, 0.15);
+  /* Anushtan 2.0 Modern Terracotta Tokens */
+  --anushtan-terracotta: #6B3126;
+  --anushtan-parchment: #FDFBF7;
+  --anushtan-gold: #D4AF37;
+  --anushtan-charcoal: #1A1A1A;
+  --anushtan-border: rgba(26, 26, 26, 0.1);
 
   /* Semantic Mappings */
-  --background: var(--anushtan-ivory);
+  --background: var(--anushtan-parchment);
   --foreground: var(--anushtan-charcoal);
 
-  --primary: var(--anushtan-maroon);
+  --primary: var(--anushtan-terracotta);
   --primary-foreground: #ffffff;
 
-  --secondary: var(--anushtan-saffron);
-  --secondary-foreground: #ffffff;
+  --secondary: var(--anushtan-gold);
+  --secondary-foreground: var(--anushtan-charcoal);
 
   --accent: var(--anushtan-gold);
   --accent-foreground: var(--anushtan-charcoal);
@@ -35,14 +34,13 @@
   --color-text: var(--foreground);
   --color-border: var(--border);
 
-  --color-anushtan-saffron: var(--anushtan-saffron);
-  --color-anushtan-maroon: var(--anushtan-maroon);
-  --color-anushtan-ivory: var(--anushtan-ivory);
-  --color-anushtan-charcoal: var(--anushtan-charcoal);
+  --color-anushtan-terracotta: var(--anushtan-terracotta);
+  --color-anushtan-parchment: var(--anushtan-parchment);
   --color-anushtan-gold: var(--anushtan-gold);
+  --color-anushtan-charcoal: var(--anushtan-charcoal);
 
   --font-heading: "Playfair Display", serif;
-  --font-body: "Georgia", serif;
+  --font-body: "Inter", sans-serif;
 }
 
 body {

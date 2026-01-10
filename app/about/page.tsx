@@ -3,54 +3,89 @@ import Image from "next/image";
 import { Footer } from "@/components/layout/Footer";
 import { PageHeader } from "@/components/sections/PageHeader";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { PillarsSection } from "@/components/sections/PillarsSection"; // Import updated PillarsSection
+import { Card } from "@/components/ui/Card"; // Assuming Card component exists
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
     title: 'About | Anushtan Indic School',
-    description: 'An overview of the vision, mission, and student profile at Anushtan Indic School.',
+    description: 'Governance of the Soul, Mind, and Future. The Anushtan Mandate and Leadership Architecture.',
 };
 
 export default function About() {
     return (
         <>
             <Navbar />
-            <PageHeader
-                title="About Anushtan Indic School"
-                subtitle="Integrating academic learning with cultural grounding and holistic development."
-            />
 
-            {/* About Anushtan (Intro) */}
-            <section className="py-20 bg-transparent">
-                <div className="container-custom max-w-4xl mx-auto">
-                    <SectionHeader title="Overview" />
-                    <div className="text-lg text-[#2B2B2B] leading-relaxed space-y-6 bg-[rgba(196,106,26,0.08)] border-l-4 border-anushtan-saffron p-6">
-                        <p>
-                            Anushtan Indic School is an educational institution designed to integrate academic learning with cultural grounding and holistic development.
+            {/* 1. Header: The Anushtan Mandate */}
+            <header className="bg-anushtan-terracotta text-white py-24 text-center">
+                <div className="container-custom">
+                    <h1 className="font-heading text-4xl md:text-6xl font-bold mb-6">
+                        The Anushtan Mandate
+                    </h1>
+                    <p className="text-xl md:text-2xl font-light text-anushtan-gold max-w-3xl mx-auto tracking-wide">
+                        Governance of the Soul, Mind, and Future.
+                    </p>
+                </div>
+            </header>
+
+            {/* 2. Governance and Leadership Architecture */}
+            <section className="py-24 bg-white relative overflow-hidden">
+                <div className="container-custom">
+                    <div className="text-center mb-16">
+                        <span className="text-anushtan-terracotta font-bold uppercase tracking-widest text-sm block mb-2">Global Oversight</span>
+                        <h2 className="font-heading text-4xl md:text-5xl font-bold text-anushtan-charcoal mb-6">
+                            Governance & Leadership Architecture
+                        </h2>
+                        <div className="h-1 w-24 bg-anushtan-gold mx-auto mb-8"></div>
+                    </div>
+
+                    <div className="max-w-4xl mx-auto bg-anushtan-parchment/30 border border-anushtan-border p-10 rounded-2xl relative shadow-lg">
+                        <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none"
+                            style={{ backgroundImage: 'radial-gradient(#6B3126 1px, transparent 1px)', backgroundSize: '30px 30px' }}>
+                        </div>
+                        <p className="text-xl md:text-2xl text-anushtan-charcoal font-heading leading-relaxed text-center font-medium">
+                            "Led by a <span className="text-anushtan-terracotta font-bold">Global System Architect</span>, Anushtan applies the principles of enterprise-level precision to education."
                         </p>
-                        <p>
-                            The school is structured around a coherent educational vision that views education not merely as skill acquisition, but as a process of nurturing intellectual clarity, ethical maturity, emotional stability, and cultural continuity.
+                        <p className="text-base text-gray-600 text-center mt-6 max-w-2xl mx-auto">
+                            Our leadership structure mirrors high-performance organizational governance, ensuring that every educational process is monitored, measured, and optimized for world-class outcomes.
                         </p>
                     </div>
                 </div>
             </section>
 
-            {/* The Purpose of Anushtan */}
-            <section className="py-20 bg-transparent">
-                <div className="container-custom max-w-4xl mx-auto">
-                    <SectionHeader title="The Purpose of Anushtan" />
-                    <div className="text-lg text-[#2B2B2B] leading-relaxed space-y-6 bg-[rgba(196,106,26,0.08)] border-l-4 border-anushtan-saffron p-6">
-                        <p>
-                            The purpose of Anushtan is to create an educational environment where learning is meaningful, disciplined, and rooted in context.
-                        </p>
-                        <p>
-                            Education here is understood as a formative process — shaping how students think, how they relate to others, how they understand responsibility, and how they locate themselves within society and tradition.
-                        </p>
+            {/* 3. The 7 Pillars (Protocols) - Transitioned from Home Page */}
+            <PillarsSection />
+
+            {/* 4. Academic Audit */}
+            <section className="py-24 bg-anushtan-charcoal text-white relative">
+                <div className="container-custom">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <span className="text-anushtan-gold font-bold uppercase tracking-widest text-sm block mb-2">Quality Assurance</span>
+                            <h2 className="font-heading text-4xl font-bold mb-6">Academic Audit & Future-Proofing</h2>
+                            <div className="space-y-6 text-lg text-white/80 leading-relaxed font-light">
+                                <p>
+                                    At Anushtan, we do not rely on standard metrics alone. Our curriculum is built on <strong>"Descriptive Logic,"</strong> a rigorous framework monitored daily to ensure deeper conceptual understanding rather than rote memorization.
+                                </p>
+                                <p>
+                                    We actively monitor <strong>AI-driven educational shifts</strong>. Our Academic Audit team reviews and adapts our methodologies to ensure our students stay ahead of technological disruptions, retaining their edge in a world where AI will replace routine cognition.
+                                </p>
+                            </div>
+                        </div>
+                        <div className="relative h-80 lg:h-full min-h-[400px] border border-white/10 rounded-xl overflow-hidden bg-white/5 backdrop-blur-sm p-8 flex flex-col justify-center items-center text-center">
+                            <div className="w-20 h-20 bg-anushtan-gold/20 rounded-full flex items-center justify-center text-4xl text-anushtan-gold mb-6 border border-anushtan-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.2)]">
+                                🔍
+                            </div>
+                            <h3 className="text-2xl font-bold text-anushtan-gold mb-2">Continuous Monitoring</h3>
+                            <p className="text-sm text-white/60">Real-time curriculum adjustments based on global standards.</p>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* Meaning of the Logo */}
-            <section className="py-20 bg-anushtan-ivory/30">
+            {/* 5. Meaning of the Logo (Preserved) */}
+            <section className="py-24 bg-anushtan-ivory/30">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Our Identity: The Meaning of the Logo" />
 

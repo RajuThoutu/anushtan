@@ -3,33 +3,45 @@ import React from 'react';
 const pillars = [
     {
         name: "Swami Vivekananda",
-        title: "The Foundation of Man-Making",
+        title: "The Man-Making Protocol",
         quote: "Education is the manifestation of the perfection already in man.",
-        description: "Following the ideals of Swami Vivekananda, our primary goal is Man-making Education. We believe in building character, strengthening the mind, and expanding the intellect so that our students can stand on their own feet, driven by self-reliance and an indomitable spirit of service."
+        description: "Focusing on character building, strength of mind, and the expansion of the intellect. This protocol ensures students become self-reliant, fearless, and driven by a spirit of service."
     },
     {
-        name: 'Sri Sarada Devi (the "Holy Mother")',
-        title: "The Sacred Kitchen of Kindness",
+        name: 'Sri Sarada Devi',
+        title: "The Sharada Mata Nutrition Protocol",
         quote: "I am the mother of the wicked, as I am the mother of the virtuous.",
-        description: "Inspired by the holiness of Sri Sharada Devi, the Anushtan kitchen is more than a place of sustenance; it is a sanctuary of love. We serve every child with the same kindness and devotion she practiced, teaching our students that serving others with love is the highest form of worship. Our nourishment is for both the body and the soul."
+        description: "The Anushtan kitchen is a sanctuary of love. We serve high-prana, satvic food with the same devotion she practiced. This protocol emphasizes that nourishment is for both the body and the soul, fostering compassion."
     },
     {
         name: "Sri Aurobindo",
-        title: "The Integral Path of Free Learning",
+        title: "The Integral Education Protocol",
         quote: "The first principle of true teaching is that nothing can be taught.",
-        description: "We adopt Sri Aurobindo’s Integral Education concepts, where learning is a process of self-discovery rather than instruction. By fostering an environment of Free Learning, we allow the child’s psychic and mental faculties to evolve naturally, ensuring the development of the body, mind, and spirit as one unified whole."
+        description: "Learning is a process of self-discovery. We facilitate an environment where the child's psychic and mental faculties evolve naturally, integrating the physical, vital, mental, and spiritual self."
     },
     {
         name: "Rabindranath Tagore",
-        title: "The Harmony of Fine Arts",
+        title: "The Shantinikethan Arts Protocol",
         quote: "The highest education is that which does not merely give us information but makes our life in harmony with all existence.",
-        description: "Taking inspiration from Tagore’s Shantinikethan, we celebrate the \"Culture of the Heart.\" We integrate Fine Arts, Music, and Creativity into the daily rhythm of school life, encouraging students to express their inner beauty and find harmony with nature and humanity."
+        description: "Cultivating the 'Culture of the Heart' through Fine Arts, Music, and Nature. This protocol integrates creativity into daily life, encouraging expression and harmony with the universe."
     },
     {
         name: "Dr. APJ Abdul Kalam",
-        title: "Igniting the Future",
+        title: "The Ignited Minds Innovation Protocol",
         quote: "Dream is not that which you see while sleeping; it is something that does not let you sleep.",
-        description: "Dr. Kalam represents the Modern Scientific Spirit of Anushtan. We strive to create \"Ignited Minds\" by blending value-based education with a passion for technology and innovation. We empower our students to dream big, work with integrity, and lead India toward a bright, self-reliant future through excellence in science and leadership."
+        description: "Blending value-based education with cutting-edge technology. This protocol drives the 'Kriya Shakti' (Action) aspect, preparing students to lead India's future through science, innovation, and integrity."
+    },
+    {
+        name: "Chanakya",
+        title: "The Arthashastra Governance Protocol",
+        quote: "Before you start some work, always ask yourself three questions - Why am I doing it, What the results might be and Will I be successful.",
+        description: "Instilling strategic thinking, leadership, and statecraft. This protocol shapes future leaders who understand governance, economics, and the responsible use of power for the welfare of society."
+    },
+    {
+        name: "Patanjali",
+        title: "The Yogic Wellness Protocol",
+        quote: "Yoga is the settling of the mind into silence.",
+        description: "Physical and mental discipline through Yoga. This protocol ensures the alignment of body, breath, and mind, creating a stable foundation for periods of intense intellectual focus."
     }
 ];
 
@@ -39,7 +51,7 @@ export function PillarsSection() {
             <div className="container-custom">
                 <div className="text-center mb-16">
                     <h2 className="font-heading text-4xl md:text-5xl font-bold text-anushtan-maroon mb-4">
-                        The Pillars of Anushtan
+                        The 7 Pillars of Anushtan
                     </h2>
                     <div className="h-1 w-24 bg-anushtan-gold mx-auto mb-6"></div>
                     <p className="max-w-3xl mx-auto text-lg text-anushtan-charcoal/80 leading-relaxed">

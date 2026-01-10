@@ -20,10 +20,10 @@ export function Navbar() {
     const [isOpen, setIsOpen] = React.useState(false);
 
     return (
-        <nav className="sticky top-0 z-50 w-full border-b border-anushtan-border bg-anushtan-ivory/95 backdrop-blur-md">
+        <nav className="sticky top-0 z-50 w-full border-b border-anushtan-border bg-anushtan-parchment/95 backdrop-blur-md">
             <div className="container-custom flex h-20 items-center justify-between">
                 <Link href="/" className="flex items-center gap-3">
-                    <div className="relative h-10 w-10 overflow-hidden rounded-full border border-anushtan-maroon/20">
+                    <div className="relative h-10 w-10 overflow-hidden rounded-full border border-anushtan-terracotta/20">
                         <Image
                             src="/logo.jpg"
                             alt="Anushtan Logo"
@@ -32,7 +32,7 @@ export function Navbar() {
                             sizes="40px"
                         />
                     </div>
-                    <span className="font-heading text-xl font-bold text-anushtan-maroon tracking-tight">
+                    <span className="font-heading text-xl font-bold text-anushtan-terracotta tracking-tight">
                         Anushtan
                     </span>
                 </Link>
@@ -43,12 +43,12 @@ export function Navbar() {
                         <Link
                             key={link.href}
                             href={link.href}
-                            className="text-sm font-medium text-anushtan-charcoal hover:text-anushtan-saffron transition-colors"
+                            className="text-sm font-medium text-anushtan-charcoal hover:text-anushtan-terracotta transition-colors"
                         >
                             {link.name}
                         </Link>
                     ))}
-                    <Button href="/admissions" className="bg-anushtan-maroon text-white hover:bg-anushtan-maroon/90">
+                    <Button href="/admissions" className="bg-anushtan-terracotta text-white hover:bg-[#8B3A2B] font-bold px-6 shadow-md hover:shadow-xl transition-all hover:-translate-y-0.5 border border-white/10">
                         Admissions
                     </Button>
                 </div>
@@ -56,7 +56,7 @@ export function Navbar() {
                 {/* Mobile Menu Toggle */}
                 {/* Mobile Menu Toggle */}
                 <button
-                    className="lg:hidden flex items-center gap-2 px-3 py-2 text-anushtan-maroon hover:bg-anushtan-maroon/5 rounded-md transition-colors border border-anushtan-maroon/10"
+                    className="lg:hidden flex items-center gap-2 px-3 py-2 text-anushtan-terracotta hover:bg-anushtan-terracotta/5 rounded-md transition-colors border border-anushtan-terracotta/10"
                     onClick={() => setIsOpen(!isOpen)}
                     aria-label="Toggle menu"
                 >
@@ -78,19 +78,19 @@ export function Navbar() {
 
             {/* Mobile Nav */}
             {isOpen && (
-                <div className="lg:hidden border-t border-anushtan-border bg-anushtan-ivory p-4 shadow-lg">
+                <div className="lg:hidden border-t border-anushtan-border bg-anushtan-parchment p-4 shadow-lg">
                     <div className="flex flex-col gap-4">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className="text-base font-medium text-anushtan-charcoal px-4 py-2 hover:bg-anushtan-maroon/5 rounded-md"
+                                className="text-base font-medium text-anushtan-charcoal px-4 py-2 hover:bg-anushtan-terracotta/5 rounded-md"
                                 onClick={() => setIsOpen(false)}
                             >
                                 {link.name}
                             </Link>
                         ))}
-                        <Button href="/admissions" fullWidth onClick={() => setIsOpen(false)} className="bg-anushtan-maroon text-white">
+                        <Button href="/admissions" fullWidth onClick={() => setIsOpen(false)} className="bg-anushtan-terracotta text-white font-bold shadow-md hover:bg-[#8B3A2B]">
                             Admissions
                         </Button>
                     </div>
