@@ -38,9 +38,7 @@ export const HeroSection = () => {
                     <span className="text-anushtan-terracotta italic">Global Minds.</span>
                 </h1>
 
-                <p className="text-xl md:text-2xl text-anushtan-parchment/80 max-w-3xl mb-12 font-light leading-relaxed">
-                    Architecting the next generation through a USA-supervised ecosystem. Where Vedantic strength meets Silicon Valley logic.
-                </p>
+
 
                 <div className="flex flex-col md:flex-row gap-6">
                     <Button href="/admissions" className="bg-anushtan-terracotta text-white hover:bg-anushtan-terracotta/90 border-0 px-10 py-8 text-xl tracking-wide shadow-[0_0_30px_rgba(107,49,38,0.3)]">
