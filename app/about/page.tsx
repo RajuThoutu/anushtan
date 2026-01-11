@@ -16,82 +16,89 @@ export default function About() {
             <Navbar />
 
             {/* 1. New Header: Our Identity (Logo & Meaning) */}
-            <section className="py-24 bg-anushtan-parchment">
-                <div className="container-custom max-w-6xl mx-auto">
-                    <div className="flex flex-col md:flex-row gap-16 items-center">
-                        {/* Left Column: Logo */}
-                        <div className="w-full md:w-1/3 flex justify-center">
-                            <div className="w-64 h-64 border-4 border-anushtan-gold/20 rounded-full flex items-center justify-center bg-white shadow-2xl overflow-hidden relative p-4">
-                                <div className="relative w-full h-full">
-                                    <Image
-                                        src="/logo.jpg"
-                                        alt="Anushtan Indic School Logo"
-                                        fill
-                                        className="object-contain"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Right Column: Meaning & Philosophy */}
-                        <div className="w-full md:w-2/3 text-left">
-                            <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 text-anushtan-terracotta">
-                                Our Identity
-                            </h1>
-                            <p className="text-xl text-anushtan-charcoal/80 leading-relaxed italic mb-8 border-l-4 border-anushtan-gold pl-6">
+            <section className="py-24 bg-anushtan-parchment overflow-hidden">
+                <div className="container-custom max-w-7xl mx-auto">
+                    <div className="text-center mb-12">
+                        <h1 className="font-heading text-4xl md:text-5xl font-bold text-anushtan-terracotta mb-8">
+                            Our Identity
+                        </h1>
+                        <div className="w-full bg-white/50 border-y border-anushtan-gold/20 py-8 px-4 mb-16 backdrop-blur-sm">
+                            <p className="text-2xl md:text-3xl text-anushtan-charcoal font-heading leading-relaxed italic max-w-4xl mx-auto text-center">
                                 "Our logo is not just a design; it is a visual representation of our educational philosophy."
                             </p>
+                        </div>
+                    </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div className="space-y-4">
-                                    <h3 className="font-heading text-xl font-bold text-anushtan-terracotta flex items-center gap-2">
-                                        <Triangle className="w-5 h-5 text-anushtan-gold fill-current" /> The Equilateral Triangle
-                                    </h3>
-                                    <div className="text-anushtan-charcoal/80 space-y-3 text-sm">
-                                        <p>
-                                            The triangle represents <strong>Balance, Interconnectedness, and Growth</strong>. Each side carries a profound meaning, representing the core pillars of our philosophy:
-                                        </p>
-                                        <ul className="list-disc list-inside pl-2 space-y-1">
-                                            <li><strong>Academic Excellence</strong></li>
-                                            <li><strong>Holistic Development</strong></li>
-                                            <li><strong>Cultural Rootedness</strong></li>
-                                        </ul>
-                                        <p className="mt-4 pt-4 border-t border-dashed border-gray-200">
-                                            It also symbolizes the harmony between the <strong>Teacher, Student, and Parent</strong>, and the alignment of <strong>Body, Mind, and Intellect</strong>.
-                                        </p>
-                                    </div>
-                                </div>
+                    {/* Symmetrical Exploded View */}
+                    <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-0 relative">
 
-                                <div className="space-y-4">
-                                    <h3 className="font-heading text-xl font-bold text-anushtan-terracotta flex items-center gap-2">
-                                        <Flower className="w-5 h-5 text-anushtan-gold" /> The Lotus (Kamalam)
-                                    </h3>
-                                    <div className="text-anushtan-charcoal/80 space-y-3 text-sm">
-                                        <p>
-                                            The Lotus blooms in mud but remains unstained. It symbolizes <strong>Purity and Clarity</strong> amidst the complexities of the world.
-                                        </p>
-                                        <p>
-                                            The five petals represent the <em>Panchakoshas</em> (Five Layers of Existence) that we aim to blossom in every child:
-                                        </p>
-                                        <ul className="list-disc list-inside pl-2 space-y-1 font-medium text-anushtan-terracotta/90">
-                                            <li>Annamaya (Physical)</li>
-                                            <li>Pranamaya (Vital)</li>
-                                            <li>Manomaya (Mental)</li>
-                                            <li>Vijnanamaya (Intellectual)</li>
-                                            <li>Anandamaya (Bliss)</li>
-                                        </ul>
-                                        <div className="mt-4 pt-4 border-t border-dashed border-gray-200 space-y-2">
-                                            <p>The Lotus is also a powerful emblem of:</p>
-                                            <ul className="list-disc list-inside pl-2 space-y-1">
-                                                <li><strong>Heart and Emotional Growth:</strong> Cultivating compassion, empathy, and values.</li>
-                                                <li><strong>Devotion and Discipline:</strong> Dedication to learning, teaching, and self-mastery.</li>
-                                                <li><strong>Divinity and Purity:</strong> Blossoming with knowledge even amidst challenges.</li>
-                                            </ul>
-                                        </div>
+                        {/* Left Wing: Triangle */}
+                        <div className="w-full lg:w-1/3 text-center lg:text-right lg:pr-12 relative">
+                            {/* Connector Line (Desktop) */}
+                            <div className="hidden lg:block absolute top-1/2 right-0 w-12 h-[1px] bg-anushtan-gold/30"></div>
+
+                            <h3 className="font-heading text-2xl font-bold text-anushtan-terracotta mb-4 flex items-center justify-center lg:justify-end gap-2">
+                                The Equilateral Triangle <Triangle className="w-6 h-6 text-anushtan-gold fill-current" />
+                            </h3>
+                            <div className="text-anushtan-charcoal/80 space-y-4 text-sm leading-relaxed">
+                                <p>
+                                    The triangle represents <strong>Balance, Interconnectedness, and Growth</strong>. Each side carries a profound meaning, representing the core pillars of our philosophy:
+                                </p>
+                                <ul className="space-y-1 text-anushtan-terracotta font-medium">
+                                    <li>Academic Excellence</li>
+                                    <li>Holistic Development</li>
+                                    <li>Cultural Rootedness</li>
+                                </ul>
+                                <p className="text-xs uppercase tracking-widest text-anushtan-charcoal/50 pt-2 border-t border-anushtan-border inline-block">
+                                    It also symbolizes the harmony between the Teacher, Student, and Parent, and the alignment of Body, Mind, and Intellect.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Center: Hero Logo */}
+                        <div className="w-full lg:w-1/3 flex justify-center relative z-10 my-8 lg:my-0">
+                            <div className="w-80 h-80 relative">
+                                {/* Glow Effect */}
+                                <div className="absolute inset-0 bg-anushtan-gold/5 rounded-full blur-3xl scale-110"></div>
+                                <div className="w-full h-full border-[1px] border-anushtan-gold/20 rounded-full flex items-center justify-center bg-white shadow-2xl relative p-6">
+                                    <div className="absolute inset-4 border border-anushtan-gold/10 rounded-full border-dashed animate-spin-slow"></div>
+                                    <div className="relative w-full h-full">
+                                        <Image
+                                            src="/logo.jpg"
+                                            alt="Anushtan Indic School Logo"
+                                            fill
+                                            className="object-contain"
+                                        />
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        {/* Right Wing: Lotus */}
+                        <div className="w-full lg:w-1/3 text-center lg:text-left lg:pl-12 relative">
+                            {/* Connector Line (Desktop) */}
+                            <div className="hidden lg:block absolute top-1/2 left-0 w-12 h-[1px] bg-anushtan-gold/30"></div>
+
+                            <h3 className="font-heading text-2xl font-bold text-anushtan-terracotta mb-4 flex items-center justify-center lg:justify-start gap-2">
+                                <Flower className="w-6 h-6 text-anushtan-gold" /> The Lotus (Kamalam)
+                            </h3>
+                            <div className="text-anushtan-charcoal/80 space-y-4 text-sm leading-relaxed">
+                                <p>
+                                    The Lotus blooms in mud but remains unstained. It symbolizes <strong>Purity and Clarity</strong> amidst the complexities of the world.
+                                </p>
+                                <ul className="space-y-1 text-anushtan-terracotta font-medium">
+                                    <li>Annamaya (Physical)</li>
+                                    <li>Pranamaya (Vital)</li>
+                                    <li>Manomaya (Mental)</li>
+                                    <li>Vijnanamaya (Intellectual)</li>
+                                    <li>Anandamaya (Bliss)</li>
+                                </ul>
+                                <p className="text-xs uppercase tracking-widest text-anushtan-charcoal/50 pt-2 border-t border-anushtan-border inline-block">
+                                    The Lotus is also a powerful emblem of Heart, Devotion, and Divinity.
+                                </p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </section>
