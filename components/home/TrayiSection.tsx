@@ -62,17 +62,17 @@ export const TrayiSection = () => {
                                         backgroundSize: '10px 10px'
                                     }}
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-100" />
-                                <div className="absolute bottom-6 left-6">
-                                    <h3 className="font-heading text-3xl font-bold mb-1 text-white">Jnana Shakti</h3>
-                                    <p className="text-anushtan-gold font-medium tracking-wide">The Mind</p>
-                                </div>
                                 <Image
                                     src="/images/chukka-ramaiah.png"
                                     alt="Chukka Ramaiah"
                                     fill
                                     className="object-cover object-top"
                                 />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-100" />
+                                <div className="absolute bottom-6 left-6">
+                                    <h3 className="font-heading text-3xl font-bold mb-1 text-white">Jnana Shakti</h3>
+                                    <p className="text-anushtan-gold font-medium tracking-wide">The Mind</p>
+                                </div>
 
                             </div>
                             <div className="p-8 bg-white text-anushtan-charcoal h-full relative border-t border-anushtan-border">
@@ -98,17 +98,17 @@ export const TrayiSection = () => {
                                         backgroundSize: '20px 20px'
                                     }}
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-100" />
-                                <div className="absolute bottom-6 left-6">
-                                    <h3 className="font-heading text-3xl font-bold mb-1 text-white">Kriya Shakti</h3>
-                                    <p className="text-anushtan-gold font-medium tracking-wide">The Future</p>
-                                </div>
                                 <Image
                                     src="/images/apj-kalam.jpg"
                                     alt="APJ Abdul Kalam"
                                     fill
                                     className="object-cover object-top"
                                 />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-100" />
+                                <div className="absolute bottom-6 left-6">
+                                    <h3 className="font-heading text-3xl font-bold mb-1 text-white">Kriya Shakti</h3>
+                                    <p className="text-anushtan-gold font-medium tracking-wide">The Future</p>
+                                </div>
 
                             </div>
                             <div className="p-8 bg-white text-anushtan-charcoal h-full relative border-t border-anushtan-border">
