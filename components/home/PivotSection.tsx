@@ -1,10 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Microscope, Leaf, Landmark } from "lucide-react";
 
 export const PivotSection = () => {
     return (
-        <section className="py-24 bg-white text-anushtan-charcoal relative overflow-hidden">
+        <section className="py-24 bg-anushtan-parchment text-anushtan-charcoal relative overflow-hidden">
             <div className="container-custom">
                 <div className="text-center mb-16">
                     <h2 className="font-heading text-4xl md:text-5xl font-bold text-anushtan-terracotta mb-6">
@@ -51,7 +52,9 @@ export const PivotSection = () => {
                             transition={{ delay: 0.2 }}
                             className="bg-red-50/50 border border-red-200 p-8 rounded-xl text-center hover:bg-red-100/50 transition-colors group shadow-lg shadow-red-900/5 hover:shadow-xl"
                         >
-                            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl group-hover:bg-red-200 transition-colors">📐</div>
+                            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl group-hover:bg-red-200 transition-colors">
+                                <Microscope className="w-8 h-8 text-red-600" />
+                            </div>
                             <h3 className="font-heading text-2xl font-bold text-red-700 mb-2">Mathematical Sciences</h3>
                             <p className="text-sm text-red-900/60 mb-4">JEE / BITSAT Focus</p>
                         </motion.div>
@@ -63,7 +66,9 @@ export const PivotSection = () => {
                             transition={{ delay: 0.4 }}
                             className="bg-green-50/50 border border-green-200 p-8 rounded-xl text-center hover:bg-green-100/50 transition-colors mt-0 md:mt-12 group shadow-lg shadow-green-900/5 hover:shadow-xl"
                         >
-                            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl group-hover:bg-green-200 transition-colors">🌿</div>
+                            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl group-hover:bg-green-200 transition-colors">
+                                <Leaf className="w-8 h-8 text-green-600" />
+                            </div>
                             <h3 className="font-heading text-2xl font-bold text-green-700 mb-2">Life Sciences</h3>
                             <p className="text-sm text-green-900/60 mb-4">NEET / Research Focus</p>
                         </motion.div>
@@ -75,7 +80,9 @@ export const PivotSection = () => {
                             transition={{ delay: 0.6 }}
                             className="bg-yellow-50/50 border border-yellow-200 p-8 rounded-xl text-center hover:bg-yellow-100/50 transition-colors group shadow-lg shadow-yellow-900/5 hover:shadow-xl"
                         >
-                            <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl group-hover:bg-yellow-200 transition-colors">🏛️</div>
+                            <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl group-hover:bg-yellow-200 transition-colors">
+                                <Landmark className="w-8 h-8 text-yellow-600" />
+                            </div>
                             <h3 className="font-heading text-2xl font-bold text-yellow-700 mb-2">Management & Governance</h3>
                             <p className="text-sm text-yellow-900/60 mb-4">IAS / Leadership Focus</p>
                         </motion.div>

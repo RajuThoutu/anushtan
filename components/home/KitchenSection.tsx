@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
+import { Droplets } from "lucide-react";
 
 export const KitchenSection = () => {
     return (
@@ -48,7 +49,7 @@ export const KitchenSection = () => {
                     {/* Feature 3: Zero Sugar */}
                     <div className="relative group overflow-hidden rounded-2xl bg-white border-2 border-anushtan-terracotta/20 shadow-md">
                         <div className="absolute inset-0 flex items-center justify-center opacity-80 group-hover:scale-110 transition-transform duration-500">
-                            <span className="text-7xl">🍯</span>
+                            <Droplets className="w-24 h-24 text-anushtan-gold" />
                         </div>
                         <div className="absolute bottom-6 left-6 z-20">
                             <h3 className="text-anushtan-charcoal font-heading text-2xl font-bold mb-1">Zero-Sugar Standard</h3>

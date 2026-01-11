@@ -17,7 +17,7 @@ export const TrayiSection = () => {
                         The Trinity of Inspirations
                     </h2>
                     <p className="text-anushtan-terracotta text-lg font-bold tracking-widest uppercase">
-                        Architecting potential through Iccha, Jnana, and Kriya Shakti.
+                        Architecting potential through the Trishakti Framework
                     </p>
                 </div>
 
