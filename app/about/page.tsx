@@ -47,18 +47,48 @@ export default function About() {
                                     <h3 className="font-heading text-xl font-bold text-anushtan-terracotta flex items-center gap-2">
                                         <Triangle className="w-5 h-5 text-anushtan-gold fill-current" /> The Equilateral Triangle
                                     </h3>
-                                    <p className="text-anushtan-charcoal/80 text-sm leading-relaxed">
-                                        Represents <strong>Balance, Interconnectedness, and Growth</strong>. It symbolizes the harmony between Teacher, Student, and Parent, and the alignment of Body, Mind, and Intellect.
-                                    </p>
+                                    <div className="text-anushtan-charcoal/80 space-y-3 text-sm">
+                                        <p>
+                                            The triangle represents <strong>Balance, Interconnectedness, and Growth</strong>. Each side carries a profound meaning, representing the core pillars of our philosophy:
+                                        </p>
+                                        <ul className="list-disc list-inside pl-2 space-y-1">
+                                            <li><strong>Academic Excellence</strong></li>
+                                            <li><strong>Holistic Development</strong></li>
+                                            <li><strong>Cultural Rootedness</strong></li>
+                                        </ul>
+                                        <p className="mt-4 pt-4 border-t border-dashed border-gray-200">
+                                            It also symbolizes the harmony between the <strong>Teacher, Student, and Parent</strong>, and the alignment of <strong>Body, Mind, and Intellect</strong>.
+                                        </p>
+                                    </div>
                                 </div>
 
                                 <div className="space-y-4">
                                     <h3 className="font-heading text-xl font-bold text-anushtan-terracotta flex items-center gap-2">
                                         <Flower className="w-5 h-5 text-anushtan-gold" /> The Lotus (Kamalam)
                                     </h3>
-                                    <p className="text-anushtan-charcoal/80 text-sm leading-relaxed">
-                                        Symbolizing <strong>Purity and Clarity</strong>. The petals represent the <em>Panchakoshas</em> (Five Layers of Existence) we aim to blossom in every child: Physical, Vital, Mental, Intellectual, and Bliss.
-                                    </p>
+                                    <div className="text-anushtan-charcoal/80 space-y-3 text-sm">
+                                        <p>
+                                            The Lotus blooms in mud but remains unstained. It symbolizes <strong>Purity and Clarity</strong> amidst the complexities of the world.
+                                        </p>
+                                        <p>
+                                            The five petals represent the <em>Panchakoshas</em> (Five Layers of Existence) that we aim to blossom in every child:
+                                        </p>
+                                        <ul className="list-disc list-inside pl-2 space-y-1 font-medium text-anushtan-terracotta/90">
+                                            <li>Annamaya (Physical)</li>
+                                            <li>Pranamaya (Vital)</li>
+                                            <li>Manomaya (Mental)</li>
+                                            <li>Vijnanamaya (Intellectual)</li>
+                                            <li>Anandamaya (Bliss)</li>
+                                        </ul>
+                                        <div className="mt-4 pt-4 border-t border-dashed border-gray-200 space-y-2">
+                                            <p>The Lotus is also a powerful emblem of:</p>
+                                            <ul className="list-disc list-inside pl-2 space-y-1">
+                                                <li><strong>Heart and Emotional Growth:</strong> Cultivating compassion, empathy, and values.</li>
+                                                <li><strong>Devotion and Discipline:</strong> Dedication to learning, teaching, and self-mastery.</li>
+                                                <li><strong>Divinity and Purity:</strong> Blossoming with knowledge even amidst challenges.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
