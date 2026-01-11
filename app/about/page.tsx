@@ -12,18 +12,20 @@ export const metadata: Metadata = {
     description: 'Governance of the Soul, Mind, and Future. The Anushtan Mandate and Leadership Architecture.',
 };
 
+import { Search, Triangle, Flower } from "lucide-react";
+
 export default function About() {
     return (
         <>
             <Navbar />
 
-            {/* 1. Header: The Anushtan Mandate */}
-            <header className="bg-anushtan-terracotta text-white py-24 text-center">
+            {/* 1. Header: The Architect's Vision */}
+            <header className="bg-anushtan-parchment text-anushtan-charcoal py-24 text-center">
                 <div className="container-custom">
-                    <h1 className="font-heading text-4xl md:text-6xl font-bold mb-6">
-                        The Anushtan Mandate
+                    <h1 className="font-heading text-4xl md:text-6xl font-bold mb-6 text-anushtan-terracotta">
+                        The Architect's Vision
                     </h1>
-                    <p className="text-xl md:text-2xl font-light text-anushtan-gold max-w-3xl mx-auto tracking-wide">
+                    <p className="text-xl md:text-2xl font-light text-anushtan-charcoal/80 max-w-3xl mx-auto tracking-wide">
                         Governance of the Soul, Mind, and Future.
                     </p>
                 </div>
@@ -35,7 +37,7 @@ export default function About() {
                     <div className="text-center mb-16">
                         <span className="text-anushtan-terracotta font-bold uppercase tracking-widest text-sm block mb-2">Global Oversight</span>
                         <h2 className="font-heading text-4xl md:text-5xl font-bold text-anushtan-charcoal mb-6">
-                            Governance & Leadership Architecture
+                            Global Oversight Map
                         </h2>
                         <div className="h-1 w-24 bg-anushtan-gold mx-auto mb-8"></div>
                     </div>
@@ -57,14 +59,14 @@ export default function About() {
             {/* 3. The 7 Pillars (Protocols) - Transitioned from Home Page */}
             <PillarsSection />
 
-            {/* 4. Academic Audit */}
-            <section className="py-24 bg-anushtan-charcoal text-white relative">
+            {/* 4. Continuous Quality Audits */}
+            <section className="py-24 bg-anushtan-parchment text-anushtan-charcoal relative">
                 <div className="container-custom">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         <div>
-                            <span className="text-anushtan-gold font-bold uppercase tracking-widest text-sm block mb-2">Quality Assurance</span>
-                            <h2 className="font-heading text-4xl font-bold mb-6">Academic Audit & Future-Proofing</h2>
-                            <div className="space-y-6 text-lg text-white/80 leading-relaxed font-light">
+                            <span className="text-anushtan-terracotta font-bold uppercase tracking-widest text-sm block mb-2">Quality Assurance</span>
+                            <h2 className="font-heading text-4xl font-bold mb-6 text-anushtan-charcoal">Continuous Quality Audits</h2>
+                            <div className="space-y-6 text-lg text-anushtan-charcoal/80 leading-relaxed font-light">
                                 <p>
                                     At Anushtan, we do not rely on standard metrics alone. Our curriculum is built on <strong>"Descriptive Logic,"</strong> a rigorous framework monitored daily to ensure deeper conceptual understanding rather than rote memorization.
                                 </p>
@@ -73,19 +75,19 @@ export default function About() {
                                 </p>
                             </div>
                         </div>
-                        <div className="relative h-80 lg:h-full min-h-[400px] border border-white/10 rounded-xl overflow-hidden bg-white/5 backdrop-blur-sm p-8 flex flex-col justify-center items-center text-center">
-                            <div className="w-20 h-20 bg-anushtan-gold/20 rounded-full flex items-center justify-center text-4xl text-anushtan-gold mb-6 border border-anushtan-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.2)]">
-                                🔍
+                        <div className="relative h-80 lg:h-full min-h-[400px] border border-anushtan-border rounded-xl overflow-hidden bg-white shadow-sm p-8 flex flex-col justify-center items-center text-center">
+                            <div className="w-20 h-20 bg-anushtan-gold/10 rounded-full flex items-center justify-center text-4xl text-anushtan-gold mb-6 border border-anushtan-gold/30">
+                                <Search className="w-10 h-10 text-anushtan-gold" />
                             </div>
-                            <h3 className="text-2xl font-bold text-anushtan-gold mb-2">Continuous Monitoring</h3>
-                            <p className="text-sm text-white/60">Real-time curriculum adjustments based on global standards.</p>
+                            <h3 className="text-2xl font-bold text-anushtan-terracotta mb-2">Continuous Monitoring</h3>
+                            <p className="text-sm text-anushtan-charcoal/60">Real-time curriculum adjustments based on global standards.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* 5. Meaning of the Logo (Preserved) */}
-            <section className="py-24 bg-anushtan-ivory/30">
+            <section className="py-24 bg-anushtan-parchment">
                 <div className="container-custom max-w-4xl mx-auto">
                     <SectionHeader title="Our Identity: The Meaning of the Logo" />
 
@@ -109,8 +111,8 @@ export default function About() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="bg-white p-6 rounded-lg border border-anushtan-border shadow-sm">
-                            <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon flex items-center gap-2">
-                                <span className="text-anushtan-saffron text-2xl">△</span> The Equilateral Triangle
+                            <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-terracotta flex items-center gap-2">
+                                <span className="text-anushtan-gold"><Triangle className="w-6 h-6 fill-current" /></span> The Equilateral Triangle
                             </h3>
                             <div className="text-anushtan-charcoal/80 space-y-3">
                                 <p>
@@ -128,8 +130,8 @@ export default function About() {
                         </div>
 
                         <div className="bg-white p-6 rounded-lg border border-anushtan-border shadow-sm">
-                            <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-maroon flex items-center gap-2">
-                                <span className="text-anushtan-saffron text-2xl">✿</span> The Lotus (Kamalam)
+                            <h3 className="font-heading text-xl font-bold mb-4 text-anushtan-terracotta flex items-center gap-2">
+                                <span className="text-anushtan-gold"><Flower className="w-6 h-6" /></span> The Lotus (Kamalam)
                             </h3>
                             <div className="text-anushtan-charcoal/80 space-y-3">
                                 <p>

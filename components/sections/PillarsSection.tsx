@@ -50,8 +50,8 @@ export function PillarsSection() {
         <section className="py-20 bg-white">
             <div className="container-custom">
                 <div className="text-center mb-16">
-                    <h2 className="font-heading text-4xl md:text-5xl font-bold text-anushtan-maroon mb-4">
-                        The 7 Pillars of Anushtan
+                    <h2 className="font-heading text-4xl md:text-5xl font-bold text-anushtan-terracotta mb-4">
+                        The 7 Pillars of Governance
                     </h2>
                     <div className="h-1 w-24 bg-anushtan-gold mx-auto mb-6"></div>
                     <p className="max-w-3xl mx-auto text-lg text-anushtan-charcoal/80 leading-relaxed">
@@ -68,10 +68,10 @@ export function PillarsSection() {
                             <div className="bg-[#fdfbf7] border border-anushtan-border rounded-lg p-8 h-full shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
                                 <div className="absolute top-0 right-0 w-24 h-24 bg-anushtan-gold/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
 
-                                <h3 className="font-heading text-2xl font-bold text-anushtan-maroon mb-2 relative z-10">
+                                <h3 className="font-heading text-2xl font-bold text-anushtan-terracotta mb-2 relative z-10">
                                     {pillar.name}
                                 </h3>
-                                <div className="text-anushtan-saffron font-medium uppercase text-sm tracking-wider mb-6 relative z-10">
+                                <div className="text-anushtan-gold font-medium uppercase text-sm tracking-wider mb-6 relative z-10">
                                     {pillar.title}
                                 </div>
 
