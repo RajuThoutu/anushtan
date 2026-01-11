@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  /* Anushtan 2.0 Modern Terracotta Tokens */
+  /* Anushtan 2.0 Modern Terracotta Tokens (Light Theme) */
   --anushtan-terracotta: #6B3126;
-  --anushtan-parchment: #FDFBF7;
+  --anushtan-parchment: #FDFCF0;
   --anushtan-gold: #D4AF37;
-  --anushtan-charcoal: #1A1A1A;
-  --anushtan-border: rgba(26, 26, 26, 0.1);
+  --anushtan-charcoal: #2D2D2D;
+  --anushtan-border: rgba(45, 45, 45, 0.1);
 
   /* Semantic Mappings */
   --background: var(--anushtan-parchment);

@@ -16,9 +16,9 @@ export const InfrastructureSection = () => {
                 {/* Bento Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 grid-rows-2 gap-4 h-[800px] mb-20">
                     {/* Item 1: Main Block (Large) - Campus Aerial View */}
-                    <div className="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group shadow-xl">
-                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-20" />
+                    <div className="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group shadow-xl border-2 border-white hover:border-anushtan-terracotta transition-colors duration-300">
+                        <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors z-10" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-20" />
                         <Image
                             src="/images/campus-arial.jpg"
                             alt="Anushtan Campus Aerial View"
@@ -32,8 +32,8 @@ export const InfrastructureSection = () => {
                     </div>
 
                     {/* Item 2: Anushtan Building */}
-                    <div className="md:col-span-1 md:row-span-1 relative rounded-3xl overflow-hidden group shadow-lg hover:shadow-xl transition-shadow">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent z-20" />
+                    <div className="md:col-span-1 md:row-span-1 relative rounded-3xl overflow-hidden group shadow-lg hover:shadow-xl transition-all border-2 border-white hover:border-anushtan-terracotta duration-300">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-20" />
                         <Image
                             src="/images/anushtan-building.jpg"
                             alt="Anushtan Generic Block"
@@ -47,8 +47,8 @@ export const InfrastructureSection = () => {
                     </div>
 
                     {/* Item 3: Open Air Mandapa */}
-                    <div className="md:col-span-1 md:row-span-1 relative rounded-3xl overflow-hidden group shadow-lg hover:shadow-xl transition-shadow">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent z-20" />
+                    <div className="md:col-span-1 md:row-span-1 relative rounded-3xl overflow-hidden group shadow-lg hover:shadow-xl transition-all border-2 border-white hover:border-anushtan-terracotta duration-300">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-20" />
                         <Image
                             src="/images/mandapa.jpg"
                             alt="Open-Air Mandapa"
