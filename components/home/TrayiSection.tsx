@@ -22,8 +22,44 @@ export const TrayiSection = () => {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-7xl mx-auto px-4">
-                    {/* Column 1: Iccha Shakti (The Soul) */}
+                    {/* Column 1: Kriya Shakti (The Future) - Kalam */}
                     <div className="group relative">
+                        <Card className="relative h-full bg-white border-2 border-anushtan-border p-0 overflow-hidden group-hover:-translate-y-2 transition-all duration-500 group-hover:border-anushtan-terracotta hover:shadow-[0_10px_40px_rgba(212,175,55,0.2)]">
+                            <div className="h-96 w-full relative transition-all duration-700 bg-anushtan-parchment">
+                                {/* Tech Pattern for Future */}
+                                <div className="absolute inset-0 opacity-10"
+                                    style={{
+                                        backgroundImage: 'radial-gradient(circle, #4a90e2 1px, transparent 1px)',
+                                        backgroundSize: '20px 20px'
+                                    }}
+                                />
+                                <Image
+                                    src="/images/apj-kalam.jpg"
+                                    alt="APJ Abdul Kalam"
+                                    fill
+                                    className="object-cover object-top"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-100" />
+                                <div className="absolute bottom-6 left-6">
+                                    <h3 className="font-heading text-3xl font-bold mb-1 text-white">Kriya Shakti</h3>
+                                    <p className="text-anushtan-gold font-medium tracking-wide">The Future</p>
+                                </div>
+
+                            </div>
+                            <div className="p-8 bg-white text-anushtan-charcoal h-full relative border-t border-anushtan-border">
+                                <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 rounded-bl-full" />
+                                <p className="text-lg leading-relaxed font-light mb-6 italic">
+                                    "Technology must serve the nation especially the rural poor and marginalized."
+                                </p>
+                                <p className="text-sm font-bold text-anushtan-terracotta uppercase tracking-widest">
+                                    Protagonist: APJ Abdul Kalam
+                                </p>
+                            </div>
+                        </Card>
+                    </div>
+
+                    {/* Column 2: Iccha Shakti (The Soul) - Vivekananda */}
+                    <div className="group relative mt-0 lg:-mt-12">
                         <Card className="relative h-full bg-white border-2 border-anushtan-border p-0 overflow-hidden group-hover:-translate-y-2 transition-all duration-500 group-hover:border-anushtan-terracotta hover:shadow-[0_10px_40px_rgba(212,175,55,0.2)]">
                             <div className="h-96 w-full relative transition-all duration-700">
                                 <Image
@@ -50,9 +86,8 @@ export const TrayiSection = () => {
                         </Card>
                     </div>
 
-
-                    {/* Column 2: Jnana Shakti (The Mind) */}
-                    <div className="group relative mt-0 lg:-mt-12">
+                    {/* Column 3: Jnana Shakti (The Mind) - Ramayya */}
+                    <div className="group relative">
                         <Card className="relative h-full bg-white border-2 border-anushtan-border p-0 overflow-hidden group-hover:-translate-y-2 transition-all duration-500 group-hover:border-anushtan-terracotta hover:shadow-[0_10px_40px_rgba(212,175,55,0.2)]">
                             <div className="h-96 w-full relative transition-all duration-700 bg-anushtan-parchment">
                                 {/* Fractal Pattern for Mind */}
@@ -82,42 +117,6 @@ export const TrayiSection = () => {
                                 </p>
                                 <p className="text-sm font-bold text-anushtan-terracotta uppercase tracking-widest">
                                     Protagonist: Chukka Ramayya
-                                </p>
-                            </div>
-                        </Card>
-                    </div>
-
-                    {/* Column 3: Kriya Shakti (The Future) */}
-                    <div className="group relative">
-                        <Card className="relative h-full bg-white border-2 border-anushtan-border p-0 overflow-hidden group-hover:-translate-y-2 transition-all duration-500 group-hover:border-anushtan-terracotta hover:shadow-[0_10px_40px_rgba(212,175,55,0.2)]">
-                            <div className="h-96 w-full relative transition-all duration-700 bg-anushtan-parchment">
-                                {/* Tech Pattern for Future */}
-                                <div className="absolute inset-0 opacity-10"
-                                    style={{
-                                        backgroundImage: 'radial-gradient(circle, #4a90e2 1px, transparent 1px)',
-                                        backgroundSize: '20px 20px'
-                                    }}
-                                />
-                                <Image
-                                    src="/images/apj-kalam.jpg"
-                                    alt="APJ Abdul Kalam"
-                                    fill
-                                    className="object-cover object-top"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-100" />
-                                <div className="absolute bottom-6 left-6">
-                                    <h3 className="font-heading text-3xl font-bold mb-1 text-white">Kriya Shakti</h3>
-                                    <p className="text-anushtan-gold font-medium tracking-wide">The Future</p>
-                                </div>
-
-                            </div>
-                            <div className="p-8 bg-white text-anushtan-charcoal h-full relative border-t border-anushtan-border">
-                                <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 rounded-bl-full" />
-                                <p className="text-lg leading-relaxed font-light mb-6 italic">
-                                    "The technology is of no use unless and until it reaches those for whom it is intended... Knowledge without action is useless and irrelevant."
-                                </p>
-                                <p className="text-sm font-bold text-anushtan-terracotta uppercase tracking-widest">
-                                    Protagonist: APJ Abdul Kalam
                                 </p>
                             </div>
                         </Card>

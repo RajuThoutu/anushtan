@@ -130,7 +130,7 @@ export const PivotSection = () => {
                                             <div className="w-16 h-16 bg-yellow-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-100">
                                                 <Landmark className="w-8 h-8 text-yellow-600" />
                                             </div>
-                                            <h3 className="font-heading text-xl font-bold text-yellow-700 mb-1">Management</h3>
+                                            <h3 className="font-heading text-xl font-bold text-yellow-700 mb-1">Management & Governance</h3>
                                             <p className="text-xs text-yellow-900/60 uppercase tracking-widest">IAS / Leadership Focus</p>
                                         </div>
                                     </div>

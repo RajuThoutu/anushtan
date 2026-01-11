@@ -1,21 +1,52 @@
 import { Navbar } from "@/components/layout/Navbar";
 import Image from "next/image";
 import { Footer } from "@/components/layout/Footer";
-import { PillarsSection } from "@/components/sections/PillarsSection";
 import type { Metadata } from 'next';
-import { Search, Triangle, Flower } from "lucide-react";
+import { Search, Triangle, Flower, User, Heart, Zap, Feather } from "lucide-react";
+import { Card } from "@/components/ui/Card";
 
 export const metadata: Metadata = {
     title: 'About | Anushtan Indic School',
-    description: 'Our Identity, Protocols, and Governance.',
+    description: 'Our Identity, Lineage, and Wisdom.',
 };
 
 export default function About() {
+    const pillars = [
+        {
+            name: "Sri Ramakrishna Paramahamsa",
+            theme: "Universal Harmony & The Core of Being",
+            focus: "Cultivating the realization of divinity in every soul and the harmony of all paths.",
+            icon: <Heart className="w-8 h-8 text-anushtan-gold" />,
+            image: "/images/ramakrishna.jpg" // Placeholder path
+        },
+        {
+            name: "Sri Sarada Devi",
+            theme: "Maternal Nurturing & Purity",
+            focus: "Governance of the Sacred Kitchen (Annam Brahma) and the emotional safety of the child.",
+            icon: <User className="w-8 h-8 text-anushtan-gold" />,
+            image: "/images/sarada-devi.jpg" // Placeholder path
+        },
+        {
+            name: "Swami Vivekananda",
+            theme: "The Man-Making Mandate",
+            focus: "Building the grit, ethics, and strength of character required for leadership and service.",
+            icon: <Zap className="w-8 h-8 text-anushtan-gold" />,
+            image: "/hero-swami-standing.jpg"
+        },
+        {
+            name: "Rabindranath Tagore",
+            theme: "Natural Freedom & Aesthetic Harmony",
+            focus: "Integrating learning into the 6-acre sanctuary and cultivating the 'Culture of the Heart'.",
+            icon: <Feather className="w-8 h-8 text-anushtan-gold" />,
+            image: "/images/tagore.jpg" // Placeholder path
+        }
+    ];
+
     return (
         <>
             <Navbar />
 
-            {/* 1. New Header: Our Identity (Logo & Meaning) */}
+            {/* 1. Header: Our Identity (Logo & Meaning) - KEPT AS IS */}
             <section className="py-24 bg-anushtan-parchment overflow-hidden">
                 <div className="container-custom max-w-7xl mx-auto">
                     <div className="text-center mb-12">
@@ -103,32 +134,97 @@ export default function About() {
                 </div>
             </section>
 
-            {/* 2. The 7 Foundational Protocols */}
-            <PillarsSection />
+            {/* 2. The Foundational Lineage (The Holy Trio) */}
+            <section className="py-24 bg-white relative">
+                <div className="container-custom max-w-6xl mx-auto">
+                    <div className="text-center mb-16">
+                        <span className="text-anushtan-gold font-bold tracking-widest uppercase text-sm mb-2 block">
+                            Our Spiritual Roots
+                        </span>
+                        <h2 className="font-heading text-4xl md:text-5xl font-bold text-anushtan-terracotta mb-6">
+                            The Foundational Lineage
+                        </h2>
+                        <div className="h-1 w-24 bg-anushtan-gold mx-auto mb-8"></div>
+                        <p className="text-2xl text-anushtan-charcoal/80 font-heading leading-relaxed italic max-w-4xl mx-auto">
+                            "Guided by the Ramakrishna Math vision, we architect a <span className="text-anushtan-terracotta">'Man-Making'</span> educational system dedicated to nation-building."
+                        </p>
+                    </div>
 
-            {/* 3. Continuous Quality Audits */}
-            <section className="py-24 bg-anushtan-parchment text-anushtan-charcoal relative border-t border-anushtan-border">
-                <div className="container-custom">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                        <div>
-                            <span className="text-anushtan-terracotta font-bold uppercase tracking-widest text-sm block mb-2">Quality Assurance</span>
-                            <h2 className="font-heading text-4xl font-bold mb-6 text-anushtan-charcoal">Continuous Quality Audits</h2>
-                            <div className="space-y-6 text-lg text-anushtan-charcoal/80 leading-relaxed font-light">
-                                <p>
-                                    At Anushtan, we do not rely on standard metrics alone. Our curriculum is built on <strong>"Descriptive Logic,"</strong> a rigorous framework monitored daily to ensure deeper conceptual understanding rather than rote memorization.
+                    {/* Triptych Display for The Holy Trio */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                        {/* Ramakrishna */}
+                        <div className="text-center group">
+                            <div className="w-64 h-80 mx-auto relative overflow-hidden rounded-t-full border-4 border-anushtan-border shadow-lg mb-6 grayscale hover:grayscale-0 transition-all duration-500">
+                                <Image
+                                    src="/images/ramakrishna.jpg"
+                                    alt="Sri Ramakrishna Paramahamsa"
+                                    fill
+                                    className="object-cover object-top"
+                                />
+                            </div>
+                            <h3 className="text-2xl font-bold text-anushtan-terracotta font-heading">Sri Ramakrishna</h3>
+                            <p className="text-anushtan-charcoal/60 text-sm italic">The Prophet of Harmony</p>
+                        </div>
+
+                        {/* Sarada Devi */}
+                        <div className="text-center group mt-0 md:-mt-12">
+                            <div className="w-64 h-80 mx-auto relative overflow-hidden rounded-t-full border-4 border-anushtan-border shadow-lg mb-6 grayscale hover:grayscale-0 transition-all duration-500">
+                                <Image
+                                    src="/images/sarada-devi.jpg"
+                                    alt="Sri Sarada Devi"
+                                    fill
+                                    className="object-cover object-top"
+                                />
+                            </div>
+                            <h3 className="text-2xl font-bold text-anushtan-terracotta font-heading">Sri Sarada Devi</h3>
+                            <p className="text-anushtan-charcoal/60 text-sm italic">The Holy Mother</p>
+                        </div>
+
+                        {/* Vivekananda */}
+                        <div className="text-center group">
+                            <div className="w-64 h-80 mx-auto relative overflow-hidden rounded-t-full border-4 border-anushtan-border shadow-lg mb-6 grayscale hover:grayscale-0 transition-all duration-500">
+                                <Image
+                                    src="/hero-swami-standing.jpg"
+                                    alt="Swami Vivekananda"
+                                    fill
+                                    className="object-cover object-top"
+                                />
+                            </div>
+                            <h3 className="text-2xl font-bold text-anushtan-terracotta font-heading">Swami Vivekananda</h3>
+                            <p className="text-anushtan-charcoal/60 text-sm italic">The Awakener of Souls</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 3. The 4 Pillars of Universal Wisdom */}
+            <section className="py-24 bg-anushtan-parchment border-t border-anushtan-border">
+                <div className="container-custom max-w-7xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="font-heading text-4xl md:text-5xl font-bold text-anushtan-terracotta mb-6">
+                            The 4 Pillars of Universal Wisdom
+                        </h2>
+                        <div className="h-1 w-24 bg-anushtan-gold mx-auto"></div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {pillars.map((pillar, index) => (
+                            <div key={index} className="bg-white border border-anushtan-border p-8 rounded-xl shadow-sm hover:shadow-xl hover:border-anushtan-terracotta/30 transition-all duration-300 group hover:-translate-y-1">
+                                <div className="w-16 h-16 bg-anushtan-parchment rounded-full flex items-center justify-center mb-6 border border-anushtan-gold/20 group-hover:bg-anushtan-gold/10 transition-colors">
+                                    {pillar.icon}
+                                </div>
+                                <h3 className="font-heading text-xl font-bold text-anushtan-terracotta mb-2 min-h-[3.5rem] flex items-end">
+                                    {pillar.name}
+                                </h3>
+                                <div className="w-12 h-[2px] bg-anushtan-gold/50 mb-4"></div>
+                                <p className="text-sm font-bold text-anushtan-charcoal/80 mb-3 uppercase tracking-wide">
+                                    {pillar.theme}
                                 </p>
-                                <p>
-                                    We actively monitor <strong>AI-driven educational shifts</strong>. Our Academic Audit team reviews and adapts our methodologies to ensure our students stay ahead of technological disruptions, retaining their edge in a world where AI will replace routine cognition.
+                                <p className="text-anushtan-charcoal/70 text-sm leading-relaxed">
+                                    {pillar.focus}
                                 </p>
                             </div>
-                        </div>
-                        <div className="relative h-80 lg:h-full min-h-[400px] border border-anushtan-border rounded-xl overflow-hidden bg-anushtan-parchment shadow-sm p-8 flex flex-col justify-center items-center text-center">
-                            <div className="w-20 h-20 bg-anushtan-gold/10 rounded-full flex items-center justify-center text-4xl text-anushtan-gold mb-6 border border-anushtan-gold/30">
-                                <Search className="w-10 h-10 text-anushtan-gold" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-anushtan-terracotta mb-2">Continuous Monitoring</h3>
-                            <p className="text-sm text-anushtan-charcoal/60">Real-time curriculum adjustments based on global standards.</p>
-                        </div>
+                        ))}
                     </div>
                 </div>
             </section>
