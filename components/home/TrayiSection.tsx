@@ -40,8 +40,8 @@ export const TrayiSection = () => {
                             </div>
                             <div className="p-8 bg-white text-anushtan-charcoal h-full relative border-t border-anushtan-border">
                                 <div className="absolute top-0 right-0 w-20 h-20 bg-anushtan-terracotta/10 rounded-bl-full" />
-                                <p className="text-lg leading-relaxed font-light mb-6">
-                                    The Governance of Character. Implementing the 'Man-Making' protocol of Swami Vivekananda.
+                                <p className="text-lg leading-relaxed font-light mb-6 italic">
+                                    "Education is the manifestation of the perfection already in man."
                                 </p>
                                 <p className="text-sm font-bold text-anushtan-terracotta uppercase tracking-widest">
                                     Protagonist: Swami Vivekananda
@@ -76,8 +76,8 @@ export const TrayiSection = () => {
                             </div>
                             <div className="p-8 bg-white text-anushtan-charcoal h-full relative border-t border-anushtan-border">
                                 <div className="absolute top-0 right-0 w-20 h-20 bg-anushtan-gold/10 rounded-bl-full" />
-                                <p className="text-lg leading-relaxed font-light mb-6">
-                                    Logical Mastery. The 'Descriptive Logic' standard for competitive dominance and AI-resilience.
+                                <p className="text-lg leading-relaxed font-light mb-6 italic">
+                                    "People think a classroom runs when the teacher talks, but learning happens only when student thinks."
                                 </p>
                                 <p className="text-sm font-bold text-anushtan-terracotta uppercase tracking-widest">
                                     Protagonist: Chukka Ramayya
@@ -111,8 +111,8 @@ export const TrayiSection = () => {
                             </div>
                             <div className="p-8 bg-white text-anushtan-charcoal h-full relative border-t border-anushtan-border">
                                 <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 rounded-bl-full" />
-                                <p className="text-lg leading-relaxed font-light mb-6">
-                                    Ignited Vision. Preparing the technical frontiers of 2030 through Dr. Kalam's scientific temper.
+                                <p className="text-lg leading-relaxed font-light mb-6 italic">
+                                    "The technology is of no use unless and until it reaches those for whom it is intended... Knowledge without action is useless and irrelevant."
                                 </p>
                                 <p className="text-sm font-bold text-anushtan-terracotta uppercase tracking-widest">
                                     Protagonist: APJ Abdul Kalam

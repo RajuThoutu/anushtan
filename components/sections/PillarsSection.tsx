@@ -28,7 +28,7 @@ const pillars = [
     {
         name: "Dr. APJ Abdul Kalam",
         title: "The Ignited Minds Innovation Protocol",
-        quote: "Dream is not that which you see while sleeping; it is something that does not let you sleep.",
+        quote: "The technology is of no use unless and until it reaches those for whom it is intended... Knowledge without action is useless and irrelevant.",
         description: "Blending value-based education with cutting-edge technology. This protocol drives the 'Kriya Shakti' (Action) aspect, preparing students to lead India's future through science, innovation, and integrity."
     },
     {
