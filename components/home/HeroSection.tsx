@@ -45,7 +45,7 @@ export const HeroSection = () => {
                         Secure a Founding Batch Seat
                     </Button>
                     <Button href="#trayi" variant="outline" className="text-anushtan-terracotta border-anushtan-terracotta/50 hover:bg-anushtan-terracotta/10 px-10 py-8 text-xl tracking-wide bg-white/50 backdrop-blur-sm">
-                        Explore the Trayi Path
+                        Explore the Trinity
                     </Button>
                 </div>
             </div>

@@ -2,12 +2,13 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { Ruler, TreePine, BookOpen } from "lucide-react";
 
 const cards = [
     {
         title: "The Analytical Protocol",
         description: "Beyond OMR factories.",
-        icon: "📐",
+        icon: <Ruler className="w-10 h-10 text-anushtan-gold" />,
         color: "from-blue-500/20 to-cyan-500/20",
         borderColor: "border-blue-500/30",
         textColor: "text-blue-200",
@@ -15,7 +16,7 @@ const cards = [
     {
         title: "The 6-Acre Sanctuary",
         description: "Grit, Growth, & Goshala.",
-        icon: "mk_tree_icon",
+        icon: <TreePine className="w-10 h-10 text-anushtan-gold" />,
         color: "from-green-500/20 to-emerald-500/20",
         borderColor: "border-green-500/30",
         textColor: "text-green-200",
@@ -23,7 +24,7 @@ const cards = [
     {
         title: "The Man-Making Mandate",
         description: "Character is our Operating System.",
-        icon: "🕉️",
+        icon: <BookOpen className="w-10 h-10 text-anushtan-gold" />,
         color: "from-amber-500/20 to-orange-500/20",
         borderColor: "border-amber-500/30",
         textColor: "text-amber-200",
@@ -57,7 +58,7 @@ export const DashboardCards = () => {
                             <div className="absolute inset-0 bg-gradient-to-br from-anushtan-terracotta/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                             <div className="relative z-10">
-                                <div className="mb-4 text-4xl">{card.icon === "mk_tree_icon" ? "🌿" : card.icon}</div>
+                                <div className="mb-4">{card.icon}</div>
                                 <h3 className={cn("text-2xl font-bold mb-2 font-heading", "text-anushtan-charcoal group-hover:text-anushtan-terracotta transition-colors")}>
                                     {card.title}
                                 </h3>

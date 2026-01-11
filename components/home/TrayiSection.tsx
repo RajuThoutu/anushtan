@@ -14,10 +14,10 @@ export const TrayiSection = () => {
             <div className="container-custom relative z-10">
                 <div className="text-center mb-20">
                     <h2 className="font-heading text-5xl md:text-6xl font-bold text-anushtan-charcoal mb-4">
-                        The Anushtan Trinity
+                        The Trinity of Inspirations
                     </h2>
                     <p className="text-anushtan-terracotta text-lg font-bold tracking-widest uppercase">
-                        The Framework of Iccha, Jnana, and Kriya Shakti
+                        Architecting potential through Iccha, Jnana, and Kriya Shakti.
                     </p>
                 </div>
 
@@ -41,7 +41,7 @@ export const TrayiSection = () => {
                             <div className="p-8 bg-white text-anushtan-charcoal h-full relative border-t border-anushtan-border">
                                 <div className="absolute top-0 right-0 w-20 h-20 bg-anushtan-terracotta/10 rounded-bl-full" />
                                 <p className="text-lg leading-relaxed font-light mb-6">
-                                    "Education is the manifestation of the perfection already in man"
+                                    The Governance of Character. Implementing the 'Man-Making' protocol of Swami Vivekananda.
                                 </p>
                                 <p className="text-sm font-bold text-anushtan-terracotta uppercase tracking-widest">
                                     Protagonist: Swami Vivekananda
@@ -77,7 +77,7 @@ export const TrayiSection = () => {
                             <div className="p-8 bg-white text-anushtan-charcoal h-full relative border-t border-anushtan-border">
                                 <div className="absolute top-0 right-0 w-20 h-20 bg-anushtan-gold/10 rounded-bl-full" />
                                 <p className="text-lg leading-relaxed font-light mb-6">
-                                    "People think a classroom runs when the teacher talks, but learning happens only when student thinks."
+                                    Logical Mastery. The 'Descriptive Logic' standard for competitive dominance and AI-resilience.
                                 </p>
                                 <p className="text-sm font-bold text-anushtan-terracotta uppercase tracking-widest">
                                     Protagonist: Chukka Ramayya
@@ -112,7 +112,7 @@ export const TrayiSection = () => {
                             <div className="p-8 bg-white text-anushtan-charcoal h-full relative border-t border-anushtan-border">
                                 <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 rounded-bl-full" />
                                 <p className="text-lg leading-relaxed font-light mb-6">
-                                    "The technology is of no use unless and until it reaches those for whom it is intended... Knowledge without action is useless and irrelevant."
+                                    Ignited Vision. Preparing the technical frontiers of 2030 through Dr. Kalam's scientific temper.
                                 </p>
                                 <p className="text-sm font-bold text-anushtan-terracotta uppercase tracking-widest">
                                     Protagonist: APJ Abdul Kalam

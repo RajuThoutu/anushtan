@@ -19,7 +19,7 @@ export const PivotSection = () => {
                 <div className="relative">
                     {/* Unified Path (Grades 1-7) */}
                     <div className="flex flex-col items-center mb-12 relative z-10">
-                        <div className="w-1 h-32 bg-anushtan-charcoal/10 absolute top-0 left-1/2 -translate-x-1/2" />
+                        <div className="w-1 h-32 bg-anushtan-terracotta absolute top-0 left-1/2 -translate-x-1/2" />
                         <div className="bg-anushtan-charcoal text-white font-bold py-3 px-8 rounded-full z-10 mb-8 border-4 border-white shadow-lg relative">
                             Grades 1 - 7
                             <span className="absolute -right-4 -top-4 w-8 h-8 bg-anushtan-gold rounded-full flex items-center justify-center text-xs text-anushtan-charcoal font-bold border-2 border-white">✓</span>
@@ -42,7 +42,7 @@ export const PivotSection = () => {
                     {/* Branches */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 lg:gap-12 relative z-10 max-w-6xl mx-auto">
                         {/* Decorative Branch Lines (Desktop) */}
-                        <div className="hidden md:block absolute top-[-48px] left-1/2 -translate-x-1/2 w-full h-24 border-t-2 border-l-2 border-r-2 border-anushtan-charcoal/10 rounded-t-[4rem] pointer-events-none" style={{ width: '66%' }} />
+                        <div className="hidden md:block absolute top-[-48px] left-1/2 -translate-x-1/2 w-full h-24 border-t-2 border-l-2 border-r-2 border-anushtan-terracotta rounded-t-[4rem] pointer-events-none" style={{ width: '66%' }} />
 
                         {/* Branch 1: Mathematical Sciences */}
                         <motion.div

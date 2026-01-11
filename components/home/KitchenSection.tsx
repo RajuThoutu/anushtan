@@ -21,7 +21,7 @@ export const KitchenSection = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 h-auto md:h-[500px]">
                     {/* Feature 1: A2 Milk */}
-                    <div className="relative group overflow-hidden rounded-2xl bg-anushtan-terracotta md:col-span-2 md:row-span-2 shadow-xl">
+                    <div className="relative group overflow-hidden rounded-2xl bg-white md:col-span-2 md:row-span-2 shadow-sm border border-anushtan-border">
                         <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors z-10" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-20" />
                         <Image
@@ -37,8 +37,8 @@ export const KitchenSection = () => {
                     </div>
 
                     {/* Feature 2: Ancient Grains */}
-                    <div className="relative group overflow-hidden rounded-2xl bg-anushtan-gold shadow-md">
-                        <div className="absolute inset-0 bg-white/10 group-hover:bg-white/30 transition-colors z-10" />
+                    <div className="relative group overflow-hidden rounded-2xl bg-white shadow-sm border border-anushtan-border">
+                        <div className="absolute inset-0 bg-anushtan-gold/5 group-hover:bg-anushtan-gold/10 transition-colors z-10" />
                         <div className="absolute bottom-6 left-6 z-20">
                             <h3 className="text-anushtan-charcoal font-heading text-2xl font-bold mb-1">Ancient Millets</h3>
                             <p className="text-anushtan-charcoal/90 font-medium">Returning to roots.</p>
@@ -57,11 +57,11 @@ export const KitchenSection = () => {
                     </div>
 
                     {/* Feature 4: Sahabhojan (Service) */}
-                    <div className="relative group overflow-hidden rounded-2xl bg-anushtan-charcoal md:col-span-2">
-                        <div className="absolute inset-0 bg-gradient-to-r from-black/90 to-transparent z-20" />
+                    <div className="relative group overflow-hidden rounded-2xl bg-white md:col-span-2 shadow-sm border border-anushtan-border">
+                        <div className="absolute inset-0 bg-anushtan-charcoal/5 group-hover:bg-anushtan-charcoal/10 transition-colors z-10" />
                         <div className="p-8 relative z-30 flex flex-col justify-center h-full">
-                            <h3 className="text-white font-heading text-3xl font-bold mb-3 tracking-wide">Sahabhojan</h3>
-                            <p className="text-white/80 max-w-sm mb-6 text-lg font-light leading-relaxed">"The Culture of Service." Students serve each other, breaking ego and building community.</p>
+                            <h3 className="text-anushtan-charcoal font-heading text-3xl font-bold mb-3 tracking-wide">Sahabhojan</h3>
+                            <p className="text-anushtan-charcoal/80 max-w-sm mb-6 text-lg font-light leading-relaxed">"The Culture of Service." Students serve each other, breaking ego and building community.</p>
                             <div className="w-full h-1 bg-anushtan-gold/30 rounded-full overflow-hidden">
                                 <div className="w-2/3 h-full bg-anushtan-gold" />
                             </div>
