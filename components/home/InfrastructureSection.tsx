@@ -22,7 +22,7 @@ export const InfrastructureSection = () => {
                                 src="/images/campus-arial.jpg"
                                 alt="Anushtan Campus Aerial View"
                                 fill
-                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                className="object-cover transition-transform duration-700 group-hover:scale-105 saturate-125"
                             />
                         </div>
                         <div className="p-8 flex-1 flex flex-col justify-center">
@@ -38,7 +38,7 @@ export const InfrastructureSection = () => {
                                 src="/images/anushtan-building.jpg"
                                 alt="Anushtan Generic Block"
                                 fill
-                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                className="object-cover transition-transform duration-700 group-hover:scale-105 saturate-125"
                             />
                         </div>
                         <div className="p-6 flex-1 flex flex-col justify-center">
@@ -54,7 +54,7 @@ export const InfrastructureSection = () => {
                                 src="/images/mandapa.jpg"
                                 alt="Open-Air Mandapa"
                                 fill
-                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                className="object-cover transition-transform duration-700 group-hover:scale-105 saturate-125"
                             />
                         </div>
                         <div className="p-6 flex-1 flex flex-col justify-center">

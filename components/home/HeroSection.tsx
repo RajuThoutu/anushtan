@@ -21,7 +21,7 @@ export const HeroSection = () => {
                     <img
                         src="/images/hero-banner-collage.png"
                         alt="Anushtan Hero Banner"
-                        className="w-full h-full object-cover object-top opacity-60"
+                        className="w-full h-full object-cover object-top opacity-60 saturate-125"
                     />
                 </div>
             </div>

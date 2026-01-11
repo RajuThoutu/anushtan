@@ -25,7 +25,7 @@ export const TrayiSection = () => {
                     {/* Column 1: Iccha Shakti (The Soul) */}
                     <div className="group relative">
                         <Card className="relative h-full bg-white border-2 border-anushtan-border p-0 overflow-hidden group-hover:-translate-y-2 transition-all duration-500 group-hover:border-anushtan-terracotta hover:shadow-[0_10px_40px_rgba(212,175,55,0.2)]">
-                            <div className="h-96 w-full relative grayscale group-hover:grayscale-0 transition-all duration-700">
+                            <div className="h-96 w-full relative transition-all duration-700">
                                 <Image
                                     src="/hero-swami-standing.jpg" // Placeholder for Vivekananda
                                     alt="Swami Vivekananda"
@@ -54,7 +54,7 @@ export const TrayiSection = () => {
                     {/* Column 2: Jnana Shakti (The Mind) */}
                     <div className="group relative mt-0 lg:-mt-12">
                         <Card className="relative h-full bg-white border-2 border-anushtan-border p-0 overflow-hidden group-hover:-translate-y-2 transition-all duration-500 group-hover:border-anushtan-terracotta hover:shadow-[0_10px_40px_rgba(212,175,55,0.2)]">
-                            <div className="h-96 w-full relative grayscale group-hover:grayscale-0 transition-all duration-700 bg-anushtan-parchment">
+                            <div className="h-96 w-full relative transition-all duration-700 bg-anushtan-parchment">
                                 {/* Fractal Pattern for Mind */}
                                 <div className="absolute inset-0 opacity-10"
                                     style={{
@@ -89,7 +89,7 @@ export const TrayiSection = () => {
                     {/* Column 3: Kriya Shakti (The Future) */}
                     <div className="group relative">
                         <Card className="relative h-full bg-white border-2 border-anushtan-border p-0 overflow-hidden group-hover:-translate-y-2 transition-all duration-500 group-hover:border-anushtan-terracotta hover:shadow-[0_10px_40px_rgba(212,175,55,0.2)]">
-                            <div className="h-96 w-full relative grayscale group-hover:grayscale-0 transition-all duration-700 bg-anushtan-parchment">
+                            <div className="h-96 w-full relative transition-all duration-700 bg-anushtan-parchment">
                                 {/* Tech Pattern for Future */}
                                 <div className="absolute inset-0 opacity-10"
                                     style={{
