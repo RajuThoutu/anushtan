@@ -17,8 +17,8 @@ const chiefAdvisors = [
     {
         id: 'sbr-talks',
         name: "SBR Talks",
-        title: "Strategic Advisor",
-        bio: "A school established with a foundation of educational values and ideology.",
+        title: "Strategic Academic Advisor",
+        bio: "Providing the foundational pedagogical framework for Anushtan. SBR Talks serves as the strategic compass for our 'Descriptive Logic' standard, ensuring that our academic protocols prioritize first-principles thinking over rote-learning factories. His guidance bridges the gap between ancient educational ideologies and modern competitive excellence.",
         image: "/logo.jpg"
     },
     {
@@ -103,12 +103,18 @@ export default function LeadershipPage() {
 
             <main className="bg-[#fdfbf7] min-h-screen">
                 {/* Page Header */}
-                <section className="bg-anushtan-maroon text-white py-16 text-center">
+                {/* Page Header */}
+                <section className="bg-anushtan-terracotta text-white py-16 text-center">
                     <div className="container-custom">
-                        <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">Leadership & Guidance</h1>
-                        <p className="max-w-2xl mx-auto text-white/80 text-lg">
-                            The visionaries and mentors guiding Anushtan Indic School towards its mission of holistic and rooted education.
-                        </p>
+                        <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6">Leadership & Guidance</h1>
+                        <div className="max-w-4xl mx-auto space-y-4">
+                            <h2 className="text-2xl md:text-3xl font-bold text-anushtan-gold">
+                                A Convergence of Vision and Governance
+                            </h2>
+                            <p className="text-lg md:text-xl font-light text-white/90 leading-relaxed tracking-wide">
+                                “Anushtan is not managed by a traditional board, but governed by a collective of Global System Architects, IITians, and Strategic Visionaries. Our advisors provide the 'Traceability Matrix' that ensures our 2026-ready curriculum remains anchored in Sanatana values while meeting the highest international standards of logical mastery.”
+                            </p>
+                        </div>
                     </div>
                 </section>
 
