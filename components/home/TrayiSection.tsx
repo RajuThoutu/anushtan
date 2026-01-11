@@ -32,14 +32,12 @@ export const TrayiSection = () => {
                                     fill
                                     className="object-cover object-top"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-90" />
-                                <div className="absolute bottom-6 left-6 text-anushtan-charcoal">
-                                    <h3 className="font-heading text-3xl font-bold mb-1">Iccha Shakti</h3>
-                                    <p className="text-anushtan-terracotta font-medium tracking-wide">The Soul</p>
-                                </div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent opacity-0" />
                             </div>
                             <div className="p-8 bg-white text-anushtan-charcoal h-full relative border-t border-anushtan-border">
                                 <div className="absolute top-0 right-0 w-20 h-20 bg-anushtan-terracotta/10 rounded-bl-full" />
+                                <h3 className="font-heading text-3xl font-bold mb-1 text-anushtan-charcoal">Iccha Shakti</h3>
+                                <p className="text-anushtan-terracotta font-medium tracking-wide mb-6">The Soul</p>
                                 <p className="text-lg leading-relaxed font-light mb-6 italic">
                                     "Education is the manifestation of the perfection already in man."
                                 </p>
@@ -62,20 +60,19 @@ export const TrayiSection = () => {
                                         backgroundSize: '10px 10px'
                                     }}
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-90" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent opacity-0" />
                                 <Image
                                     src="/images/chukka-ramaiah.png"
                                     alt="Chukka Ramaiah"
                                     fill
                                     className="object-cover object-top"
                                 />
-                                <div className="absolute bottom-6 left-6 text-anushtan-charcoal">
-                                    <h3 className="font-heading text-3xl font-bold mb-1">Jnana Shakti</h3>
-                                    <p className="text-anushtan-terracotta font-medium tracking-wide">The Mind</p>
-                                </div>
+
                             </div>
                             <div className="p-8 bg-white text-anushtan-charcoal h-full relative border-t border-anushtan-border">
                                 <div className="absolute top-0 right-0 w-20 h-20 bg-anushtan-gold/10 rounded-bl-full" />
+                                <h3 className="font-heading text-3xl font-bold mb-1 text-anushtan-charcoal">Jnana Shakti</h3>
+                                <p className="text-anushtan-terracotta font-medium tracking-wide mb-6">The Mind</p>
                                 <p className="text-lg leading-relaxed font-light mb-6 italic">
                                     "People think a classroom runs when the teacher talks, but learning happens only when student thinks."
                                 </p>
@@ -97,20 +94,19 @@ export const TrayiSection = () => {
                                         backgroundSize: '20px 20px'
                                     }}
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-90" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent opacity-0" />
                                 <Image
                                     src="/images/apj-kalam.jpg"
                                     alt="APJ Abdul Kalam"
                                     fill
                                     className="object-cover object-top"
                                 />
-                                <div className="absolute bottom-6 left-6 text-anushtan-charcoal">
-                                    <h3 className="font-heading text-3xl font-bold mb-1">Kriya Shakti</h3>
-                                    <p className="text-anushtan-terracotta font-medium tracking-wide">The Future</p>
-                                </div>
+
                             </div>
                             <div className="p-8 bg-white text-anushtan-charcoal h-full relative border-t border-anushtan-border">
                                 <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 rounded-bl-full" />
+                                <h3 className="font-heading text-3xl font-bold mb-1 text-anushtan-charcoal">Kriya Shakti</h3>
+                                <p className="text-anushtan-terracotta font-medium tracking-wide mb-6">The Future</p>
                                 <p className="text-lg leading-relaxed font-light mb-6 italic">
                                     "The technology is of no use unless and until it reaches those for whom it is intended... Knowledge without action is useless and irrelevant."
                                 </p>
