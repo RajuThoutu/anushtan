@@ -51,7 +51,7 @@ export function PillarsSection() {
             <div className="container-custom">
                 <div className="text-center mb-16">
                     <h2 className="font-heading text-4xl md:text-5xl font-bold text-anushtan-terracotta mb-4">
-                        The 7 Pillars of Governance
+                        The 7 Foundational Protocols
                     </h2>
                     <div className="h-1 w-24 bg-anushtan-gold mx-auto mb-6"></div>
                     <p className="max-w-3xl mx-auto text-lg text-anushtan-charcoal/80 leading-relaxed">
