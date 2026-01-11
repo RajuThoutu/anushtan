@@ -25,9 +25,14 @@ export default function About() {
                     <h1 className="font-heading text-4xl md:text-6xl font-bold mb-6 text-anushtan-terracotta">
                         The Architect's Vision
                     </h1>
-                    <p className="text-xl md:text-2xl font-light text-anushtan-charcoal/80 max-w-3xl mx-auto tracking-wide">
-                        Governance of the Soul, Mind, and Future.
-                    </p>
+                    <div className="max-w-4xl mx-auto">
+                        <h2 className="text-2xl md:text-3xl font-bold text-anushtan-terracotta mb-4">
+                            A Convergence of Vision and Governance
+                        </h2>
+                        <p className="text-lg md:text-xl font-light text-anushtan-charcoal/80 leading-relaxed tracking-wide">
+                            “Anushtan is not managed by a traditional board, but governed by a collective of Global System Architects, IITians, and Strategic Visionaries. Our advisors provide the 'Traceability Matrix' that ensures our 2026-ready curriculum remains anchored in Sanatana values while meeting the highest international standards of logical mastery.”
+                        </p>
+                    </div>
                 </div>
             </header>
 
@@ -46,12 +51,19 @@ export default function About() {
                         <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none"
                             style={{ backgroundImage: 'radial-gradient(#6B3126 1px, transparent 1px)', backgroundSize: '30px 30px' }}>
                         </div>
-                        <p className="text-xl md:text-2xl text-anushtan-charcoal font-heading leading-relaxed text-center font-medium">
-                            "Led by a <span className="text-anushtan-terracotta font-bold">Global System Architect</span>, Anushtan applies the principles of enterprise-level precision to education."
-                        </p>
-                        <p className="text-base text-gray-600 text-center mt-6 max-w-2xl mx-auto">
-                            Our leadership structure mirrors high-performance organizational governance, ensuring that every educational process is monitored, measured, and optimized for world-class outcomes.
-                        </p>
+
+                        {/* SBR Talks Card */}
+                        <div className="text-center relative z-10">
+                            <h3 className="font-heading text-3xl font-bold text-anushtan-terracotta mb-2">
+                                SBR Talks
+                            </h3>
+                            <div className="text-anushtan-gold font-bold uppercase tracking-widest text-sm mb-6">
+                                Strategic Academic Advisor
+                            </div>
+                            <p className="text-xl text-anushtan-charcoal font-heading leading-relaxed italic max-w-3xl mx-auto">
+                                “Providing the foundational pedagogical framework for Anushtan. SBR Talks serves as the strategic compass for our 'Descriptive Logic' standard, ensuring that our academic protocols prioritize first-principles thinking over rote-learning factories. His guidance bridges the gap between ancient educational ideologies and modern competitive excellence.”
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
