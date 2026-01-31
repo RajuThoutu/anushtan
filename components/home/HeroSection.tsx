@@ -7,9 +7,12 @@ export const HeroSection = () => {
         <section className="relative h-[90vh] w-full overflow-hidden flex items-center justify-center bg-anushtan-parchment">
             {/* Hero Image Background */}
             <div className="absolute inset-0 z-0">
+                {/* Dark overlay for better text contrast */}
+                <div className="absolute inset-0 bg-black/40 z-10" />
+
                 {/* Light Gradient Overlay for Blending */}
-                <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-white/10 to-anushtan-parchment z-10" />
-                <div className="absolute inset-0 bg-gradient-to-r from-anushtan-parchment/90 via-transparent to-anushtan-parchment/90 z-10" />
+                <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-anushtan-parchment/50 z-10" />
+                <div className="absolute inset-0 bg-gradient-to-r from-anushtan-parchment/60 via-transparent to-anushtan-parchment/60 z-10" />
 
                 {/* 
                    Using an img tag for the background to ensure it covers properly.
@@ -21,7 +24,7 @@ export const HeroSection = () => {
                     <img
                         src="/images/hero-banner-collage.png"
                         alt="Anushtan Hero Banner"
-                        className="w-full h-full object-cover object-top opacity-60 saturate-125"
+                        className="w-full h-full object-cover object-top opacity-70 saturate-125"
                     />
                 </div>
             </div>
@@ -44,7 +47,7 @@ export const HeroSection = () => {
                     <Button href="/admissions" className="bg-anushtan-terracotta text-white hover:bg-anushtan-terracotta/90 border-0 px-10 py-8 text-xl tracking-wide shadow-lg shadow-anushtan-terracotta/20">
                         Secure a Founding Batch Seat
                     </Button>
-                    <Button href="#trayi" variant="outline" className="text-anushtan-terracotta border-anushtan-terracotta/50 hover:bg-anushtan-terracotta/10 px-10 py-8 text-xl tracking-wide bg-white/50 backdrop-blur-sm">
+                    <Button href="#trayi" variant="outline" className="text-anushtan-charcoal border-2 border-anushtan-charcoal/70 hover:bg-anushtan-charcoal/10 px-10 py-8 text-xl tracking-wide bg-white/80 backdrop-blur-sm font-semibold">
                         Explore the Trinity
                     </Button>
                 </div>
