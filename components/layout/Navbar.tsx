@@ -8,12 +8,9 @@ import Image from "next/image";
 const navLinks = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
-    { name: "Directors", href: "/leadership" },
     { name: "Academics", href: "/academics" },
-    { name: "Student Life", href: "/student-life" },
-    { name: "Teachers & Community", href: "/teachers-community" },
+    { name: "Food & Wellness", href: "/food-wellness" },
     { name: "Campus", href: "/campus" },
-
 ];
 
 export function Navbar() {
@@ -21,18 +18,18 @@ export function Navbar() {
 
     return (
         <nav className="sticky top-0 z-50 w-full border-b border-anushtan-border bg-anushtan-parchment/95 backdrop-blur-md">
-            <div className="container-custom flex h-20 items-center justify-between">
+            <div className="container-custom flex items-center justify-between py-6">
                 <Link href="/" className="flex items-center gap-3">
-                    <div className="relative h-10 w-10 overflow-hidden rounded-full border border-anushtan-terracotta/20">
+                    <div className="relative h-12 w-12 overflow-hidden rounded-full border border-anushtan-terracotta/20">
                         <Image
                             src="/logo.jpg"
                             alt="Anushtan Logo"
                             fill
                             className="object-cover"
-                            sizes="40px"
+                            sizes="48px"
                         />
                     </div>
-                    <span className="font-heading text-xl font-bold text-anushtan-terracotta tracking-tight">
+                    <span className="font-heading text-2xl font-semibold text-anushtan-terracotta tracking-tight">
                         Anushtan
                     </span>
                 </Link>

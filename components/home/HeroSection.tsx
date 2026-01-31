@@ -7,8 +7,8 @@ export const HeroSection = () => {
         <section className="relative h-[90vh] w-full overflow-hidden flex items-center justify-center bg-anushtan-parchment">
             {/* Hero Image Background */}
             <div className="absolute inset-0 z-0">
-                {/* Dark overlay for better text contrast */}
-                <div className="absolute inset-0 bg-black/40 z-10" />
+                {/* Strong dark gradient overlay for perfect text legibility */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60 z-10" />
 
                 {/* Light Gradient Overlay for Blending */}
                 <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-anushtan-parchment/50 z-10" />
@@ -24,7 +24,7 @@ export const HeroSection = () => {
                     <img
                         src="/images/hero-banner-collage.png"
                         alt="Anushtan Hero Banner"
-                        className="w-full h-full object-cover object-top opacity-70 saturate-125"
+                        className="w-full h-full object-cover object-top opacity-80 saturate-125"
                     />
                 </div>
             </div>
@@ -32,7 +32,7 @@ export const HeroSection = () => {
             <div className="container-custom relative z-20 text-center flex flex-col items-center">
                 <div className="inline-block border border-anushtan-terracotta/30 bg-white/80 backdrop-blur-md px-6 py-2 rounded-full mb-8 shadow-sm">
                     <span className="text-anushtan-terracotta font-bold tracking-[0.2em] text-sm uppercase">
-                        Admissions Opening June 2026
+                        Admissions Opening for 2026
                     </span>
                 </div>
 
@@ -47,7 +47,7 @@ export const HeroSection = () => {
                     <Button href="/admissions" className="bg-anushtan-terracotta text-white hover:bg-anushtan-terracotta/90 border-0 px-10 py-8 text-xl tracking-wide shadow-lg shadow-anushtan-terracotta/20">
                         Secure a Founding Batch Seat
                     </Button>
-                    <Button href="#trayi" variant="outline" className="text-anushtan-charcoal border-2 border-anushtan-charcoal/70 hover:bg-anushtan-charcoal/10 px-10 py-8 text-xl tracking-wide bg-white/80 backdrop-blur-sm font-semibold">
+                    <Button href="#trayi" variant="outline" className="text-anushtan-terracotta border-2 border-anushtan-terracotta hover:bg-anushtan-terracotta/10 px-10 py-8 text-xl tracking-wide bg-white/90 backdrop-blur-sm font-semibold">
                         Explore the Trinity
                     </Button>
                 </div>

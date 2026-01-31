@@ -3,9 +3,11 @@
 :root {
   /* Anushtan 2.0 Modern Terracotta Tokens (Light Theme) */
   --anushtan-terracotta: #6B3126;
-  --anushtan-parchment: #F5F5F5; /* Updated to darker off-white for better contrast */
+  --anushtan-parchment: #FCF9F6;
+  /* Warm off-white for better color depth */
   --anushtan-gold: #C5A059;
-  --anushtan-charcoal: #333333; /* Updated for 4.5:1 contrast ratio */
+  --anushtan-charcoal: #333333;
+  /* Updated for 4.5:1 contrast ratio */
   --anushtan-border: rgba(45, 45, 45, 0.1);
 
   /* Semantic Mappings */

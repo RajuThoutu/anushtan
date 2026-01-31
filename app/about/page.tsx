@@ -2,8 +2,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import Image from "next/image";
 import { Footer } from "@/components/layout/Footer";
 import type { Metadata } from 'next';
-import { Search, Triangle, Flower, User, Heart, Zap, Feather } from "lucide-react";
-import { Card } from "@/components/ui/Card";
+import { Triangle, Flower } from "lucide-react";
 
 export const metadata: Metadata = {
     title: 'About | Anushtan Indic School',
@@ -11,37 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function About() {
-    const pillars = [
-        {
-            name: "Sri Ramakrishna Paramahamsa",
-            theme: "Universal Harmony & The Core of Being",
-            focus: "Cultivating the realization of divinity in every soul and the harmony of all paths.",
-            icon: <Heart className="w-8 h-8 text-anushtan-gold" />,
-            image: "/images/ramakrishna.jpg" // Placeholder path
-        },
-        {
-            name: "Sri Sarada Devi",
-            theme: "Maternal Nurturing & Purity",
-            focus: "Governance of the Sacred Kitchen (Annam Brahma) and the emotional safety of the child.",
-            icon: <User className="w-8 h-8 text-anushtan-gold" />,
-            image: "/images/sarada-devi.jpg" // Placeholder path
-        },
-        {
-            name: "Swami Vivekananda",
-            theme: "The Man-Making Mandate",
-            focus: "Building the grit, ethics, and strength of character required for leadership and service.",
-            icon: <Zap className="w-8 h-8 text-anushtan-gold" />,
-            image: "/hero-swami-standing.jpg"
-        },
-        {
-            name: "Rabindranath Tagore",
-            theme: "Natural Freedom & Aesthetic Harmony",
-            focus: "Integrating learning into the 6-acre sanctuary and cultivating the 'Culture of the Heart'.",
-            icon: <Feather className="w-8 h-8 text-anushtan-gold" />,
-            image: "/images/tagore.jpg" // Placeholder path
-        }
-    ];
-
     return (
         <>
             <Navbar />
@@ -162,8 +130,13 @@ export default function About() {
                                     className="object-cover object-top"
                                 />
                             </div>
-                            <h3 className="text-2xl font-bold text-anushtan-terracotta font-heading">Sri Ramakrishna</h3>
-                            <p className="text-anushtan-charcoal/60 text-sm italic">The Prophet of Harmony</p>
+                            <h3 className="text-2xl font-bold text-anushtan-terracotta font-heading">Sri Ramakrishna Paramahamsa</h3>
+                            <p className="text-anushtan-charcoal/60 text-sm italic mb-4">The Divine Mystic</p>
+                            <div className="max-w-md mx-auto bg-anushtan-parchment p-6 rounded-lg border border-anushtan-gold/30">
+                                <p className="text-anushtan-charcoal/80 leading-relaxed italic">
+                                    "God can be realized through all paths. All religions are true. The important thing is to reach the roof. You can reach it by stone stairs or by wooden stairs or by bamboo steps or by a rope. You can also climb up by a bamboo pole."
+                                </p>
+                            </div>
                         </div>
 
                         {/* Sarada Devi */}
@@ -177,7 +150,12 @@ export default function About() {
                                 />
                             </div>
                             <h3 className="text-2xl font-bold text-anushtan-terracotta font-heading">Sri Sarada Devi</h3>
-                            <p className="text-anushtan-charcoal/60 text-sm italic">The Holy Mother</p>
+                            <p className="text-anushtan-charcoal/60 text-sm italic mb-4">The Holy Mother</p>
+                            <div className="max-w-md mx-auto bg-anushtan-parchment p-6 rounded-lg border border-anushtan-gold/30">
+                                <p className="text-anushtan-charcoal/80 leading-relaxed italic">
+                                    "If you want peace of mind, do not find fault with others. Rather learn to see your own faults. Learn to make the whole world your own. No one is a stranger, my child; this whole world is your own."
+                                </p>
+                            </div>
                         </div>
 
                         {/* Vivekananda */}
@@ -191,45 +169,120 @@ export default function About() {
                                 />
                             </div>
                             <h3 className="text-2xl font-bold text-anushtan-terracotta font-heading">Swami Vivekananda</h3>
-                            <p className="text-anushtan-charcoal/60 text-sm italic">The Awakener of Souls</p>
+                            <p className="text-anushtan-charcoal/60 text-sm italic mb-4">The Awakener of Souls</p>
+                            <div className="max-w-md mx-auto bg-anushtan-parchment p-6 rounded-lg border border-anushtan-gold/30">
+                                <p className="text-anushtan-charcoal/80 leading-relaxed italic">
+                                    "We want that education by which character is formed, strength of mind is increased, the intellect is expanded, and by which one can stand on one's own feet."
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* 3. The 4 Pillars of Universal Wisdom */}
-            <section className="py-24 bg-anushtan-parchment border-t border-anushtan-border">
+            {/* 4. Leadership & Governance */}
+            <section className="py-24 bg-white">
                 <div className="container-custom max-w-7xl mx-auto">
                     <div className="text-center mb-16">
+                        <span className="text-anushtan-gold font-bold tracking-widest uppercase text-sm mb-2 block">
+                            Our Team
+                        </span>
                         <h2 className="font-heading text-4xl md:text-5xl font-bold text-anushtan-terracotta mb-6">
-                            The 4 Pillars of Universal Wisdom
+                            Leadership & Governance
                         </h2>
-                        <div className="h-1 w-24 bg-anushtan-gold mx-auto"></div>
+                        <div className="h-1 w-24 bg-anushtan-gold mx-auto mb-8"></div>
+                        <p className="text-xl text-anushtan-charcoal/80 leading-relaxed max-w-4xl mx-auto">
+                            Governed by a collective of Global Experts, IITians, and Strategic Visionaries dedicated to building a world-class Indic educational institution.
+                        </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {pillars.map((pillar, index) => (
-                            <div key={index} className="bg-white border border-anushtan-border p-8 rounded-xl shadow-sm hover:shadow-xl hover:border-anushtan-terracotta/30 transition-all duration-300 group hover:-translate-y-1">
-                                <div className="w-16 h-16 bg-anushtan-parchment rounded-full flex items-center justify-center mb-6 border border-anushtan-gold/20 group-hover:bg-anushtan-gold/10 transition-colors">
-                                    {pillar.icon}
-                                </div>
-                                <h3 className="font-heading text-xl font-bold text-anushtan-terracotta mb-2 min-h-[3.5rem] flex items-end">
-                                    {pillar.name}
-                                </h3>
-                                <div className="w-12 h-[2px] bg-anushtan-gold/50 mb-4"></div>
-                                <p className="text-sm font-bold text-anushtan-charcoal/80 mb-3 uppercase tracking-wide">
-                                    {pillar.theme}
-                                </p>
-                                <p className="text-anushtan-charcoal/70 text-sm leading-relaxed">
-                                    {pillar.focus}
-                                </p>
-                            </div>
-                        ))}
+                    {/* Pratishtan Edu Research */}
+                    <div className="text-center mb-8">
+                        <h3 className="font-heading text-2xl font-bold text-anushtan-charcoal mb-4">Strategic Academic Partner</h3>
+                    </div>
+
+                    <div className="space-y-6 mb-16">
+                        <LeadershipCompactCard
+                            name="Pratishtan Edu Research / SBR Talks"
+                            title="Strategic Academic Advisor"
+                            bio="Providing the foundational pedagogical framework for Anushtan's 'Descriptive Logic' standard."
+                        />
+                    </div>
+
+                    {/* Advisory Board & Guiding Force */}
+                    <div className="text-center mb-8">
+                        <h3 className="font-heading text-2xl font-bold text-anushtan-charcoal mb-4">Our Advisory Board & Guiding Force</h3>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                        <LeadershipCompactCard
+                            name="Sri. Srikanth Bollavaram"
+                            title="Vice President - PEPSICO, USA"
+                            bio="Visionary Leader with Global Corporate Exposure and Strong Commitment to Nation-Building Through Education."
+                        />
+                        <LeadershipCompactCard
+                            name="Sri. Bharat Teja"
+                            title="B.TECH, M.TECH, IIT Kharagpur"
+                            bio="Education Visionary with Strong Academic and Research Orientation."
+                        />
+                        <LeadershipCompactCard
+                            name="Sri. Jaswanth"
+                            title="B.TECH, IIT Kharagpur"
+                            bio="Mentor in Technology-Driven Farming and Innovation Frameworks."
+                        />
+                        <LeadershipCompactCard
+                            name="Sri. Divi Reddy"
+                            title="B.TECH, M.TECH, NIT Warangal"
+                            bio="Former Director & CEO US Based Software Companies, Expert in Global Systems, Technology Leadership and Institutional Strategy."
+                        />
+                    </div>
+
+                    {/* Directors */}
+                    <div className="text-center mb-8">
+                        <h3 className="font-heading text-2xl font-bold text-anushtan-charcoal mb-4">Directors</h3>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <LeadershipCompactCard
+                            name="Sri. Raju Thoutu"
+                            title="Architect - CITI BANK, USA"
+                            bio="Renowned Professional with Deep Expertise in Infrastructure Planning and Sustainable Development."
+                        />
+                        <LeadershipCompactCard
+                            name="Sri. Sreedhar Bollavaram"
+                            title="CEO - Pratishtan Education & Research, Hyderabad"
+                            bio="Education Reformer Focused on Value-Based Student-Centric Learning Models."
+                        />
+                        <LeadershipCompactCard
+                            name="Sri. Kartik Narendrula"
+                            title="Research Scholar - Organic Farming"
+                            bio="Advocate of Sustainability, Environmental Responsibility and Rural Development."
+                        />
+                        <LeadershipCompactCard
+                            name="Sri. Goutham Reddy"
+                            title="B.Tech, IIT Mandi - AI Application Engineer"
+                            bio="Specializing in building pre-trained Real-world AI solutions."
+                        />
+                        <LeadershipCompactCard
+                            name="Ramu T"
+                            title="Global IT Leader & Product Specialist"
+                            bio="Integrating world-class pedagogical practices from diverse global schooling systems."
+                        />
                     </div>
                 </div>
             </section>
 
             <Footer />
         </>
+    );
+}
+
+function LeadershipCompactCard({ name, title, bio }: { name: string; title: string; bio: string }) {
+    return (
+        <div className="bg-anushtan-parchment p-6 rounded-lg border border-anushtan-border hover:border-anushtan-terracotta/30 hover:shadow-md transition-all">
+            <h4 className="font-heading text-xl font-bold text-anushtan-terracotta mb-2">{name}</h4>
+            <div className="text-anushtan-gold text-sm font-medium mb-3">{title}</div>
+            <p className="text-anushtan-charcoal/70 text-sm leading-relaxed">{bio}</p>
+        </div>
     );
 }
