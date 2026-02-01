@@ -23,6 +23,7 @@ export default function AddStudentPage() {
         occupation: '',
         primaryContact: '',
         secondaryContact: '',
+        email: '',
 
         // Inquiry Details
         leadSource: '',
@@ -68,6 +69,7 @@ export default function AddStudentPage() {
                     occupation: '',
                     primaryContact: '',
                     secondaryContact: '',
+                    email: '',
                     leadSource: '',
                     dsHostel: 'Day Scholar',
                     comments: '',
@@ -275,6 +277,20 @@ export default function AddStudentPage() {
                                     pattern="[0-9]{10}"
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
                                     placeholder="10-digit mobile number (optional)"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    Email Address
+                                </label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
+                                    placeholder="parent@example.com (optional)"
                                 />
                             </div>
                         </div>
