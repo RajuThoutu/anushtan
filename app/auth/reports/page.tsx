@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth"
-<parameter name="redirect } from " next /navigation"
+import { redirect } from "next/navigation"
 import { authOptions } from "@/lib/auth/auth-config"
 
 export default async function ReportsPage() {
