@@ -25,6 +25,13 @@ export default function AddStudentPage() {
         secondaryContact: '',
         email: '',
 
+        // Parent Preferences
+        q1_education_guide: '',
+        q2_learning_approach: '',
+        q3_teacher_preference: '',
+        q4_child_priority: '',
+        q5_school_environment: '',
+
         // Inquiry Details
         leadSource: '',
         dsHostel: 'Day Scholar',
@@ -70,6 +77,11 @@ export default function AddStudentPage() {
                     primaryContact: '',
                     secondaryContact: '',
                     email: '',
+                    q1_education_guide: '',
+                    q2_learning_approach: '',
+                    q3_teacher_preference: '',
+                    q4_child_priority: '',
+                    q5_school_environment: '',
                     leadSource: '',
                     dsHostel: 'Day Scholar',
                     comments: '',
@@ -292,6 +304,172 @@ export default function AddStudentPage() {
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
                                     placeholder="parent@example.com (optional)"
                                 />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Parent Preferences Section */}
+                    <div>
+                        <h2 className="font-heading text-xl font-bold text-anushtan-charcoal mb-4 pb-2 border-b border-anushtan-border">
+                            Parent Preferences
+                        </h2>
+                        <p className="text-sm text-anushtan-charcoal/60 mb-6">
+                            Help us understand your educational philosophy and expectations
+                        </p>
+                        <div className="space-y-6">
+                            {/* Question 1 */}
+                            <div>
+                                <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
+                                    1. Who should guide a child's education?
+                                </label>
+                                <div className="space-y-2">
+                                    <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <input
+                                            type="radio"
+                                            name="q1_education_guide"
+                                            value="schools_marks"
+                                            checked={formData.q1_education_guide === 'schools_marks'}
+                                            onChange={handleChange}
+                                            className="mt-1 mr-3"
+                                        />
+                                        <span className="text-sm">Schools mainly focused on marks and ranks</span>
+                                    </label>
+                                    <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <input
+                                            type="radio"
+                                            name="q1_education_guide"
+                                            value="teachers_mentors"
+                                            checked={formData.q1_education_guide === 'teachers_mentors'}
+                                            onChange={handleChange}
+                                            className="mt-1 mr-3"
+                                        />
+                                        <span className="text-sm">Teachers and mentors who guide children step by step</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* Question 2 */}
+                            <div>
+                                <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
+                                    2. How should children learn subjects?
+                                </label>
+                                <div className="space-y-2">
+                                    <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <input
+                                            type="radio"
+                                            name="q2_learning_approach"
+                                            value="memorising"
+                                            checked={formData.q2_learning_approach === 'memorising'}
+                                            onChange={handleChange}
+                                            className="mt-1 mr-3"
+                                        />
+                                        <span className="text-sm">By memorising and completing the syllabus</span>
+                                    </label>
+                                    <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <input
+                                            type="radio"
+                                            name="q2_learning_approach"
+                                            value="understanding"
+                                            checked={formData.q2_learning_approach === 'understanding'}
+                                            onChange={handleChange}
+                                            className="mt-1 mr-3"
+                                        />
+                                        <span className="text-sm">By understanding concepts with explanation and activities</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* Question 3 */}
+                            <div>
+                                <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
+                                    3. What kind of teachers do you prefer?
+                                </label>
+                                <div className="space-y-2">
+                                    <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <input
+                                            type="radio"
+                                            name="q3_teacher_preference"
+                                            value="strict_syllabus"
+                                            checked={formData.q3_teacher_preference === 'strict_syllabus'}
+                                            onChange={handleChange}
+                                            className="mt-1 mr-3"
+                                        />
+                                        <span className="text-sm">Teachers who strictly complete the syllabus</span>
+                                    </label>
+                                    <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <input
+                                            type="radio"
+                                            name="q3_teacher_preference"
+                                            value="caring_explaining"
+                                            checked={formData.q3_teacher_preference === 'caring_explaining'}
+                                            onChange={handleChange}
+                                            className="mt-1 mr-3"
+                                        />
+                                        <span className="text-sm">Teachers who explain well and care about each child</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* Question 4 */}
+                            <div>
+                                <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
+                                    4. What is more important for your child?
+                                </label>
+                                <div className="space-y-2">
+                                    <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <input
+                                            type="radio"
+                                            name="q4_child_priority"
+                                            value="only_studies"
+                                            checked={formData.q4_child_priority === 'only_studies'}
+                                            onChange={handleChange}
+                                            className="mt-1 mr-3"
+                                        />
+                                        <span className="text-sm">Only studies and marks</span>
+                                    </label>
+                                    <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <input
+                                            type="radio"
+                                            name="q4_child_priority"
+                                            value="holistic"
+                                            checked={formData.q4_child_priority === 'holistic'}
+                                            onChange={handleChange}
+                                            className="mt-1 mr-3"
+                                        />
+                                        <span className="text-sm">Studies along with sports, skills, and activities</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* Question 5 */}
+                            <div>
+                                <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
+                                    5. Which school environment do you prefer?
+                                </label>
+                                <div className="space-y-2">
+                                    <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <input
+                                            type="radio"
+                                            name="q5_school_environment"
+                                            value="selective_performance"
+                                            checked={formData.q5_school_environment === 'selective_performance'}
+                                            onChange={handleChange}
+                                            className="mt-1 mr-3"
+                                        />
+                                        <span className="text-sm">Schools that select children only by current performance</span>
+                                    </label>
+                                    <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <input
+                                            type="radio"
+                                            name="q5_school_environment"
+                                            value="nurturing_improvement"
+                                            checked={formData.q5_school_environment === 'nurturing_improvement'}
+                                            onChange={handleChange}
+                                            className="mt-1 mr-3"
+                                        />
+                                        <span className="text-sm">Schools that help every child improve with guidance and care</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
