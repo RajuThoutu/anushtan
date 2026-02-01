@@ -4,12 +4,221 @@ import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
+// Translation object
+const translations = {
+    en: {
+        pageTitle: 'Add Student Inquiry',
+        pageSubtitle: 'Capture new lead information',
+        backToDashboard: '← Back to Dashboard',
+        successMessage: '{t.successMessage}',
+
+        // Student Information
+        studentInfo: 'Student Information',
+        studentName: 'Student Name',
+        studentNamePlaceholder: "Enter student's full name",
+        currentClass: 'Current Class',
+        selectClass: 'Select class',
+        currentSchool: 'Current School',
+        currentSchoolPlaceholder: 'Current school name',
+        board: 'Board',
+        selectBoard: 'Select board',
+
+        // Parent Information
+        parentInfo: 'Parent Information',
+        parentName: 'Parent Name',
+        parentNamePlaceholder: 'Parent/Guardian name',
+        occupation: 'Occupation',
+        occupationPlaceholder: "Parent's occupation",
+        primaryContact: 'Primary Contact',
+        primaryContactPlaceholder: '10-digit mobile number',
+        secondaryContact: 'Secondary Contact',
+        secondaryContactPlaceholder: '10-digit mobile number (optional)',
+        emailAddress: 'Email Address',
+        emailPlaceholder: 'parent@example.com (optional)',
+
+        // Parent Preferences
+        parentPreferences: 'Parent Preferences',
+        preferencesSubtitle: 'Help us understand your educational philosophy and expectations',
+        q1: 'Who should guide a child\'s education?',
+        q1_opt1: 'Schools mainly focused on marks and ranks',
+        q1_opt2: 'Teachers and mentors who guide children step by step',
+        q2: 'How should children learn subjects?',
+        q2_opt1: 'By memorising and completing the syllabus',
+        q2_opt2: 'By understanding concepts with explanation and activities',
+        q3: 'What kind of teachers do you prefer?',
+        q3_opt1: 'Teachers who strictly complete the syllabus',
+        q3_opt2: 'Teachers who explain well and care about each child',
+        q4: 'What is more important for your child?',
+        q4_opt1: 'Only studies and marks',
+        q4_opt2: 'Studies along with sports, skills, and activities',
+        q5: 'Which school environment do you prefer?',
+        q5_opt1: 'Schools that select children only by current performance',
+        q5_opt2: 'Schools that help every child improve with guidance and care',
+
+        // Inquiry Details
+        inquiryDetails: 'Inquiry Details',
+        leadSource: 'Lead Source',
+        selectSource: 'Select source',
+        dsHostel: 'Day Scholar / Hostel',
+        inquiryDate: 'Inquiry Date',
+        priority: 'Priority',
+        comments: 'Comments / Notes',
+        commentsPlaceholder: 'Any additional information about the inquiry...',
+
+        // Buttons
+        submitButton: '✅ Add Student Inquiry',
+        submittingButton: 'Adding Inquiry...',
+        cancelButton: 'Cancel',
+
+        // Options
+        dayScholar: 'Day Scholar',
+        hostel: 'Hostel',
+        low: 'Low',
+        medium: 'Medium',
+        high: 'High',
+
+        // Lead Sources
+        walkIn: 'Walk-in',
+        phoneCall: 'Phone Call',
+        website: 'Website',
+        referral: 'Referral',
+        socialMedia: 'Social Media',
+        advertisement: 'Advertisement',
+        other: 'Other',
+
+        // Boards
+        cbse: 'CBSE',
+        icse: 'ICSE',
+        stateBoard: 'State Board',
+        ib: 'IB',
+
+        // Classes
+        nursery: 'Nursery',
+        lkg: 'LKG',
+        ukg: 'UKG',
+        grade1: '1st Grade',
+        grade2: '2nd Grade',
+        grade3: '3rd Grade',
+        grade4: '4th Grade',
+        grade5: '5th Grade',
+        grade6: '6th Grade',
+        grade7: '7th Grade',
+        grade8: '8th Grade',
+        grade9: '9th Grade',
+        grade10: '10th Grade',
+    },
+    te: {
+        pageTitle: 'విద్యార్థి విచారణ జోడించండి',
+        pageSubtitle: 'కొత్త లీడ్ సమాచారాన్ని సేకరించండి',
+        backToDashboard: '← డాష్‌బోర్డ్‌కు తిరిగి వెళ్ళండి',
+        successMessage: '✅ విద్యార్థి విచారణ విజయవంతంగా జోడించబడింది! డాష్‌బోర్డ్‌కు మళ్లిస్తోంది...',
+
+        // Student Information
+        studentInfo: 'విద్యార్థి సమాచారం',
+        studentName: 'విద్యార్థి పేరు',
+        studentNamePlaceholder: 'విద్యార్థి పూర్తి పేరు నమోదు చేయండి',
+        currentClass: 'ప్రస్తుత తరగతి',
+        selectClass: 'తరగతిని ఎంచుకోండి',
+        currentSchool: 'ప్రస్తుత పాఠశాల',
+        currentSchoolPlaceholder: 'ప్రస్తుత పాఠశాల పేరు',
+        board: 'బోర్డు',
+        selectBoard: 'బోర్డును ఎంచుకోండి',
+
+        // Parent Information
+        parentInfo: 'తల్లిదండ్రుల సమాచారం',
+        parentName: 'తల్లిదండ్రుల పేరు',
+        parentNamePlaceholder: 'తల్లిదండ్రుల/సంరక్షకుల పేరు',
+        occupation: 'వృత్తి',
+        occupationPlaceholder: 'తల్లిదండ్రుల వృత్తి',
+        primaryContact: 'ప్రాథమిక సంప్రదింపు',
+        primaryContactPlaceholder: '10-అంకెల మొబైల్ నంబర్',
+        secondaryContact: 'ద్వితీయ సంప్రదింపు',
+        secondaryContactPlaceholder: '10-అంకెల మొబైల్ నంబర్ (ఐచ్ఛికం)',
+        emailAddress: 'ఇమెయిల్ చిరునామా',
+        emailPlaceholder: 'parent@example.com (ఐచ్ఛికం)',
+
+        // Parent Preferences
+        parentPreferences: 'తల్లిదండ్రుల ప్రాధాన్యతలు',
+        preferencesSubtitle: 'మీ విద్యా తత్వశాస్త్రం మరియు అంచనాలను అర్థం చేసుకోవడంలో మాకు సహాయపడండి',
+        q1: 'పిల్లల విద్యకు ఎవరు మార్గదర్శకత్వం వహించాలి?',
+        q1_opt1: 'ప్రధానంగా మార్కులు మరియు ర్యాంకులపై దృష్టి సారించే పాఠశాలలు',
+        q1_opt2: 'పిల్లలకు అడుగడుగునా మార్గదర్శకత్వం చేసే ఉపాధ్యాయులు మరియు మార్గదర్శకులు',
+        q2: 'పిల్లలు విషయాలను ఎలా నేర్చుకోవాలి?',
+        q2_opt1: 'పాఠ్యాంశాలను కంఠస్థం చేయడం మరియు పూర్తి చేయడం ద్వారా',
+        q2_opt2: 'వివరణ మరియు కార్యకలాపాలతో భావనలను అర్థం చేసుకోవడం ద్వారా',
+        q3: 'మీరు ఎలాంటి ఉపాధ్యాయులను ఇష్టపడతారు?',
+        q3_opt1: 'పాఠ్యాంశాలను ఖచ్చితంగా పూర్తి చేసే ఉపాధ్యాయులు',
+        q3_opt2: 'బాగా వివరించే మరియు ప్రతి పిల్లవాడి గురించి శ్రద్ధ వహించే ఉపాధ్యాయులు',
+        q4: 'మీ పిల్లవాడికి ఏది ముఖ్యం?',
+        q4_opt1: 'చదువులు మరియు మార్కులు మాత్రమే',
+        q4_opt2: 'క్రీడలు, నైపుణ్యాలు మరియు కార్యకలాపాలతో పాటు చదువులు',
+        q5: 'మీరు ఏ పాఠశాల వాతావరణాన్ని ఇష్టపడతారు?',
+        q5_opt1: 'ప్రస్తుత పనితీరు ఆధారంగా మాత్రమే పిల్లలను ఎంపిక చేసే పాఠశాలలు',
+        q5_opt2: 'మార్గదర్శకత్వం మరియు శ్రద్ధతో ప్రతి పిల్లవాడిని మెరుగుపరచడంలో సహాయపడే పాఠశాలలు',
+
+        // Inquiry Details
+        inquiryDetails: 'విచారణ వివరాలు',
+        leadSource: 'లీడ్ మూలం',
+        selectSource: 'మూలాన్ని ఎంచుకోండి',
+        dsHostel: 'డే స్కాలర్ / హాస్టల్',
+        inquiryDate: 'విచారణ తేదీ',
+        priority: 'ప్రాధాన్యత',
+        comments: 'వ్యాఖ్యలు / గమనికలు',
+        commentsPlaceholder: 'విచారణ గురించి ఏదైనా అదనపు సమాచారం...',
+
+        // Buttons
+        submitButton: '✅ విద్యార్థి విచారణ జోడించండి',
+        submittingButton: 'విచారణ జోడిస్తోంది...',
+        cancelButton: 'రద్దు చేయండి',
+
+        // Options
+        dayScholar: 'డే స్కాలర్',
+        hostel: 'హాస్టల్',
+        low: 'తక్కువ',
+        medium: 'మధ్యస్థ',
+        high: 'అధిక',
+
+        // Lead Sources
+        walkIn: 'వాక్-ఇన్',
+        phoneCall: 'ఫోన్ కాల్',
+        website: 'వెబ్‌సైట్',
+        referral: 'రెఫరల్',
+        socialMedia: 'సోషల్ మీడియా',
+        advertisement: 'ప్రకటన',
+        other: 'ఇతరం',
+
+        // Boards
+        cbse: 'CBSE',
+        icse: 'ICSE',
+        stateBoard: 'రాష్ట్ర బోర్డు',
+        ib: 'IB',
+
+        // Classes
+        nursery: 'నర్సరీ',
+        lkg: 'LKG',
+        ukg: 'UKG',
+        grade1: '1వ తరగతి',
+        grade2: '2వ తరగతి',
+        grade3: '3వ తరగతి',
+        grade4: '4వ తరగతి',
+        grade5: '5వ తరగతి',
+        grade6: '6వ తరగతి',
+        grade7: '7వ తరగతి',
+        grade8: '8వ తరగతి',
+        grade9: '9వ తరగతి',
+        grade10: '10వ తరగతి',
+    }
+}
+
 export default function AddStudentPage() {
     const { data: session } = useSession()
     const router = useRouter()
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState('')
     const [success, setSuccess] = useState(false)
+    const [language, setLanguage] = useState<'en' | 'te'>('en')
+
+    const t = translations[language]
 
     const [formData, setFormData] = useState({
         // Student Information
@@ -111,18 +320,41 @@ export default function AddStudentPage() {
                 <div className="container-custom max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
                     <div>
                         <h1 className="font-heading text-2xl font-bold text-anushtan-terracotta">
-                            Add Student Inquiry
+                            {t.pageTitle}
                         </h1>
                         <p className="text-sm text-anushtan-charcoal/60">
-                            Capture new lead information
+                            {t.pageSubtitle}
                         </p>
                     </div>
-                    <button
-                        onClick={() => router.push('/auth/dashboard')}
-                        className="text-sm text-anushtan-terracotta hover:underline"
-                    >
-                        ← Back to Dashboard
-                    </button>
+                    <div className="flex items-center gap-4">
+                        {/* Language Toggle */}
+                        <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+                            <button
+                                onClick={() => setLanguage('en')}
+                                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${language === 'en'
+                                    ? 'bg-white text-anushtan-terracotta shadow-sm'
+                                    : 'text-gray-600 hover:text-gray-900'
+                                    }`}
+                            >
+                                English
+                            </button>
+                            <button
+                                onClick={() => setLanguage('te')}
+                                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${language === 'te'
+                                    ? 'bg-white text-anushtan-terracotta shadow-sm'
+                                    : 'text-gray-600 hover:text-gray-900'
+                                    }`}
+                            >
+                                తెలుగు
+                            </button>
+                        </div>
+                        <button
+                            onClick={() => router.push('/auth/dashboard')}
+                            className="text-sm text-anushtan-terracotta hover:underline"
+                        >
+                            {t.backToDashboard}
+                        </button>
+                    </div>
                 </div>
             </header>
 
@@ -130,7 +362,7 @@ export default function AddStudentPage() {
             <main className="container-custom max-w-4xl mx-auto px-4 py-8">
                 {success && (
                     <div className="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
-                        ✅ Student inquiry added successfully! Redirecting to dashboard...
+                        {t.successMessage}
                     </div>
                 )}
 
@@ -145,12 +377,12 @@ export default function AddStudentPage() {
                     {/* Student Information Section */}
                     <div>
                         <h2 className="font-heading text-xl font-bold text-anushtan-charcoal mb-4 pb-2 border-b border-anushtan-border">
-                            Student Information
+                            {t.studentInfo}
                         </h2>
                         <div className="grid md:grid-cols-2 gap-6">
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Student Name <span className="text-red-500">*</span>
+                                    {t.studentName} <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                     type="text"
@@ -159,13 +391,13 @@ export default function AddStudentPage() {
                                     onChange={handleChange}
                                     required
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
-                                    placeholder="Enter student's full name"
+                                    placeholder={t.studentNamePlaceholder}
                                 />
                             </div>
 
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Current Class <span className="text-red-500">*</span>
+                                    {t.currentClass} <span className="text-red-500">*</span>
                                 </label>
                                 <select
                                     name="currentClass"
@@ -174,26 +406,26 @@ export default function AddStudentPage() {
                                     required
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
                                 >
-                                    <option value="">Select class</option>
-                                    <option value="Nursery">Nursery</option>
-                                    <option value="LKG">LKG</option>
-                                    <option value="UKG">UKG</option>
-                                    <option value="1st Grade">1st Grade</option>
-                                    <option value="2nd Grade">2nd Grade</option>
-                                    <option value="3rd Grade">3rd Grade</option>
-                                    <option value="4th Grade">4th Grade</option>
-                                    <option value="5th Grade">5th Grade</option>
-                                    <option value="6th Grade">6th Grade</option>
-                                    <option value="7th Grade">7th Grade</option>
-                                    <option value="8th Grade">8th Grade</option>
-                                    <option value="9th Grade">9th Grade</option>
-                                    <option value="10th Grade">10th Grade</option>
+                                    <option value="">{t.selectClass}</option>
+                                    <option value="Nursery">{t.nursery}</option>
+                                    <option value="LKG">{t.lkg}</option>
+                                    <option value="UKG">{t.ukg}</option>
+                                    <option value="1st Grade">{t.grade1}</option>
+                                    <option value="2nd Grade">{t.grade2}</option>
+                                    <option value="3rd Grade">{t.grade3}</option>
+                                    <option value="4th Grade">{t.grade4}</option>
+                                    <option value="5th Grade">{t.grade5}</option>
+                                    <option value="6th Grade">{t.grade6}</option>
+                                    <option value="7th Grade">{t.grade7}</option>
+                                    <option value="8th Grade">{t.grade8}</option>
+                                    <option value="9th Grade">{t.grade9}</option>
+                                    <option value="10th Grade">{t.grade10}</option>
                                 </select>
                             </div>
 
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Current School
+                                    {t.currentSchool}
                                 </label>
                                 <input
                                     type="text"
@@ -201,13 +433,13 @@ export default function AddStudentPage() {
                                     value={formData.currentSchool}
                                     onChange={handleChange}
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
-                                    placeholder="Current school name"
+                                    placeholder={t.currentSchoolPlaceholder}
                                 />
                             </div>
 
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Board
+                                    {t.board}
                                 </label>
                                 <select
                                     name="board"
@@ -215,12 +447,12 @@ export default function AddStudentPage() {
                                     onChange={handleChange}
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
                                 >
-                                    <option value="">Select board</option>
-                                    <option value="CBSE">CBSE</option>
-                                    <option value="ICSE">ICSE</option>
-                                    <option value="State Board">State Board</option>
-                                    <option value="IB">IB</option>
-                                    <option value="Other">Other</option>
+                                    <option value="">{t.selectBoard}</option>
+                                    <option value="CBSE">{t.cbse}</option>
+                                    <option value="ICSE">{t.icse}</option>
+                                    <option value="State Board">{t.stateBoard}</option>
+                                    <option value="IB">{t.ib}</option>
+                                    <option value="Other">{t.other}</option>
                                 </select>
                             </div>
                         </div>
@@ -229,12 +461,12 @@ export default function AddStudentPage() {
                     {/* Parent Information Section */}
                     <div>
                         <h2 className="font-heading text-xl font-bold text-anushtan-charcoal mb-4 pb-2 border-b border-anushtan-border">
-                            Parent Information
+                            {t.parentInfo}
                         </h2>
                         <div className="grid md:grid-cols-2 gap-6">
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Parent Name <span className="text-red-500">*</span>
+                                    {t.parentName} <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                     type="text"
@@ -243,13 +475,13 @@ export default function AddStudentPage() {
                                     onChange={handleChange}
                                     required
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
-                                    placeholder="Parent/Guardian name"
+                                    placeholder={t.parentNamePlaceholder}
                                 />
                             </div>
 
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Occupation
+                                    {t.occupation}
                                 </label>
                                 <input
                                     type="text"
@@ -257,13 +489,13 @@ export default function AddStudentPage() {
                                     value={formData.occupation}
                                     onChange={handleChange}
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
-                                    placeholder="Parent's occupation"
+                                    placeholder={t.occupationPlaceholder}
                                 />
                             </div>
 
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Primary Contact <span className="text-red-500">*</span>
+                                    {t.primaryContact} <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                     type="tel"
@@ -273,13 +505,13 @@ export default function AddStudentPage() {
                                     required
                                     pattern="[0-9]{10}"
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
-                                    placeholder="10-digit mobile number"
+                                    placeholder={t.primaryContactPlaceholder}
                                 />
                             </div>
 
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Secondary Contact
+                                    {t.secondaryContact}
                                 </label>
                                 <input
                                     type="tel"
@@ -288,13 +520,13 @@ export default function AddStudentPage() {
                                     onChange={handleChange}
                                     pattern="[0-9]{10}"
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
-                                    placeholder="10-digit mobile number (optional)"
+                                    placeholder={t.secondaryContactPlaceholder}
                                 />
                             </div>
 
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Email Address
+                                    {t.emailAddress}
                                 </label>
                                 <input
                                     type="email"
@@ -302,7 +534,7 @@ export default function AddStudentPage() {
                                     value={formData.email}
                                     onChange={handleChange}
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
-                                    placeholder="parent@example.com (optional)"
+                                    placeholder={t.emailPlaceholder}
                                 />
                             </div>
                         </div>
@@ -311,16 +543,16 @@ export default function AddStudentPage() {
                     {/* Parent Preferences Section */}
                     <div>
                         <h2 className="font-heading text-xl font-bold text-anushtan-charcoal mb-4 pb-2 border-b border-anushtan-border">
-                            Parent Preferences
+                            {t.parentPreferences}
                         </h2>
                         <p className="text-sm text-anushtan-charcoal/60 mb-6">
-                            Help us understand your educational philosophy and expectations
+                            {t.preferencesSubtitle}
                         </p>
                         <div className="space-y-6">
                             {/* Question 1 */}
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
-                                    1. Who should guide a child's education?
+                                    {`1. ${t.q1}`}
                                 </label>
                                 <div className="space-y-2">
                                     <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
@@ -332,7 +564,7 @@ export default function AddStudentPage() {
                                             onChange={handleChange}
                                             className="mt-1 mr-3"
                                         />
-                                        <span className="text-sm">Schools mainly focused on marks and ranks</span>
+                                        <span className="text-sm">{t.q1_opt1}</span>
                                     </label>
                                     <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                         <input
@@ -343,7 +575,7 @@ export default function AddStudentPage() {
                                             onChange={handleChange}
                                             className="mt-1 mr-3"
                                         />
-                                        <span className="text-sm">Teachers and mentors who guide children step by step</span>
+                                        <span className="text-sm">{t.q1_opt2}</span>
                                     </label>
                                 </div>
                             </div>
@@ -351,7 +583,7 @@ export default function AddStudentPage() {
                             {/* Question 2 */}
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
-                                    2. How should children learn subjects?
+                                    {`2. ${t.q2}`}
                                 </label>
                                 <div className="space-y-2">
                                     <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
@@ -363,7 +595,7 @@ export default function AddStudentPage() {
                                             onChange={handleChange}
                                             className="mt-1 mr-3"
                                         />
-                                        <span className="text-sm">By memorising and completing the syllabus</span>
+                                        <span className="text-sm">{t.q2_opt1}</span>
                                     </label>
                                     <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                         <input
@@ -374,7 +606,7 @@ export default function AddStudentPage() {
                                             onChange={handleChange}
                                             className="mt-1 mr-3"
                                         />
-                                        <span className="text-sm">By understanding concepts with explanation and activities</span>
+                                        <span className="text-sm">{t.q2_opt2}</span>
                                     </label>
                                 </div>
                             </div>
@@ -382,7 +614,7 @@ export default function AddStudentPage() {
                             {/* Question 3 */}
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
-                                    3. What kind of teachers do you prefer?
+                                    {`3. ${t.q3}`}
                                 </label>
                                 <div className="space-y-2">
                                     <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
@@ -394,7 +626,7 @@ export default function AddStudentPage() {
                                             onChange={handleChange}
                                             className="mt-1 mr-3"
                                         />
-                                        <span className="text-sm">Teachers who strictly complete the syllabus</span>
+                                        <span className="text-sm">{t.q3_opt1}</span>
                                     </label>
                                     <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                         <input
@@ -405,7 +637,7 @@ export default function AddStudentPage() {
                                             onChange={handleChange}
                                             className="mt-1 mr-3"
                                         />
-                                        <span className="text-sm">Teachers who explain well and care about each child</span>
+                                        <span className="text-sm">{t.q3_opt2}</span>
                                     </label>
                                 </div>
                             </div>
@@ -413,7 +645,7 @@ export default function AddStudentPage() {
                             {/* Question 4 */}
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
-                                    4. What is more important for your child?
+                                    {`4. ${t.q4}`}
                                 </label>
                                 <div className="space-y-2">
                                     <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
@@ -425,7 +657,7 @@ export default function AddStudentPage() {
                                             onChange={handleChange}
                                             className="mt-1 mr-3"
                                         />
-                                        <span className="text-sm">Only studies and marks</span>
+                                        <span className="text-sm">{t.q4_opt1}</span>
                                     </label>
                                     <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                         <input
@@ -436,7 +668,7 @@ export default function AddStudentPage() {
                                             onChange={handleChange}
                                             className="mt-1 mr-3"
                                         />
-                                        <span className="text-sm">Studies along with sports, skills, and activities</span>
+                                        <span className="text-sm">{t.q4_opt2}</span>
                                     </label>
                                 </div>
                             </div>
@@ -444,7 +676,7 @@ export default function AddStudentPage() {
                             {/* Question 5 */}
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
-                                    5. Which school environment do you prefer?
+                                    {`5. ${t.q5}`}
                                 </label>
                                 <div className="space-y-2">
                                     <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
@@ -456,7 +688,7 @@ export default function AddStudentPage() {
                                             onChange={handleChange}
                                             className="mt-1 mr-3"
                                         />
-                                        <span className="text-sm">Schools that select children only by current performance</span>
+                                        <span className="text-sm">{t.q5_opt1}</span>
                                     </label>
                                     <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                         <input
@@ -467,7 +699,7 @@ export default function AddStudentPage() {
                                             onChange={handleChange}
                                             className="mt-1 mr-3"
                                         />
-                                        <span className="text-sm">Schools that help every child improve with guidance and care</span>
+                                        <span className="text-sm">{t.q5_opt2}</span>
                                     </label>
                                 </div>
                             </div>
@@ -477,12 +709,12 @@ export default function AddStudentPage() {
                     {/* Inquiry Details Section */}
                     <div>
                         <h2 className="font-heading text-xl font-bold text-anushtan-charcoal mb-4 pb-2 border-b border-anushtan-border">
-                            Inquiry Details
+                            {t.inquiryDetails}
                         </h2>
                         <div className="grid md:grid-cols-2 gap-6">
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Lead Source <span className="text-red-500">*</span>
+                                    {t.leadSource} <span className="text-red-500">*</span>
                                 </label>
                                 <select
                                     name="leadSource"
@@ -491,20 +723,20 @@ export default function AddStudentPage() {
                                     required
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
                                 >
-                                    <option value="">Select source</option>
-                                    <option value="Walk-in">Walk-in</option>
-                                    <option value="Phone Call">Phone Call</option>
-                                    <option value="Website">Website</option>
-                                    <option value="Referral">Referral</option>
-                                    <option value="Social Media">Social Media</option>
-                                    <option value="Advertisement">Advertisement</option>
-                                    <option value="Other">Other</option>
+                                    <option value="">{t.selectSource}</option>
+                                    <option value="Walk-in">{t.walkIn}</option>
+                                    <option value="Phone Call">{t.phoneCall}</option>
+                                    <option value="Website">{t.website}</option>
+                                    <option value="Referral">{t.referral}</option>
+                                    <option value="Social Media">{t.socialMedia}</option>
+                                    <option value="Advertisement">{t.advertisement}</option>
+                                    <option value="Other">{t.other}</option>
                                 </select>
                             </div>
 
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Day Scholar / Hostel <span className="text-red-500">*</span>
+                                    {t.dsHostel} <span className="text-red-500">*</span>
                                 </label>
                                 <select
                                     name="dsHostel"
@@ -513,14 +745,14 @@ export default function AddStudentPage() {
                                     required
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
                                 >
-                                    <option value="Day Scholar">Day Scholar</option>
-                                    <option value="Hostel">Hostel</option>
+                                    <option value="Day Scholar">{t.dayScholar}</option>
+                                    <option value="Hostel">{t.hostel}</option>
                                 </select>
                             </div>
 
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Inquiry Date
+                                    {t.inquiryDate}
                                 </label>
                                 <input
                                     type="date"
@@ -534,7 +766,7 @@ export default function AddStudentPage() {
 
                             <div>
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Priority
+                                    {t.priority}
                                 </label>
                                 <select
                                     name="priority"
@@ -542,15 +774,15 @@ export default function AddStudentPage() {
                                     onChange={handleChange}
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
                                 >
-                                    <option value="Low">Low</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="High">High</option>
+                                    <option value="Low">{t.low}</option>
+                                    <option value="Medium">{t.medium}</option>
+                                    <option value="High">{t.high}</option>
                                 </select>
                             </div>
 
                             <div className="md:col-span-2">
                                 <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Comments / Notes
+                                    {t.comments}
                                 </label>
                                 <textarea
                                     name="comments"
@@ -558,7 +790,7 @@ export default function AddStudentPage() {
                                     onChange={handleChange}
                                     rows={4}
                                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
-                                    placeholder="Any additional information about the inquiry..."
+                                    placeholder={t.commentsPlaceholder}
                                 />
                             </div>
                         </div>
@@ -571,14 +803,14 @@ export default function AddStudentPage() {
                             disabled={isSubmitting}
                             className="flex-1 bg-anushtan-terracotta text-white font-semibold py-3 px-6 rounded-lg hover:bg-anushtan-terracotta/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {isSubmitting ? 'Adding Inquiry...' : '✅ Add Student Inquiry'}
+                            {isSubmitting ? t.submittingButton : t.submitButton}
                         </button>
                         <button
                             type="button"
                             onClick={() => router.push('/auth/dashboard')}
                             className="px-6 py-3 border border-anushtan-border text-anushtan-charcoal rounded-lg hover:bg-gray-50 transition-colors"
                         >
-                            Cancel
+                            {t.cancelButton}
                         </button>
                     </div>
                 </form>
