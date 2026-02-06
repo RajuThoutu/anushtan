@@ -26,7 +26,8 @@ export async function POST(request: Request) {
         // Assign inquiry to current user
         await updateCounselorActions(inquiryId, {
             assignedTo: session.user.name,
-            status: 'Interested', // Auto-set to Interested when assigned
+            status: 'Open', // Auto-set to Open when assigned
+            updatedBy: session.user.name,
         });
 
         return NextResponse.json({

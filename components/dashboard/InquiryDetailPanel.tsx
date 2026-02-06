@@ -12,15 +12,15 @@ interface InquiryDetailPanelProps {
 
 export interface CounselorUpdates {
     status: string;
-    priority: string;
-    notes: string;
+    assignedTo?: string;
+    counselorPriority: string;
+    counselorComments: string;
     followUpDate: string;
 }
 
 const statusOptions = [
     'New',
-    'In Progress',
-    'Interested',
+    'Open',
     'Follow-up',
     'Converted',
     'Closed',
@@ -31,8 +31,8 @@ const priorityOptions = ['High', 'Medium', 'Low'];
 export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPanelProps) {
     const [formData, setFormData] = useState<CounselorUpdates>({
         status: inquiry?.status || 'New',
-        priority: inquiry?.priority || 'Medium',
-        notes: inquiry?.notes || '',
+        counselorPriority: inquiry?.counselorPriority || 'Medium',
+        counselorComments: inquiry?.counselorComments || '',
         followUpDate: '',
     });
     const [saving, setSaving] = useState(false);
@@ -43,8 +43,8 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
         if (inquiry) {
             setFormData({
                 status: inquiry.status || 'New',
-                priority: inquiry.priority || 'Medium',
-                notes: inquiry.notes || '',
+                counselorPriority: inquiry.counselorPriority || 'Medium',
+                counselorComments: inquiry.counselorComments || '',
                 followUpDate: '',
             });
         }
@@ -190,8 +190,8 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                                 Priority
                             </label>
                             <select
-                                value={formData.priority}
-                                onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
+                                value={formData.counselorPriority}
+                                onChange={(e) => setFormData({ ...formData, counselorPriority: e.target.value })}
                                 className="w-full px-3 py-2 border border-anushtan-border rounded-lg focus:outline-none focus:border-anushtan-terracotta"
                             >
                                 {priorityOptions.map(opt => (
@@ -219,8 +219,8 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                                 Notes / Comments
                             </label>
                             <textarea
-                                value={formData.notes}
-                                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                                value={formData.counselorComments}
+                                onChange={(e) => setFormData({ ...formData, counselorComments: e.target.value })}
                                 rows={4}
                                 placeholder="Add notes about your conversation with the parent..."
                                 className="w-full px-3 py-2 border border-anushtan-border rounded-lg focus:outline-none focus:border-anushtan-terracotta resize-none"
@@ -228,6 +228,42 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                         </div>
                     </div>
                 </section>
+
+                {/* Audit Trail Section */}
+                {(inquiry.lastUpdatedBy || inquiry.caseStatus) && (
+                    <section className="bg-gray-50 p-4 rounded-lg">
+                        <h3 className="text-sm font-semibold text-admin-text/60 uppercase tracking-wide mb-3">
+                            Workflow Information
+                        </h3>
+                        <div className="space-y-2 text-sm">
+                            {inquiry.caseStatus && (
+                                <div className="flex justify-between">
+                                    <span className="text-admin-text/60">Case Status:</span>
+                                    <span className={`font-medium px-2 py-1 rounded ${inquiry.caseStatus === 'Resolved-Completed'
+                                            ? 'bg-admin-emerald/10 text-admin-emerald'
+                                            : 'bg-admin-blue/10 text-admin-blue'
+                                        }`}>
+                                        {inquiry.caseStatus}
+                                    </span>
+                                </div>
+                            )}
+                            {inquiry.lastUpdatedBy && (
+                                <div className="flex justify-between">
+                                    <span className="text-admin-text/60">Last Updated By:</span>
+                                    <span className="font-medium text-admin-text">{inquiry.lastUpdatedBy}</span>
+                                </div>
+                            )}
+                            {inquiry.lastUpdatedDate && (
+                                <div className="flex justify-between">
+                                    <span className="text-admin-text/60">Last Updated:</span>
+                                    <span className="font-medium text-admin-text">
+                                        {new Date(inquiry.lastUpdatedDate).toLocaleString()}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </section>
+                )}
             </div>
 
             {/* Footer with Save */}

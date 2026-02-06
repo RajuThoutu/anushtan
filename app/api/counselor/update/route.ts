@@ -1,10 +1,21 @@
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/auth-config';
 import { updateCounselorActions } from '@/lib/sheets/client';
 
 export async function POST(request: Request) {
     try {
+        // Get counselor name from session
+        const session = await getServerSession(authOptions);
+        if (!session?.user?.name) {
+            return NextResponse.json(
+                { success: false, error: 'Unauthorized - session required' },
+                { status: 401 }
+            );
+        }
+
         const body = await request.json();
-        const { id, status, assignedTo, notes, followUpDate } = body;
+        const { id, status, assignedTo, counselorPriority, followUpDate, counselorComments } = body;
 
         if (!id) {
             return NextResponse.json(
@@ -16,8 +27,10 @@ export async function POST(request: Request) {
         await updateCounselorActions(id, {
             status,
             assignedTo,
-            notes,
+            counselorPriority,
             followUpDate,
+            counselorComments,
+            updatedBy: session.user.name, // Pass counselor name for audit trail
         });
 
         return NextResponse.json({
