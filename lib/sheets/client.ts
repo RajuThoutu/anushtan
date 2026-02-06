@@ -53,15 +53,12 @@ export async function getAllInquiries() {
             inquiryDate: row[18] || '',     // Column S: Inquiry Date
             priority: row[19] || '',        // Column T: Priority
             notes: row[20] || '',           // Column U: Comments / Notes
-            // Counselor fields
-            assignedTo: row[21] || '',      // Column V: Assigned To
+            // Counselor fields (V-Z)
+            counselorName: row[21] || '',   // Column V: Counselor Name (who updated)
             status: row[22] || 'New',       // Column W: Status (default: New)
-            counselorPriority: row[23] || '', // Column X: Counselor Priority
+            caseStatus: row[23] || 'Active', // Column X: Inq Status (default: Active)
             followUpDate: row[24] || '',    // Column Y: Follow-up Date
             counselorComments: row[25] || '', // Column Z: Counselor Comments
-            lastUpdatedBy: row[26] || '',   // Column AA: Last Updated By
-            lastUpdatedDate: row[27] || '', // Column AB: Last Updated Date
-            caseStatus: row[28] || 'Active', // Column AC: Case Status (default: Active)
         }));
 
         return inquiries;
@@ -114,15 +111,12 @@ export async function getInquiryById(inquiryId: string): Promise<Inquiry> {
             inquiryDate: row[18] || '',     // Column S: Inquiry Date
             priority: row[19] || '',        // Column T: Priority
             notes: row[20] || '',           // Column U: Notes
-            // Counselor fields
-            assignedTo: row[21] || '',      // Column V: Assigned To
+            // Counselor fields (V-Z)
+            counselorName: row[21] || '',   // Column V: Counselor Name (who updated)
             status: row[22] || 'New',       // Column W: Status (default: New)
-            counselorPriority: row[23] || '', // Column X: Counselor Priority
+            caseStatus: row[23] || 'Active', // Column X: Inq Status (default: Active)
             followUpDate: row[24] || '',    // Column Y: Follow-up Date
             counselorComments: row[25] || '', // Column Z: Counselor Comments
-            lastUpdatedBy: row[26] || '',   // Column AA: Last Updated By
-            lastUpdatedDate: row[27] || '', // Column AB: Last Updated Date
-            caseStatus: row[28] || 'Active', // Column AC: Case Status (default: Active)
         };
     } catch (error) {
         console.error('Error fetching inquiry:', error);
@@ -160,39 +154,40 @@ export async function updateCounselorActions(
 
         const actualRow = rowIndex + 2; // +2 because: +1 for 0-index, +1 for header
 
-        // Get current values to preserve unchanged fields (columns V-AC)
+        // Get current values to preserve unchanged fields (columns V-Z: 5 columns)
         const currentResponse = await sheets.spreadsheets.values.get({
             spreadsheetId: SHEET_ID,
-            range: `${WORKING_SHEET_NAME}!V${actualRow}:AC${actualRow}`,
+            range: `${WORKING_SHEET_NAME}!V${actualRow}:Z${actualRow}`,
         });
 
-        const currentValues = currentResponse.data.values?.[0] || ['', '', '', '', '', '', '', ''];
+        const currentValues = currentResponse.data.values?.[0] || ['', '', '', '', ''];
 
-        // Auto-calculate Case Status based on workflow
-        let caseStatus = 'Active';
+        // Auto-calculate Inq Status (case status) based on workflow
+        let inqStatus = 'Active';
         const newStatus = data.status !== undefined ? data.status : currentValues[1]; // Column W (index 1)
         if (newStatus === 'Converted' || newStatus === 'Closed') {
-            caseStatus = 'Resolved-Completed';
+            inqStatus = 'Resolved-Completed';
         }
 
-        // Prepare update data (columns V-AC: 8 columns)
-        const now = new Date().toISOString();
+        // Prepare update data (columns V-Z: 5 columns)
+        // V: Counselor Name (who updated)
+        // W: Status (from UI)
+        // X: Inq Status (case status - auto-calculated)
+        // Y: Follow-up Date
+        // Z: Counselor Comments
         const values = [
             [
-                data.assignedTo !== undefined ? data.assignedTo : currentValues[0], // Column V: Assigned To
+                data.updatedBy,                                                      // Column V: Counselor Name (who updated)
                 data.status !== undefined ? data.status : currentValues[1],         // Column W: Status
-                data.counselorPriority !== undefined ? data.counselorPriority : currentValues[2], // Column X: Counselor Priority
+                inqStatus,                                                           // Column X: Inq Status (auto-calculated)
                 data.followUpDate !== undefined ? data.followUpDate : currentValues[3], // Column Y: Follow-up Date
                 data.counselorComments !== undefined ? data.counselorComments : currentValues[4], // Column Z: Counselor Comments
-                data.updatedBy,                                                      // Column AA: Last Updated By
-                now,                                                                 // Column AB: Last Updated Date
-                caseStatus,                                                          // Column AC: Case Status (auto-calculated)
             ],
         ];
 
         await sheets.spreadsheets.values.update({
             spreadsheetId: SHEET_ID,
-            range: `${WORKING_SHEET_NAME}!V${actualRow}:AC${actualRow}`,
+            range: `${WORKING_SHEET_NAME}!V${actualRow}:Z${actualRow}`,
             valueInputOption: 'USER_ENTERED',
             requestBody: { values },
         });
@@ -259,6 +254,7 @@ export async function createInquiry(data: {
     source?: string;  // Optional, defaults to 'Digital' or 'Paper' based on caller logic
     notes?: string;   // Optional initial notes
     status?: string;  // Optional initial status
+    counselorName?: string; // Optional counselor assignment
 }) {
     try {
         const sheets = getGoogleSheetsClient();
@@ -267,9 +263,8 @@ export async function createInquiry(data: {
         // Generate ID manually
         const inquiryId = await getNextInquiryId(sheets);
 
-        // Prepare row data to match the ACTUAL Google Sheet structure (21 columns)
-        // Based on the actual headers in the sheet
-        const rowData = [
+        // Base data (Columns A-U)
+        const baseRowData = [
             inquiryId,                      // Column A: Inquiry ID
             timestamp,                      // Column B: Timestamp
             data.studentName,               // Column C: Student Name
@@ -293,22 +288,30 @@ export async function createInquiry(data: {
             data.notes || 'Added via Add Student form',  // Column U: Comments / Notes
         ];
 
-        // 1. Append to "Inquiries (SOR)"
-        // SOR sheet has all 21 columns from the Google Form
+        // 1. Append to "Inquiries (SOR)" - Base data only (A-U)
         await sheets.spreadsheets.values.append({
             spreadsheetId: SHEET_ID,
             range: `${SOR_SHEET_NAME}!A:U`,
             valueInputOption: 'USER_ENTERED',
-            requestBody: { values: [rowData] },
+            requestBody: { values: [baseRowData] },
         });
 
-        // 2. Append to "Inquiries (Working)"
-        // Working sheet also has all 21 columns
+        // 2. Append to "Inquiries (Working)" - Full data with Counselor fields (A-Z)
+        const workingRowData = [
+            ...baseRowData,
+            // Counselor Columns V-Z
+            data.counselorName || '',       // Column V: Counselor Name
+            data.status || 'New',           // Column W: Status
+            'Active',                       // Column X: Case Status (default)
+            '',                             // Column Y: Follow-up Date
+            '',                             // Column Z: Counselor Comments
+        ];
+
         await sheets.spreadsheets.values.append({
             spreadsheetId: SHEET_ID,
-            range: `${WORKING_SHEET_NAME}!A:U`,
+            range: `${WORKING_SHEET_NAME}!A:Z`,
             valueInputOption: 'USER_ENTERED',
-            requestBody: { values: [rowData] },
+            requestBody: { values: [workingRowData] },
         });
 
         return { success: true, id: inquiryId };
@@ -342,15 +345,12 @@ export interface Inquiry {
     priority: string;        // Column T: Priority
     notes: string;           // Column U: Notes
 
-    // Counselor fields (columns V-AC)
-    assignedTo: string;      // Column V: Assigned To (Counselor Name)
+    // Counselor fields (columns V-Z)
+    counselorName: string;   // Column V: Counselor Name (who updated)
     status: string;          // Column W: Status (New/Open/Follow-up/Converted/Closed)
-    counselorPriority: string; // Column X: Counselor Priority (Low/Medium/High)
+    caseStatus: string;      // Column X: Inq Status (Active/Resolved-Completed)
     followUpDate: string;    // Column Y: Follow-up Date
     counselorComments: string; // Column Z: Counselor Comments
-    lastUpdatedBy: string;   // Column AA: Last Updated By
-    lastUpdatedDate: string; // Column AB: Last Updated Date
-    caseStatus: string;      // Column AC: Case Status (Active/Resolved-Completed)
 
     // Legacy fields
     source?: string;

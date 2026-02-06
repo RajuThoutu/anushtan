@@ -217,7 +217,7 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
                                 />
                             </div>
 
-                            <input type="hidden" name="assignedTo" value={userName} />
+                            <input type="hidden" name="counselorName" value={userName} />
                         </div>
                     </div>
 

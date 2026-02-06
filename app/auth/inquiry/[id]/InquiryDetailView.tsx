@@ -14,8 +14,7 @@ export function InquiryDetailView({ inquiry, userName }: InquiryDetailViewProps)
     const [saving, setSaving] = useState(false);
     const [formData, setFormData] = useState({
         status: inquiry.status || 'New',
-        assignedTo: inquiry.assignedTo || '',
-        notes: inquiry.notes || '',
+        counselorComments: inquiry.counselorComments || '',
         followUpDate: inquiry.followUpDate || '',
     });
     const router = useRouter();
@@ -144,6 +143,18 @@ export function InquiryDetailView({ inquiry, userName }: InquiryDetailViewProps)
                             <p className="text-sm text-anushtan-charcoal/60">Source</p>
                             <p className="font-medium">{inquiry.source}</p>
                         </div>
+                        {inquiry.counselorName && (
+                            <div>
+                                <p className="text-sm text-anushtan-charcoal/60">Last Updated By (Counselor)</p>
+                                <p className="font-medium">{inquiry.counselorName}</p>
+                            </div>
+                        )}
+                        {inquiry.caseStatus && (
+                            <div>
+                                <p className="text-sm text-anushtan-charcoal/60">Case Status</p>
+                                <p className="font-medium">{inquiry.caseStatus}</p>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -198,33 +209,19 @@ export function InquiryDetailView({ inquiry, userName }: InquiryDetailViewProps)
                             </select>
                         </div>
 
-                        <div>
-                            <label htmlFor="assignedTo" className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                Assigned To
-                            </label>
-                            <select
-                                id="assignedTo"
-                                value={formData.assignedTo}
-                                onChange={(e) => setFormData({ ...formData, assignedTo: e.target.value })}
-                                className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none"
-                            >
-                                <option value="">Select counselor</option>
-                                <option value="Bhargavi">Bhargavi (HR & Counsellor)</option>
-                                <option value="Sravani">Sravani (Career Councillor)</option>
-                            </select>
-                        </div>
+
 
                         <div>
-                            <label htmlFor="notes" className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                Notes
+                            <label htmlFor="counselorComments" className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                Counselor Comments
                             </label>
                             <textarea
-                                id="notes"
-                                value={formData.notes}
-                                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                                id="counselorComments"
+                                value={formData.counselorComments}
+                                onChange={(e) => setFormData({ ...formData, counselorComments: e.target.value })}
                                 rows={4}
                                 className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none resize-none"
-                                placeholder="Add your notes here..."
+                                placeholder="Add your notes specific to counselor actions..."
                             />
                         </div>
 

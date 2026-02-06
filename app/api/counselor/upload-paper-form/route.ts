@@ -27,8 +27,8 @@ export async function POST(request: Request) {
             email: formData.get('email') as string,
             address: formData.get('address') as string,
             howHeard: formData.get('howHeard') as string,
-            assignedTo: formData.get('assignedTo') as string || session.user.name,
-            status: 'Interested', // Auto-set to Interested for paper forms
+            counselorName: formData.get('counselorName') as string || session.user.name,
+            status: 'New',
             notes: 'Added via paper form upload',
         };
 

@@ -15,7 +15,7 @@ export async function POST(request: Request) {
         }
 
         const body = await request.json();
-        const { id, status, assignedTo, counselorPriority, followUpDate, counselorComments } = body;
+        const { id, status, followUpDate, counselorComments } = body;
 
         if (!id) {
             return NextResponse.json(
@@ -26,8 +26,6 @@ export async function POST(request: Request) {
 
         await updateCounselorActions(id, {
             status,
-            assignedTo,
-            counselorPriority,
             followUpDate,
             counselorComments,
             updatedBy: session.user.name, // Pass counselor name for audit trail

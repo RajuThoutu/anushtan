@@ -63,13 +63,13 @@ export default function DashboardClient() {
                     return inquiryDate.toDateString() === today;
                 });
             } else if (activeTab === 'mywork') {
-                result = result.filter(inq => inq.assignedTo === userName);
+                result = result.filter(inq => inq.counselorName === userName);
             }
             // 'all' tab shows everything, no filter
         } else {
             // If date filters are active, still apply "My Work" filter if on that tab
             if (activeTab === 'mywork') {
-                result = result.filter(inq => inq.assignedTo === userName);
+                result = result.filter(inq => inq.counselorName === userName);
             }
         }
 
@@ -124,7 +124,7 @@ export default function DashboardClient() {
     }, [inquiries]);
 
     const myWorkCount = useMemo(() => {
-        return inquiries.filter(inq => inq.assignedTo === userName).length;
+        return inquiries.filter(inq => inq.counselorName === userName).length;
     }, [inquiries, userName]);
 
     const allCount = inquiries.length;

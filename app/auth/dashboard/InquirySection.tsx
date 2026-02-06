@@ -28,7 +28,7 @@ export function InquirySection({ userName }: InquirySectionProps) {
             if (data.success) {
                 // Filter inquiries assigned to this user
                 const myInquiries = data.data.filter(
-                    (inquiry: Inquiry) => inquiry.assignedTo === userName
+                    (inquiry: Inquiry) => inquiry.counselorName === userName
                 );
                 setInquiries(myInquiries);
             }

@@ -12,8 +12,6 @@ interface InquiryDetailPanelProps {
 
 export interface CounselorUpdates {
     status: string;
-    assignedTo?: string;
-    counselorPriority: string;
     counselorComments: string;
     followUpDate: string;
 }
@@ -31,7 +29,6 @@ const priorityOptions = ['High', 'Medium', 'Low'];
 export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPanelProps) {
     const [formData, setFormData] = useState<CounselorUpdates>({
         status: inquiry?.status || 'New',
-        counselorPriority: inquiry?.counselorPriority || 'Medium',
         counselorComments: inquiry?.counselorComments || '',
         followUpDate: '',
     });
@@ -43,7 +40,6 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
         if (inquiry) {
             setFormData({
                 status: inquiry.status || 'New',
-                counselorPriority: inquiry.counselorPriority || 'Medium',
                 counselorComments: inquiry.counselorComments || '',
                 followUpDate: '',
             });
@@ -184,21 +180,7 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                             </select>
                         </div>
 
-                        {/* Priority */}
-                        <div>
-                            <label className="block text-sm font-medium text-anushtan-charcoal mb-1">
-                                Priority
-                            </label>
-                            <select
-                                value={formData.counselorPriority}
-                                onChange={(e) => setFormData({ ...formData, counselorPriority: e.target.value })}
-                                className="w-full px-3 py-2 border border-anushtan-border rounded-lg focus:outline-none focus:border-anushtan-terracotta"
-                            >
-                                {priorityOptions.map(opt => (
-                                    <option key={opt} value={opt}>{opt}</option>
-                                ))}
-                            </select>
-                        </div>
+
 
                         {/* Follow-up Date */}
                         <div>
@@ -230,7 +212,7 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                 </section>
 
                 {/* Audit Trail Section */}
-                {(inquiry.lastUpdatedBy || inquiry.caseStatus) && (
+                {(inquiry.counselorName || inquiry.caseStatus) && (
                     <section className="bg-gray-50 p-4 rounded-lg">
                         <h3 className="text-sm font-semibold text-admin-text/60 uppercase tracking-wide mb-3">
                             Workflow Information
@@ -240,25 +222,17 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                                 <div className="flex justify-between">
                                     <span className="text-admin-text/60">Case Status:</span>
                                     <span className={`font-medium px-2 py-1 rounded ${inquiry.caseStatus === 'Resolved-Completed'
-                                            ? 'bg-admin-emerald/10 text-admin-emerald'
-                                            : 'bg-admin-blue/10 text-admin-blue'
+                                        ? 'bg-admin-emerald/10 text-admin-emerald'
+                                        : 'bg-admin-blue/10 text-admin-blue'
                                         }`}>
                                         {inquiry.caseStatus}
                                     </span>
                                 </div>
                             )}
-                            {inquiry.lastUpdatedBy && (
+                            {inquiry.counselorName && (
                                 <div className="flex justify-between">
                                     <span className="text-admin-text/60">Last Updated By:</span>
-                                    <span className="font-medium text-admin-text">{inquiry.lastUpdatedBy}</span>
-                                </div>
-                            )}
-                            {inquiry.lastUpdatedDate && (
-                                <div className="flex justify-between">
-                                    <span className="text-admin-text/60">Last Updated:</span>
-                                    <span className="font-medium text-admin-text">
-                                        {new Date(inquiry.lastUpdatedDate).toLocaleString()}
-                                    </span>
+                                    <span className="font-medium text-admin-text">{inquiry.counselorName}</span>
                                 </div>
                             )}
                         </div>
