@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/lib/auth/auth-config"
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout"
 
 export default async function UsersPage() {
     const session = await getServerSession(authOptions)
@@ -15,44 +16,37 @@ export default async function UsersPage() {
     }
 
     return (
-        <div className="min-h-screen bg-anushtan-parchment">
-            {/* Header */}
-            <header className="bg-white border-b border-anushtan-border">
-                <div className="container-custom max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-                    <div>
-                        <h1 className="font-heading text-2xl font-bold text-anushtan-terracotta">
-                            User Management
-                        </h1>
-                        <p className="text-sm text-anushtan-charcoal/60">
-                            Manage staff accounts and permissions
-                        </p>
-                    </div>
-                    <a
-                        href="/auth/dashboard"
-                        className="text-sm text-anushtan-terracotta hover:underline"
-                    >
-                        ← Back to Dashboard
-                    </a>
+        <DashboardLayout>
+            <div className="p-8">
+                {/* Header */}
+                <div className="mb-8">
+                    <h1 className="font-heading text-3xl font-bold bg-gradient-to-r from-admin-amber to-admin-coral bg-clip-text text-transparent mb-2">
+                        User Management
+                    </h1>
+                    <p className="text-admin-text-secondary">
+                        Manage staff accounts and permissions
+                    </p>
                 </div>
-            </header>
 
-            {/* Main Content */}
-            <main className="container-custom max-w-7xl mx-auto px-4 py-8">
-                <div className="bg-white rounded-xl border border-anushtan-border p-8">
+                {/* Main Content */}
+                <div className="bg-white rounded-2xl border border-admin-border p-12 shadow-sm">
                     <div className="text-center py-12">
-                        <div className="text-6xl mb-4">👥</div>
-                        <h2 className="font-heading text-2xl font-bold text-anushtan-charcoal mb-2">
-                            User Management Coming Soon
+                        <div className="text-6xl mb-6">👥</div>
+                        <h2 className="font-heading text-2xl font-bold text-admin-text mb-3">
+                            User Management Interface Coming Soon
                         </h2>
-                        <p className="text-anushtan-charcoal/60 mb-6">
-                            This page will allow you to add, edit, and manage user accounts.
+                        <p className="text-admin-text-secondary mb-6 max-w-md mx-auto">
+                            This page will allow you to add, edit, and manage user accounts with role-based permissions.
                         </p>
-                        <p className="text-sm text-anushtan-charcoal/50">
-                            For now, users are managed in the code file: <code className="bg-gray-100 px-2 py-1 rounded">lib/auth/users.ts</code>
+                        <p className="text-sm text-admin-text-secondary/70 mb-4">
+                            For now, users are managed in the code file:
                         </p>
+                        <code className="inline-block bg-gradient-to-r from-admin-bg to-gray-100 px-4 py-2 rounded-lg text-sm text-admin-text border border-admin-border">
+                            lib/auth/users.ts
+                        </code>
                     </div>
                 </div>
-            </main>
-        </div>
+            </div>
+        </DashboardLayout>
     )
 }
