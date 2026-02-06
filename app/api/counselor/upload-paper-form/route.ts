@@ -19,16 +19,17 @@ export async function POST(request: Request) {
         const inquiryData = {
             studentName: formData.get('studentName') as string,
             currentClass: formData.get('currentClass') as string,
-            currentSchool: formData.get('currentSchool') as string || '',
-            board: formData.get('board') as string || '',
-            parentName: formData.get('parentName') as string,
-            occupation: formData.get('occupation') as string || '',
-            phone: formData.get('phone') as string,
-            email: formData.get('email') as string,
-            address: formData.get('address') as string,
-            howHeard: formData.get('howHeard') as string,
+            // Defaults for removed fields
+            parentName: 'Paper Form',
+            phone: '0000000000',
+            email: 'paper@example.com',
+            howHeard: 'Paper Form',
+            address: 'See Photo',
+
             counselorName: formData.get('counselorName') as string || session.user.name,
-            status: 'New',
+            status: formData.get('status') as string || 'New',
+            counselorComments: formData.get('counselorComments') as string || '',
+            followUpDate: formData.get('followUpDate') as string || '',
             notes: 'Added via paper form upload',
         };
 
@@ -39,8 +40,6 @@ export async function POST(request: Request) {
             ...inquiryData,
             createdBy: session.user.name,
             source: 'Paper',
-            notes: 'Added via paper form upload',
-            status: 'New',
         });
 
         return NextResponse.json({

@@ -255,6 +255,8 @@ export async function createInquiry(data: {
     notes?: string;   // Optional initial notes
     status?: string;  // Optional initial status
     counselorName?: string; // Optional counselor assignment
+    followUpDate?: string;  // Optional follow-up date
+    counselorComments?: string; // Optional counselor comments
 }) {
     try {
         const sheets = getGoogleSheetsClient();
@@ -303,8 +305,8 @@ export async function createInquiry(data: {
             data.counselorName || '',       // Column V: Counselor Name
             data.status || 'New',           // Column W: Status
             'Active',                       // Column X: Case Status (default)
-            '',                             // Column Y: Follow-up Date
-            '',                             // Column Z: Counselor Comments
+            data.followUpDate || '',        // Column Y: Follow-up Date
+            data.counselorComments || '',   // Column Z: Counselor Comments
         ];
 
         await sheets.spreadsheets.values.append({

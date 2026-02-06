@@ -158,63 +158,54 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
                                     className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none"
                                 />
                             </div>
+                        </div>
+                    </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Parent Name *
-                                </label>
-                                <input
-                                    type="text"
-                                    name="parentName"
-                                    required
-                                    className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none"
-                                />
+                    {/* Counselor Assessment */}
+                    <div className="bg-anushtan-gold/10 rounded-lg border border-anushtan-gold/30 p-6">
+                        <h2 className="text-lg font-semibold text-anushtan-charcoal mb-4">
+                            3. Counselor Assessment
+                        </h2>
+
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label htmlFor="status" className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                        Status
+                                    </label>
+                                    <select
+                                        name="status"
+                                        defaultValue="New"
+                                        className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none"
+                                    >
+                                        <option value="New">New</option>
+                                        <option value="Open">Open (Assigned)</option>
+                                        <option value="Follow-up">Follow-up</option>
+                                        <option value="Converted">Converted</option>
+                                        <option value="Closed">Closed</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label htmlFor="followUpDate" className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                        Follow-up Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        name="followUpDate"
+                                        className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none"
+                                    />
+                                </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Phone *
-                                </label>
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    required
-                                    className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Email *
-                                </label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    required
-                                    className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    How did you hear about us? *
-                                </label>
-                                <input
-                                    type="text"
-                                    name="howHeard"
-                                    required
-                                    className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none"
-                                />
-                            </div>
-
-                            <div className="md:col-span-2">
-                                <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                    Address *
+                                <label htmlFor="counselorComments" className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    Counselor Comments
                                 </label>
                                 <textarea
-                                    name="address"
-                                    required
+                                    name="counselorComments"
                                     rows={3}
+                                    placeholder="Enter initial assessment or notes..."
                                     className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none resize-none"
                                 />
                             </div>
