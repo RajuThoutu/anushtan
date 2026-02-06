@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { InquiryTypeToggle } from '@/components/dashboard/InquiryTypeToggle';
 
 interface PaperFormUploadProps {
     userName: string;
@@ -74,6 +75,7 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
             </header>
 
             <main className="max-w-4xl mx-auto px-4 py-6">
+                <InquiryTypeToggle />
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Photo Upload */}
                     <div className="bg-white rounded-lg border border-anushtan-border p-6">

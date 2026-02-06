@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { InquiryTypeToggle } from '@/components/dashboard/InquiryTypeToggle'
 
 // Translation object
 const translations = {
@@ -565,6 +566,7 @@ export default function AddStudentPage() {
 
                 {/* Main Content */}
                 <main className="container-custom max-w-4xl mx-auto px-4 py-8">
+                    <InquiryTypeToggle />
                     {success && (
                         <div className="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
                             {t.successMessage}
