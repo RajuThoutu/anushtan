@@ -55,20 +55,24 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
     };
 
     return (
-        <div className="min-h-screen bg-anushtan-parchment">
+        <div className="min-h-screen bg-admin-bg">
             {/* Header */}
-            <header className="bg-white border-b border-anushtan-border">
+            <header className="bg-white border-b border-admin-border">
                 <div className="max-w-4xl mx-auto px-4 py-4">
                     <div className="flex items-center gap-4">
                         <Link
                             href="/auth/dashboard"
-                            className="text-anushtan-charcoal hover:text-anushtan-terracotta"
+                            className="text-admin-text hover:text-admin-emerald transition-colors"
                         >
                             ← Back to Dashboard
                         </Link>
                         <div>
-                            <h1 className="text-xl font-bold text-anushtan-charcoal">New Inquiry (Paper Form)</h1>
-                            <p className="text-sm text-anushtan-charcoal/60">Upload and process paper inquiry form</p>
+                            <h1 className="text-xl font-bold bg-gradient-to-r from-admin-emerald to-admin-emerald-light bg-clip-text text-transparent">
+                                New Inquiry (Paper Form)
+                            </h1>
+                            <p className="text-sm text-admin-text-secondary">
+                                Upload and process paper inquiry form
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -78,8 +82,8 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
                 <InquiryTypeToggle />
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Photo Upload */}
-                    <div className="bg-white rounded-lg border border-anushtan-border p-6">
-                        <h2 className="text-lg font-semibold text-anushtan-charcoal mb-4">
+                    <div className="bg-white rounded-lg border border-admin-border p-6 shadow-sm">
+                        <h2 className="text-lg font-semibold text-admin-text mb-4">
                             1. Upload Paper Form Photo
                         </h2>
 
@@ -87,14 +91,14 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
                             <div>
                                 <label
                                     htmlFor="formPhoto"
-                                    className="block w-full p-8 border-2 border-dashed border-anushtan-border rounded-lg text-center cursor-pointer hover:border-anushtan-terracotta transition"
+                                    className="block w-full p-8 border-2 border-dashed border-admin-border rounded-lg text-center cursor-pointer hover:border-admin-emerald transition-colors bg-admin-bg/50 hover:bg-admin-bg"
                                 >
                                     {imagePreview ? (
-                                        <img src={imagePreview} alt="Form preview" className="max-h-64 mx-auto" />
+                                        <img src={imagePreview} alt="Form preview" className="max-h-64 mx-auto rounded shadow-sm" />
                                     ) : (
                                         <div>
                                             <svg
-                                                className="mx-auto h-12 w-12 text-anushtan-charcoal/40"
+                                                className="mx-auto h-12 w-12 text-admin-text-secondary/40"
                                                 stroke="currentColor"
                                                 fill="none"
                                                 viewBox="0 0 48 48"
@@ -106,10 +110,10 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
                                                     strokeLinejoin="round"
                                                 />
                                             </svg>
-                                            <p className="mt-2 text-sm text-anushtan-charcoal/60">
+                                            <p className="mt-2 text-sm text-admin-text-secondary">
                                                 Click to upload paper form photo
                                             </p>
-                                            <p className="text-xs text-anushtan-charcoal/40 mt-1">
+                                            <p className="text-xs text-admin-text-secondary/60 mt-1">
                                                 PNG, JPG up to 10MB
                                             </p>
                                         </div>
@@ -129,54 +133,54 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
                     </div>
 
                     {/* Manual Entry Form */}
-                    <div className="bg-white rounded-lg border border-anushtan-border p-6">
-                        <h2 className="text-lg font-semibold text-anushtan-charcoal mb-4">
+                    <div className="bg-white rounded-lg border border-admin-border p-6 shadow-sm">
+                        <h2 className="text-lg font-semibold text-admin-text mb-4">
                             2. Enter Inquiry Details
                         </h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                <label className="block text-sm font-medium text-admin-text mb-2">
                                     Student Name *
                                 </label>
                                 <input
                                     type="text"
                                     name="studentName"
                                     required
-                                    className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none"
+                                    className="w-full px-4 py-2 border border-admin-border rounded-lg focus:ring-2 focus:ring-admin-emerald focus:border-transparent outline-none transition-all"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                <label className="block text-sm font-medium text-admin-text mb-2">
                                     Current Class *
                                 </label>
                                 <input
                                     type="text"
                                     name="currentClass"
                                     required
-                                    className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none"
+                                    className="w-full px-4 py-2 border border-admin-border rounded-lg focus:ring-2 focus:ring-admin-emerald focus:border-transparent outline-none transition-all"
                                 />
                             </div>
                         </div>
                     </div>
 
                     {/* Counselor Assessment */}
-                    <div className="bg-anushtan-gold/10 rounded-lg border border-anushtan-gold/30 p-6">
-                        <h2 className="text-lg font-semibold text-anushtan-charcoal mb-4">
+                    <div className="bg-admin-bg rounded-lg border border-admin-border p-6 shadow-inner">
+                        <h2 className="text-lg font-semibold text-admin-text mb-4">
                             3. Counselor Assessment
                         </h2>
 
                         <div className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label htmlFor="status" className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label htmlFor="status" className="block text-sm font-medium text-admin-text mb-2">
                                         Status
                                     </label>
                                     <select
                                         name="status"
                                         defaultValue="New"
-                                        className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none"
+                                        className="w-full px-4 py-2 border border-admin-border rounded-lg focus:ring-2 focus:ring-admin-emerald focus:border-transparent outline-none bg-white transition-all"
                                     >
                                         <option value="New">New</option>
                                         <option value="Open">Open (Assigned)</option>
@@ -187,26 +191,26 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
                                 </div>
 
                                 <div>
-                                    <label htmlFor="followUpDate" className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label htmlFor="followUpDate" className="block text-sm font-medium text-admin-text mb-2">
                                         Follow-up Date
                                     </label>
                                     <input
                                         type="date"
                                         name="followUpDate"
-                                        className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none"
+                                        className="w-full px-4 py-2 border border-admin-border rounded-lg focus:ring-2 focus:ring-admin-emerald focus:border-transparent outline-none bg-white transition-all"
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label htmlFor="counselorComments" className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                <label htmlFor="counselorComments" className="block text-sm font-medium text-admin-text mb-2">
                                     Counselor Comments
                                 </label>
                                 <textarea
                                     name="counselorComments"
                                     rows={3}
                                     placeholder="Enter initial assessment or notes..."
-                                    className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none resize-none"
+                                    className="w-full px-4 py-2 border border-admin-border rounded-lg focus:ring-2 focus:ring-admin-emerald focus:border-transparent outline-none resize-none bg-white transition-all"
                                 />
                             </div>
 
@@ -218,14 +222,14 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
                     <div className="flex gap-4">
                         <Link
                             href="/auth/dashboard"
-                            className="flex-1 px-6 py-3 border border-anushtan-border text-anushtan-charcoal rounded-lg hover:bg-anushtan-parchment transition text-center"
+                            className="flex-1 px-6 py-3 border border-admin-border text-admin-text rounded-lg hover:bg-white hover:shadow-sm transition text-center shadow-sm bg-white"
                         >
                             Cancel
                         </Link>
                         <button
                             type="submit"
                             disabled={uploading}
-                            className="flex-1 px-6 py-3 bg-anushtan-terracotta text-white rounded-lg hover:bg-anushtan-terracotta/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex-1 px-6 py-3 bg-gradient-to-r from-admin-emerald to-admin-emerald-light text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                         >
                             {uploading ? 'Uploading...' : 'Submit Inquiry'}
                         </button>
