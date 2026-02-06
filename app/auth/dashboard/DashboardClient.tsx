@@ -51,15 +51,26 @@ export default function DashboardClient() {
     const filteredInquiries = useMemo(() => {
         let result = [...inquiries];
 
-        // Tab filter
-        if (activeTab === 'today') {
-            const today = new Date().toDateString();
-            result = result.filter(inq => {
-                const inquiryDate = new Date(inq.inquiryDate || inq.timestamp);
-                return inquiryDate.toDateString() === today;
-            });
-        } else if (activeTab === 'mywork') {
-            result = result.filter(inq => inq.assignedTo === userName);
+        // If date filters are set, use them instead of tab filter
+        const hasDateFilter = filters.dateFrom || filters.dateTo;
+
+        // Tab filter (only if no date filters are active)
+        if (!hasDateFilter) {
+            if (activeTab === 'today') {
+                const today = new Date().toDateString();
+                result = result.filter(inq => {
+                    const inquiryDate = new Date(inq.inquiryDate || inq.timestamp);
+                    return inquiryDate.toDateString() === today;
+                });
+            } else if (activeTab === 'mywork') {
+                result = result.filter(inq => inq.assignedTo === userName);
+            }
+            // 'all' tab shows everything, no filter
+        } else {
+            // If date filters are active, still apply "My Work" filter if on that tab
+            if (activeTab === 'mywork') {
+                result = result.filter(inq => inq.assignedTo === userName);
+            }
         }
 
         // Search filter
@@ -116,6 +127,8 @@ export default function DashboardClient() {
         return inquiries.filter(inq => inq.assignedTo === userName).length;
     }, [inquiries, userName]);
 
+    const allCount = inquiries.length;
+
     // Handle save
     const handleSave = async (id: string, updates: CounselorUpdates) => {
         const response = await fetch('/api/counselor/update', {
@@ -155,6 +168,7 @@ export default function DashboardClient() {
                         onTabChange={setActiveTab}
                         todayCount={todayCount}
                         myWorkCount={myWorkCount}
+                        allCount={allCount}
                     />
 
                     {/* Filters */}

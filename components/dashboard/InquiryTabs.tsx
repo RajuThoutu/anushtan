@@ -2,29 +2,31 @@
 
 import { useState } from 'react';
 
-type Tab = 'today' | 'mywork';
+type Tab = 'today' | 'mywork' | 'all';
 
 interface InquiryTabsProps {
     activeTab: Tab;
     onTabChange: (tab: Tab) => void;
     todayCount: number;
     myWorkCount: number;
+    allCount: number;
 }
 
-export function InquiryTabs({ activeTab, onTabChange, todayCount, myWorkCount }: InquiryTabsProps) {
+export function InquiryTabs({ activeTab, onTabChange, todayCount, myWorkCount, allCount }: InquiryTabsProps) {
     const tabs = [
         { id: 'today' as Tab, label: "Today's Inquiries", count: todayCount, gradient: 'from-admin-coral to-admin-coral-light' },
         { id: 'mywork' as Tab, label: 'My Work', count: myWorkCount, gradient: 'from-admin-purple to-admin-purple-light' },
+        { id: 'all' as Tab, label: 'All Inquiries', count: allCount, gradient: 'from-admin-blue to-admin-blue-light' },
     ];
 
     return (
-        <div className="flex border-b border-admin-border bg-gradient-to-r from-white to-admin-bg rounded-t-xl shadow-sm">
+        <div className="flex border-b border-admin-border bg-gradient-to-r from-white to-admin-bg rounded-t-xl shadow-sm overflow-x-auto">
             {tabs.map((tab) => (
                 <button
                     key={tab.id}
                     onClick={() => onTabChange(tab.id)}
                     className={`
-                        flex items-center gap-2 px-6 py-4 font-medium transition-all relative group
+                        flex items-center gap-2 px-6 py-4 font-medium transition-all relative group whitespace-nowrap
                         ${activeTab === tab.id
                             ? 'text-admin-blue'
                             : 'text-admin-text-secondary hover:text-admin-text'
