@@ -107,6 +107,14 @@ export default function AllInquiriesClient() {
         }
     };
 
+    // Summary Stats
+    const stats = {
+        total: inquiries.length,
+        today: inquiries.filter(i => new Date(i.inquiryDate).toDateString() === new Date().toDateString()).length,
+        open: inquiries.filter(i => ['Open', 'New', 'In Progress'].includes(i.status)).length,
+        converted: inquiries.filter(i => i.status === 'Converted').length
+    };
+
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
@@ -117,6 +125,26 @@ export default function AllInquiriesClient() {
 
     return (
         <div className="space-y-6">
+            {/* Quick View Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm">
+                    <div className="text-sm text-gray-500 font-medium">Total Inquiries</div>
+                    <div className="text-2xl font-bold text-admin-text mt-1">{stats.total}</div>
+                </div>
+                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm">
+                    <div className="text-sm text-gray-500 font-medium">Today's Inquiries</div>
+                    <div className="text-2xl font-bold text-admin-emerald mt-1">+{stats.today}</div>
+                </div>
+                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm">
+                    <div className="text-sm text-gray-500 font-medium">Open / Active</div>
+                    <div className="text-2xl font-bold text-yellow-600 mt-1">{stats.open}</div>
+                </div>
+                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm">
+                    <div className="text-sm text-gray-500 font-medium">Converted</div>
+                    <div className="text-2xl font-bold text-admin-blue mt-1">{stats.converted}</div>
+                </div>
+            </div>
+
             {/* Filters Bar */}
             <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
 
