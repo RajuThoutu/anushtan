@@ -14,6 +14,7 @@ import {
     X
 } from 'lucide-react';
 import { useState } from 'react';
+import { AddInquiryButton } from './AddInquiryButton';
 
 interface NavItem {
     label: string;
@@ -28,11 +29,7 @@ const navItems: NavItem[] = [
         href: '/auth/dashboard',
         icon: <LayoutDashboard size={20} />,
     },
-    {
-        label: 'Add Inquiry',
-        href: '/auth/students/add',
-        icon: <UserPlus size={20} />,
-    },
+
     {
         label: 'All Inquiries',
         href: '/auth/students',
@@ -88,6 +85,11 @@ export function DashboardSidebar() {
                     <h1 className="font-heading text-lg font-bold text-white">
                         Anushtan
                     </h1>
+                </div>
+
+                {/* Mobile Add Button */}
+                <div className="ml-auto">
+                    <AddInquiryButton />
                 </div>
             </div>
 
@@ -206,8 +208,18 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="min-h-screen bg-admin-bg">
             <DashboardSidebar />
             {/* Add top padding on mobile to account for fixed header */}
-            <main className="lg:ml-64 min-h-screen pt-16 lg:pt-0">
-                {children}
+            <main className="lg:ml-64 min-h-screen pt-16 lg:pt-0 flex flex-col">
+                {/* Desktop Header */}
+                <header className="hidden lg:flex items-center justify-between px-8 py-4 bg-white border-b border-anushtan-border sticky top-0 z-30">
+                    <div className="font-heading text-xl font-bold text-anushtan-charcoal">
+                        Management Console
+                    </div>
+                    <AddInquiryButton />
+                </header>
+
+                <div className="flex-1">
+                    {children}
+                </div>
             </main>
         </div>
     );
