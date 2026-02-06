@@ -519,15 +519,15 @@ export default function AddStudentPage() {
                     }
                 }
             `}</style>
-            <div className="min-h-screen bg-anushtan-parchment">
+            <div className="min-h-screen bg-admin-bg">
                 {/* Header */}
-                <header className="bg-white border-b border-anushtan-border">
+                <header className="bg-white border-b border-admin-border">
                     <div className="container-custom max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
                         <div>
-                            <h1 className="font-heading text-2xl font-bold text-anushtan-terracotta">
+                            <h1 className="font-heading text-2xl font-bold bg-gradient-to-r from-admin-emerald to-admin-emerald-light bg-clip-text text-transparent">
                                 {t.pageTitle}
                             </h1>
-                            <p className="text-sm text-anushtan-charcoal/60">
+                            <p className="text-sm text-admin-text/60">
                                 {t.pageSubtitle}
                             </p>
                         </div>
@@ -537,7 +537,7 @@ export default function AddStudentPage() {
                                 <button
                                     onClick={() => setLanguage('en')}
                                     className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${language === 'en'
-                                        ? 'bg-white text-anushtan-terracotta shadow-sm'
+                                        ? 'bg-white bg-gradient-to-r from-admin-emerald to-admin-emerald-light bg-clip-text text-transparent shadow-sm'
                                         : 'text-gray-600 hover:text-gray-900'
                                         }`}
                                 >
@@ -546,7 +546,7 @@ export default function AddStudentPage() {
                                 <button
                                     onClick={() => setLanguage('te')}
                                     className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${language === 'te'
-                                        ? 'bg-white text-anushtan-terracotta shadow-sm'
+                                        ? 'bg-white bg-gradient-to-r from-admin-emerald to-admin-emerald-light bg-clip-text text-transparent shadow-sm'
                                         : 'text-gray-600 hover:text-gray-900'
                                         }`}
                                 >
@@ -555,7 +555,7 @@ export default function AddStudentPage() {
                             </div>
                             <button
                                 onClick={() => router.push('/auth/dashboard')}
-                                className="text-sm text-anushtan-terracotta hover:underline"
+                                className="text-sm bg-gradient-to-r from-admin-emerald to-admin-emerald-light bg-clip-text text-transparent hover:underline"
                             >
                                 {t.backToDashboard}
                             </button>
@@ -577,16 +577,16 @@ export default function AddStudentPage() {
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-anushtan-border p-8 space-y-8">
+                    <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-admin-border p-8 space-y-8">
 
                         {/* Student Information Section */}
                         <div>
-                            <h2 className="font-heading text-xl font-bold text-anushtan-charcoal mb-4 pb-2 border-b border-anushtan-border">
+                            <h2 className="font-heading text-xl font-bold text-admin-text mb-4 pb-2 border-b border-admin-border">
                                 {t.studentInfo}
                             </h2>
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2">
                                         {t.studentName} <span className="text-red-500">*</span>
                                     </label>
                                     <input
@@ -595,13 +595,13 @@ export default function AddStudentPage() {
                                         value={formData.studentName}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                         placeholder={t.studentNamePlaceholder}
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2">
                                         {t.currentClass} <span className="text-red-500">*</span>
                                     </label>
                                     <select
@@ -609,7 +609,7 @@ export default function AddStudentPage() {
                                         value={formData.currentClass}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                     >
                                         <option value="">{t.selectClass}</option>
                                         <option value="Nursery">{t.nursery}</option>
@@ -629,7 +629,7 @@ export default function AddStudentPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2">
                                         {t.currentSchool}
                                     </label>
                                     <input
@@ -637,20 +637,20 @@ export default function AddStudentPage() {
                                         name="currentSchool"
                                         value={formData.currentSchool}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                         placeholder={t.currentSchoolPlaceholder}
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2">
                                         {t.board}
                                     </label>
                                     <select
                                         name="board"
                                         value={formData.board}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                     >
                                         <option value="">{t.selectBoard}</option>
                                         <option value="CBSE">{t.cbse}</option>
@@ -665,12 +665,12 @@ export default function AddStudentPage() {
 
                         {/* Parent Information Section */}
                         <div>
-                            <h2 className="font-heading text-xl font-bold text-anushtan-charcoal mb-4 pb-2 border-b border-anushtan-border">
+                            <h2 className="font-heading text-xl font-bold text-admin-text mb-4 pb-2 border-b border-admin-border">
                                 {t.parentInfo}
                             </h2>
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2">
                                         {t.parentName} <span className="text-red-500">*</span>
                                     </label>
                                     <input
@@ -679,13 +679,13 @@ export default function AddStudentPage() {
                                         value={formData.parentName}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                         placeholder={t.parentNamePlaceholder}
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2">
                                         {t.occupation}
                                     </label>
                                     <input
@@ -693,13 +693,13 @@ export default function AddStudentPage() {
                                         name="occupation"
                                         value={formData.occupation}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                         placeholder={t.occupationPlaceholder}
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2">
                                         {t.primaryContact} <span className="text-red-500">*</span>
                                     </label>
                                     <input
@@ -709,13 +709,13 @@ export default function AddStudentPage() {
                                         onChange={handleChange}
                                         required
                                         pattern="[0-9]{10}"
-                                        className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                         placeholder={t.primaryContactPlaceholder}
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2">
                                         {t.secondaryContact}
                                     </label>
                                     <input
@@ -724,13 +724,13 @@ export default function AddStudentPage() {
                                         value={formData.secondaryContact}
                                         onChange={handleChange}
                                         pattern="[0-9]{10}"
-                                        className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                         placeholder={t.secondaryContactPlaceholder}
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2">
                                         {t.emailAddress}
                                     </label>
                                     <input
@@ -738,7 +738,7 @@ export default function AddStudentPage() {
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                         placeholder={t.emailPlaceholder}
                                     />
                                 </div>
@@ -747,20 +747,20 @@ export default function AddStudentPage() {
 
                         {/* Parent Preferences Section */}
                         <div>
-                            <h2 className="font-heading text-xl font-bold text-anushtan-charcoal mb-4 pb-2 border-b border-anushtan-border">
+                            <h2 className="font-heading text-xl font-bold text-admin-text mb-4 pb-2 border-b border-admin-border">
                                 {t.parentPreferences}
                             </h2>
-                            <p className="text-sm text-anushtan-charcoal/60 mb-6">
+                            <p className="text-sm text-admin-text/60 mb-6">
                                 {t.preferencesSubtitle}
                             </p>
                             <div className="space-y-6">
                                 {/* Question 1 */}
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
+                                    <label className="block text-sm font-medium text-admin-text mb-3">
                                         {`1. ${t.q1}`}
                                     </label>
                                     <div className="space-y-2">
-                                        <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                             <input
                                                 type="radio"
                                                 name="q1_education_guide"
@@ -771,7 +771,7 @@ export default function AddStudentPage() {
                                             />
                                             <span className="text-sm">{t.q1_opt1}</span>
                                         </label>
-                                        <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                             <input
                                                 type="radio"
                                                 name="q1_education_guide"
@@ -787,11 +787,11 @@ export default function AddStudentPage() {
 
                                 {/* Question 2 */}
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
+                                    <label className="block text-sm font-medium text-admin-text mb-3">
                                         {`2. ${t.q2}`}
                                     </label>
                                     <div className="space-y-2">
-                                        <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                             <input
                                                 type="radio"
                                                 name="q2_learning_approach"
@@ -802,7 +802,7 @@ export default function AddStudentPage() {
                                             />
                                             <span className="text-sm">{t.q2_opt1}</span>
                                         </label>
-                                        <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                             <input
                                                 type="radio"
                                                 name="q2_learning_approach"
@@ -818,11 +818,11 @@ export default function AddStudentPage() {
 
                                 {/* Question 3 */}
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
+                                    <label className="block text-sm font-medium text-admin-text mb-3">
                                         {`3. ${t.q3}`}
                                     </label>
                                     <div className="space-y-2">
-                                        <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                             <input
                                                 type="radio"
                                                 name="q3_teacher_preference"
@@ -833,7 +833,7 @@ export default function AddStudentPage() {
                                             />
                                             <span className="text-sm">{t.q3_opt1}</span>
                                         </label>
-                                        <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                             <input
                                                 type="radio"
                                                 name="q3_teacher_preference"
@@ -849,11 +849,11 @@ export default function AddStudentPage() {
 
                                 {/* Question 4 */}
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
+                                    <label className="block text-sm font-medium text-admin-text mb-3">
                                         {`4. ${t.q4}`}
                                     </label>
                                     <div className="space-y-2">
-                                        <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                             <input
                                                 type="radio"
                                                 name="q4_child_priority"
@@ -864,7 +864,7 @@ export default function AddStudentPage() {
                                             />
                                             <span className="text-sm">{t.q4_opt1}</span>
                                         </label>
-                                        <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                             <input
                                                 type="radio"
                                                 name="q4_child_priority"
@@ -880,11 +880,11 @@ export default function AddStudentPage() {
 
                                 {/* Question 5 */}
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-3">
+                                    <label className="block text-sm font-medium text-admin-text mb-3">
                                         {`5. ${t.q5}`}
                                     </label>
                                     <div className="space-y-2">
-                                        <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                             <input
                                                 type="radio"
                                                 name="q5_school_environment"
@@ -895,7 +895,7 @@ export default function AddStudentPage() {
                                             />
                                             <span className="text-sm">{t.q5_opt1}</span>
                                         </label>
-                                        <label className="flex items-start p-3 border border-anushtan-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                             <input
                                                 type="radio"
                                                 name="q5_school_environment"
@@ -913,12 +913,12 @@ export default function AddStudentPage() {
 
                         {/* Inquiry Details Section */}
                         <div>
-                            <h2 className="font-heading text-xl font-bold text-anushtan-charcoal mb-4 pb-2 border-b border-anushtan-border">
+                            <h2 className="font-heading text-xl font-bold text-admin-text mb-4 pb-2 border-b border-admin-border">
                                 {t.inquiryDetails}
                             </h2>
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2">
                                         {t.leadSource} <span className="text-red-500">*</span>
                                     </label>
                                     <select
@@ -926,7 +926,7 @@ export default function AddStudentPage() {
                                         value={formData.leadSource}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                     >
                                         <option value="">{t.selectSource}</option>
                                         <option value="Walk-in">{t.walkIn}</option>
@@ -940,7 +940,7 @@ export default function AddStudentPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2">
                                         {t.dsHostel} <span className="text-red-500">*</span>
                                     </label>
                                     <select
@@ -948,7 +948,7 @@ export default function AddStudentPage() {
                                         value={formData.dsHostel}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                     >
                                         <option value="Day Scholar">{t.dayScholar}</option>
                                         <option value="Hostel">{t.hostel}</option>
@@ -956,7 +956,7 @@ export default function AddStudentPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2">
                                         {t.inquiryDate}
                                     </label>
                                     <input
@@ -964,20 +964,20 @@ export default function AddStudentPage() {
                                         name="inquiryDate"
                                         value={formData.inquiryDate}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta bg-gray-50"
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue bg-gray-50"
                                         readOnly
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2">
                                         {t.priority}
                                     </label>
                                     <select
                                         name="priority"
                                         value={formData.priority}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                     >
                                         <option value="Low">{t.low}</option>
                                         <option value="Medium">{t.medium}</option>
@@ -986,7 +986,7 @@ export default function AddStudentPage() {
                                 </div>
 
                                 <div className="md:col-span-2">
-                                    <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2">
                                         {t.comments}
                                     </label>
                                     <textarea
@@ -994,7 +994,7 @@ export default function AddStudentPage() {
                                         value={formData.comments}
                                         onChange={handleChange}
                                         rows={4}
-                                        className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta"
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                         placeholder={t.commentsPlaceholder}
                                     />
                                 </div>
@@ -1006,14 +1006,14 @@ export default function AddStudentPage() {
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="flex-1 bg-anushtan-terracotta text-white font-semibold py-3 px-6 rounded-lg hover:bg-anushtan-terracotta/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex-1 bg-gradient-to-r from-admin-emerald to-admin-emerald-light text-white font-semibold py-3 px-6 rounded-lg hover:bg-gradient-to-r from-admin-emerald to-admin-emerald-light/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isSubmitting ? t.submittingButton : t.submitButton}
                             </button>
                             <button
                                 type="button"
                                 onClick={() => router.push('/auth/dashboard')}
-                                className="px-6 py-3 border border-anushtan-border text-anushtan-charcoal rounded-lg hover:bg-gray-50 transition-colors"
+                                className="px-6 py-3 border border-admin-border text-admin-text rounded-lg hover:bg-gray-50 transition-colors"
                             >
                                 {t.cancelButton}
                             </button>
