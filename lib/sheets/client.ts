@@ -63,14 +63,14 @@ export async function getAllInquiries() {
 }
 
 // Fetch single inquiry by ID (S-1, S-2, etc.)
-export async function getInquiryById(inquiryId: string) {
+export async function getInquiryById(inquiryId: string): Promise<Inquiry> {
     try {
         const sheets = getGoogleSheetsClient();
 
         // Get all inquiries and find the one with matching ID
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: SHEET_ID,
-            range: `${WORKING_SHEET_NAME}!A2:R`,
+            range: `${WORKING_SHEET_NAME}!A2:U`, // All 21 columns
         });
 
         const rows = response.data.values || [];
@@ -82,25 +82,32 @@ export async function getInquiryById(inquiryId: string) {
 
         const row = rows[rowIndex];
 
+        // Map to Inquiry type (matching the 21-column structure)
         return {
-            id: row[0] || '',
-            timestamp: row[1] || '',
-            studentName: row[2] || '',
-            currentClass: row[3] || '',
-            currentSchool: row[4] || '',
-            board: row[5] || '',
-            parentName: row[6] || '',
-            occupation: row[7] || '',
-            phone: row[8] || '',
-            email: row[9] || '',
-            address: row[10] || '',
-            howHeard: row[11] || '',
-            source: row[12] || 'Digital',
-            createdBy: row[13] || '',
-            status: row[14] || 'New',
-            assignedTo: row[15] || '',
-            notes: row[16] || '',
-            followUpDate: row[17] || '',
+            id: row[0] || '',              // Column A: Inquiry ID
+            timestamp: row[1] || '',        // Column B: Timestamp
+            studentName: row[2] || '',      // Column C: Student Name
+            currentClass: row[3] || '',     // Column D: Current Class
+            currentSchool: row[4] || '',    // Column E: Current School
+            board: row[5] || '',            // Column F: Board
+            parentName: row[6] || '',       // Column G: Parent Name
+            occupation: row[7] || '',       // Column H: Occupation
+            phone: row[8] || '',            // Column I: Primary Contact
+            secondaryContact: row[9] || '', // Column J: Secondary Contact
+            email: row[10] || '',           // Column K: Email Address
+            educationGuide: row[11] || '',  // Column L: Who should guide education
+            learningMethod: row[12] || '',  // Column M: How children learn
+            teacherPreference: row[13] || '', // Column N: Teacher preference
+            childImportance: row[14] || '', // Column O: What's important for child
+            schoolEnvironment: row[15] || '', // Column P: School environment preference
+            howHeard: row[16] || '',        // Column Q: How did you hear about us
+            dayScholarHostel: row[17] || '', // Column R: Day Scholar / Hostel
+            inquiryDate: row[18] || '',     // Column S: Inquiry Date
+            priority: row[19] || '',        // Column T: Priority
+            notes: row[20] || '',           // Column U: Comments / Notes
+            status: row[21] || 'New',       // Extra column if exists
+            assignedTo: row[22] || '',      // Extra column if exists
+            followUpDate: row[23] || '',    // Extra column if exists
         };
     } catch (error) {
         console.error('Error fetching inquiry:', error);
@@ -284,22 +291,31 @@ export async function createInquiry(data: {
 
 // TypeScript types
 export interface Inquiry {
-    id: string;              // Changed from number to string (S-1, S-2, etc.)
-    timestamp: string;
-    studentName: string;
-    currentClass: string;
-    currentSchool: string;
-    board: string;
-    parentName: string;
-    occupation: string;
-    phone: string;
-    email: string;
-    address: string;
-    howHeard: string;
-    source: string;
-    createdBy: string;       // NEW: Counselor who created this
-    status: string;
-    assignedTo: string;
-    notes: string;
-    followUpDate: string;
+    id: string;              // Column A: Inquiry ID (S-1, S-2, etc.)
+    timestamp: string;       // Column B: Timestamp
+    studentName: string;     // Column C: Student Name
+    currentClass: string;    // Column D: Current Class
+    currentSchool: string;   // Column E: Current School
+    board: string;           // Column F: Board
+    parentName: string;      // Column G: Parent Name
+    occupation: string;      // Column H: Occupation
+    phone: string;           // Column I: Primary Contact
+    secondaryContact: string; // Column J: Secondary Contact
+    email: string;           // Column K: Email
+    educationGuide: string;  // Column L: Who should guide education
+    learningMethod: string;  // Column M: How children learn
+    teacherPreference: string; // Column N: Teacher preference
+    childImportance: string; // Column O: What's important for child
+    schoolEnvironment: string; // Column P: School environment
+    howHeard: string;        // Column Q: How heard about us
+    dayScholarHostel: string; // Column R: Day Scholar / Hostel
+    inquiryDate: string;     // Column S: Inquiry Date
+    priority: string;        // Column T: Priority
+    notes: string;           // Column U: Notes
+    status: string;          // Added by counselor
+    assignedTo: string;      // Added by counselor
+    followUpDate: string;    // Added by counselor
+    source?: string;         // Legacy field
+    createdBy?: string;      // Legacy field
+    address?: string;        // Legacy field
 }
