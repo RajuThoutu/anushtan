@@ -72,13 +72,24 @@ export function DashboardSidebar() {
 
     return (
         <>
-            {/* Mobile Menu Button */}
-            <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md border border-anushtan-border"
-            >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Mobile Header Bar */}
+            <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-gradient-to-r from-admin-blue to-admin-purple shadow-lg z-40 flex items-center px-4">
+                <button
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    className="p-2 hover:bg-white/10 rounded-lg transition-all"
+                    aria-label="Toggle menu"
+                >
+                    {isMobileMenuOpen ? <X size={24} className="text-white" /> : <Menu size={24} className="text-white" />}
+                </button>
+                <div className="flex items-center gap-2 ml-4">
+                    <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                        <span className="text-white font-bold text-sm">A</span>
+                    </div>
+                    <h1 className="font-heading text-lg font-bold text-white">
+                        Anushtan
+                    </h1>
+                </div>
+            </div>
 
             {/* Overlay for mobile */}
             {isMobileMenuOpen && (
@@ -98,8 +109,8 @@ export function DashboardSidebar() {
                     ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
                 `}
             >
-                {/* Logo */}
-                <div className="p-6 border-b border-white/20">
+                {/* Logo - Desktop only */}
+                <div className="hidden lg:block p-6 border-b border-white/20">
                     <Link href="/auth/dashboard" className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
                             <span className="text-white font-bold text-xl">A</span>
@@ -112,6 +123,9 @@ export function DashboardSidebar() {
                         </div>
                     </Link>
                 </div>
+
+                {/* Mobile: Add padding for header */}
+                <div className="lg:hidden h-16" />
 
                 {/* Navigation */}
                 <nav className="flex-1 p-4 overflow-y-auto">
@@ -191,7 +205,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     return (
         <div className="min-h-screen bg-admin-bg">
             <DashboardSidebar />
-            <main className="lg:ml-64 min-h-screen">
+            {/* Add top padding on mobile to account for fixed header */}
+            <main className="lg:ml-64 min-h-screen pt-16 lg:pt-0">
                 {children}
             </main>
         </div>
