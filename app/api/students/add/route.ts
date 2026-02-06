@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth/auth-config"
 import { NextResponse } from "next/server"
+import { createInquiry } from "@/lib/sheets/client"
 
 // This will work once Google Sheets is set up
 // For now, it's a placeholder that logs the data
@@ -14,48 +15,40 @@ export async function POST(req: Request) {
     try {
         const data = await req.json()
 
-        // TODO: Once Google Sheets is set up, uncomment this:
-        // const { appendToSheet } = await import('@/lib/googleSheets')
-        // await appendToSheet([
-        //   data.inquiryDate,
-        //   data.status,
-        //   data.priority,
-        //   '', // Admission (filled later)
-        //   '', // TNT (filled later)
-        //   data.studentName,
-        //   data.parentName,
-        //   data.occupation || '',
-        //   '', // Date of Joining (filled later)
-        //   data.primaryContact,
-        //   data.secondaryContact || '',
-        //   data.currentSchool || '',
-        //   data.currentClass,
-        //   data.board || '',
-        //   data.leadSource,
-        //   data.dsHostel,
-        //   '0', // Number of visits (starts at 0)
-        //   data.comments || '',
-        //   '', // Fee discussed (filled later)
-        //   '', // Follow-up date (filled later)
-        //   '', // Follow-up remarks (filled later)
-        //   session.user.name // Added by
-        // ])
-
-        // For now, just log the data
-        console.log('Student inquiry data:', {
-            ...data,
-            addedBy: session.user.name,
-            addedAt: new Date().toISOString()
-        })
+        // Map form data to Google Sheets structure (all 21 columns)
+        const result = await createInquiry({
+            studentName: data.studentName,
+            currentClass: data.currentClass,
+            currentSchool: data.currentSchool || '',
+            board: data.board || '',
+            parentName: data.parentName,
+            occupation: data.occupation || '',
+            phone: data.primaryContact, // Map primaryContact to phone
+            secondaryContact: data.secondaryContact || '',
+            email: data.email || '',
+            educationGuide: data.q1_education_guide || '',
+            learningMethod: data.q2_learning_approach || '',
+            teacherPreference: data.q3_teacher_preference || '',
+            childImportance: data.q4_child_priority || '',
+            schoolEnvironment: data.q5_school_environment || '',
+            howHeard: data.leadSource || 'Digital',
+            dayScholarHostel: data.dsHostel || '',
+            priority: data.priority || '',
+            createdBy: session.user.name,
+            source: 'Digital',
+            notes: data.comments || 'Added via Add Student form',
+            status: data.status || 'New',
+        });
 
         return NextResponse.json({
             success: true,
-            message: 'Student inquiry added successfully (mock - Google Sheets not yet configured)'
+            message: 'Student inquiry added successfully',
+            id: result.id
         })
     } catch (error) {
         console.error('Error adding student inquiry:', error)
         return NextResponse.json({
-            error: 'Failed to add student inquiry'
+            error: error instanceof Error ? error.message : 'Failed to add student inquiry'
         }, { status: 500 })
     }
 }
