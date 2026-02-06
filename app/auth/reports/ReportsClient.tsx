@@ -11,6 +11,8 @@ import {
 import { KpiCard } from '@/components/dashboard/reports/KpiCard';
 import { InquiryTrendChart } from '@/components/dashboard/reports/InquiryTrendChart';
 import { AdmissionFunnelChart } from '@/components/dashboard/reports/AdmissionFunnelChart';
+import { CounselorStatsTable } from '@/components/dashboard/reports/CounselorStatsTable';
+import { DailyActivityLog } from '@/components/dashboard/reports/DailyActivityLog';
 
 interface Inquiry {
     id: string;
@@ -34,6 +36,10 @@ export default function ReportsClient() {
 
     const [trendData, setTrendData] = useState<{ date: string; count: number }[]>([]);
     const [funnelData, setFunnelData] = useState<{ stage: string; count: number }[]>([]);
+
+    // Aggregated Data for new reports
+    const [counselorStats, setCounselorStats] = useState<any[]>([]);
+    const [dailyLogs, setDailyLogs] = useState<any[]>([]);
 
     useEffect(() => {
         fetchData();
@@ -62,8 +68,6 @@ export default function ReportsClient() {
         const converted = data.filter(i => i.status === 'Converted').length;
         const active = data.filter(i => i.status === 'Open' || i.status === 'Follow-up').length;
         const newInquiries = data.filter(i => i.status === 'New').length;
-        // Approximation for action needed: New + Follow-up 
-        // (Real logic would check date, but this is a good proxy for now)
         const actionNeeded = newInquiries + data.filter(i => i.status === 'Follow-up').length;
 
         setMetrics({
@@ -73,23 +77,15 @@ export default function ReportsClient() {
             actionNeeded
         });
 
-        // 2. Trend Data (Last 7 Days or Aggregated by Date)
+        // 2. Trend Data
         const dateMap = new Map<string, number>();
         data.forEach(i => {
             const date = new Date(i.inquiryDate).toLocaleDateString();
             dateMap.set(date, (dateMap.get(date) || 0) + 1);
         });
-
-        // Sort dates
         const sortedDates = Array.from(dateMap.keys()).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
-        // Take last 14 days for cleaner view
         const recentDates = sortedDates.slice(-14);
-
-        setTrendData(recentDates.map(date => ({
-            date,
-            count: dateMap.get(date) || 0
-        })));
-
+        setTrendData(recentDates.map(date => ({ date, count: dateMap.get(date) || 0 })));
 
         // 3. Funnel Data
         const stages = ['New', 'Open', 'Follow-up', 'Converted', 'Closed'];
@@ -98,6 +94,71 @@ export default function ReportsClient() {
             count: data.filter(i => i.status === stage).length
         }));
         setFunnelData(funnelCounts);
+
+        // 4. Counselor Stats Aggregation
+        const counselorMap = new Map<string, any>();
+
+        data.forEach(i => {
+            const name = i.counselorName || 'Unassigned';
+
+            if (!counselorMap.has(name)) {
+                counselorMap.set(name, {
+                    name,
+                    total: 0,
+                    statuses: { New: 0, Open: 0, FollowUp: 0, Converted: 0, Closed: 0 },
+                    conversionRate: 0
+                });
+            }
+
+            const stats = counselorMap.get(name);
+            stats.total += 1;
+
+            const statusKey = i.status === 'Follow-up' ? 'FollowUp' : i.status;
+            if (stats.statuses[statusKey] !== undefined) {
+                stats.statuses[statusKey] += 1;
+            }
+        });
+
+        const statsArray = Array.from(counselorMap.values()).map(c => {
+            c.conversionRate = c.total > 0 ? Number(((c.statuses.Converted / c.total) * 100).toFixed(1)) : 0;
+            return c;
+        });
+        setCounselorStats(statsArray);
+
+        // 5. Daily Activity Log
+        const activityMap = new Map<string, any>();
+
+        data.forEach(i => {
+            const date = new Date(i.inquiryDate).toLocaleDateString();
+            const counselor = i.counselorName || 'Unassigned';
+            const key = `${date}_${counselor}`;
+
+            if (!activityMap.has(key)) {
+                activityMap.set(key, {
+                    date: i.inquiryDate,
+                    counselorName: counselor,
+                    total: 0,
+                    statusCounts: {} as Record<string, number>
+                });
+            }
+
+            const entry = activityMap.get(key);
+            entry.total += 1;
+            entry.statusCounts[i.status] = (entry.statusCounts[i.status] || 0) + 1;
+        });
+
+        const activityArray = Array.from(activityMap.values()).map(entry => {
+            const breakdownParts = Object.entries(entry.statusCounts).map(([status, count]) => `${count} ${status}`);
+            return {
+                date: entry.date,
+                counselorName: entry.counselorName,
+                total: entry.total,
+                statusBreakdown: breakdownParts.join(', ')
+            };
+        });
+
+        activityArray.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        setDailyLogs(activityArray);
     };
 
     if (loading) {
@@ -171,8 +232,17 @@ export default function ReportsClient() {
                 </div>
             </div>
 
-            {/* Additional Insights (Placeholder for further expansion) */}
+            {/* Counselor Performance Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Stats Table */}
+                <CounselorStatsTable data={counselorStats} />
+
+                {/* Daily Activity */}
+                <DailyActivityLog data={dailyLogs} />
+            </div>
+
+            {/* Additional Insights */}
+            <div className="grid grid-cols-1 gap-6">
                 <div className="bg-gradient-to-br from-admin-blue to-admin-purple p-6 rounded-xl text-white shadow-lg">
                     <h3 className="text-lg font-bold mb-2">Director's Insight</h3>
                     <p className="opacity-90 mb-4">
