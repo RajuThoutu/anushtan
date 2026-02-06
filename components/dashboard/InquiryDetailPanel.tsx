@@ -231,17 +231,17 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
             </div>
 
             {/* Footer with Save */}
-            <div className="p-4 border-t border-anushtan-border">
+            <div className="p-4 border-t border-admin-border bg-white">
                 <button
                     onClick={handleSave}
                     disabled={saving}
                     className={`
-                        w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all
+                        w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all
                         ${saving
                             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             : saveSuccess
-                                ? 'bg-green-500 text-white'
-                                : 'bg-anushtan-terracotta text-white hover:bg-anushtan-terracotta/90'
+                                ? 'bg-gradient-to-r from-admin-emerald to-admin-emerald-light text-white shadow-lg'
+                                : 'bg-gradient-to-r from-admin-blue to-admin-purple text-white hover:shadow-lg hover:scale-105'
                         }
                     `}
                 >

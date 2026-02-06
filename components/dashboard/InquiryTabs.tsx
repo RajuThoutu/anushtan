@@ -13,36 +13,36 @@ interface InquiryTabsProps {
 
 export function InquiryTabs({ activeTab, onTabChange, todayCount, myWorkCount }: InquiryTabsProps) {
     const tabs = [
-        { id: 'today' as Tab, label: "Today's Inquiries", count: todayCount },
-        { id: 'mywork' as Tab, label: 'My Work', count: myWorkCount },
+        { id: 'today' as Tab, label: "Today's Inquiries", count: todayCount, gradient: 'from-admin-coral to-admin-coral-light' },
+        { id: 'mywork' as Tab, label: 'My Work', count: myWorkCount, gradient: 'from-admin-purple to-admin-purple-light' },
     ];
 
     return (
-        <div className="flex border-b border-anushtan-border bg-white rounded-t-xl">
+        <div className="flex border-b border-admin-border bg-gradient-to-r from-white to-admin-bg rounded-t-xl shadow-sm">
             {tabs.map((tab) => (
                 <button
                     key={tab.id}
                     onClick={() => onTabChange(tab.id)}
                     className={`
-                        flex items-center gap-2 px-6 py-4 font-medium transition-all relative
+                        flex items-center gap-2 px-6 py-4 font-medium transition-all relative group
                         ${activeTab === tab.id
-                            ? 'text-anushtan-terracotta'
-                            : 'text-anushtan-charcoal/60 hover:text-anushtan-charcoal'
+                            ? 'text-admin-blue'
+                            : 'text-admin-text-secondary hover:text-admin-text'
                         }
                     `}
                 >
-                    <span>{tab.label}</span>
+                    <span className="relative z-10">{tab.label}</span>
                     <span className={`
-                        px-2 py-0.5 text-xs rounded-full
+                        relative z-10 px-2.5 py-1 text-xs font-bold rounded-full transition-all
                         ${activeTab === tab.id
-                            ? 'bg-anushtan-terracotta text-white'
-                            : 'bg-anushtan-parchment text-anushtan-charcoal/60'
+                            ? `bg-gradient-to-r ${tab.gradient} text-white shadow-md`
+                            : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
                         }
                     `}>
                         {tab.count}
                     </span>
                     {activeTab === tab.id && (
-                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-anushtan-terracotta" />
+                        <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${tab.gradient} rounded-t-full`} />
                     )}
                 </button>
             ))}

@@ -56,11 +56,11 @@ interface InquiryListItemProps {
 function InquiryListItem({ inquiry, isSelected, onClick }: InquiryListItemProps) {
     const getStatusColor = (status: string) => {
         switch (status?.toLowerCase()) {
-            case 'new': return 'bg-orange-100 text-orange-700';
-            case 'interested': return 'bg-green-100 text-green-700';
-            case 'follow-up': return 'bg-blue-100 text-blue-700';
-            case 'in progress': return 'bg-yellow-100 text-yellow-700';
-            case 'converted': return 'bg-purple-100 text-purple-700';
+            case 'new': return 'bg-gradient-to-r from-admin-coral to-admin-coral-light text-white shadow-sm';
+            case 'interested': return 'bg-gradient-to-r from-admin-emerald to-admin-emerald-light text-white shadow-sm';
+            case 'follow-up': return 'bg-gradient-to-r from-admin-blue to-admin-blue-light text-white shadow-sm';
+            case 'in progress': return 'bg-gradient-to-r from-admin-amber to-admin-amber-light text-white shadow-sm';
+            case 'converted': return 'bg-gradient-to-r from-admin-purple to-admin-purple-light text-white shadow-sm';
             case 'closed': return 'bg-gray-100 text-gray-700';
             default: return 'bg-gray-100 text-gray-700';
         }
@@ -68,9 +68,9 @@ function InquiryListItem({ inquiry, isSelected, onClick }: InquiryListItemProps)
 
     const getPriorityColor = (priority: string) => {
         switch (priority?.toLowerCase()) {
-            case 'high': return 'text-red-600';
-            case 'medium': return 'text-yellow-600';
-            case 'low': return 'text-green-600';
+            case 'high': return 'text-admin-coral';
+            case 'medium': return 'text-admin-amber';
+            case 'low': return 'text-admin-emerald';
             default: return 'text-gray-400';
         }
     };
@@ -90,8 +90,12 @@ function InquiryListItem({ inquiry, isSelected, onClick }: InquiryListItemProps)
         <button
             onClick={onClick}
             className={`
-                w-full text-left p-4 transition-all hover:bg-anushtan-parchment/50
-                ${isSelected ? 'bg-anushtan-terracotta/5 border-l-4 border-l-anushtan-terracotta' : ''}
+                w-full text-left p-4 transition-all hover:bg-gradient-to-r hover:from-admin-bg hover:to-white
+                border-l-4 transition-all
+                ${isSelected
+                    ? 'bg-gradient-to-r from-admin-blue/5 to-admin-purple/5 border-l-admin-blue shadow-md'
+                    : 'border-l-transparent hover:border-l-admin-purple/30'
+                }
             `}
         >
             <div className="flex items-start justify-between gap-3">

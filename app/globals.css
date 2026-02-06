@@ -10,6 +10,38 @@
   /* Updated for 4.5:1 contrast ratio */
   --anushtan-border: rgba(45, 45, 45, 0.1);
 
+  /* Admin Portal - Vibrant Multi-Color Theme */
+  --admin-electric-blue: #2563eb;
+  --admin-electric-blue-light: #3b82f6;
+  --admin-electric-blue-dark: #1e40af;
+
+  --admin-vibrant-purple: #7c3aed;
+  --admin-vibrant-purple-light: #8b5cf6;
+  --admin-vibrant-purple-dark: #6d28d9;
+
+  --admin-emerald-green: #10b981;
+  --admin-emerald-green-light: #34d399;
+  --admin-emerald-green-dark: #059669;
+
+  --admin-coral-orange: #f97316;
+  --admin-coral-orange-light: #fb923c;
+  --admin-coral-orange-dark: #ea580c;
+
+  --admin-rose-pink: #ec4899;
+  --admin-rose-pink-light: #f472b6;
+  --admin-rose-pink-dark: #db2777;
+
+  --admin-amber-yellow: #f59e0b;
+  --admin-amber-yellow-light: #fbbf24;
+  --admin-amber-yellow-dark: #d97706;
+
+  --admin-bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --admin-bg-light: #f8fafc;
+  --admin-bg-card: #ffffff;
+  --admin-border: #e2e8f0;
+  --admin-text-primary: #1e293b;
+  --admin-text-secondary: #64748b;
+
   /* Semantic Mappings */
   --background: var(--anushtan-parchment);
   --foreground: var(--anushtan-charcoal);
@@ -40,6 +72,32 @@
   --color-anushtan-parchment: var(--anushtan-parchment);
   --color-anushtan-gold: var(--anushtan-gold);
   --color-anushtan-charcoal: var(--anushtan-charcoal);
+
+  /* Admin Portal Colors */
+  --color-admin-blue: var(--admin-electric-blue);
+  --color-admin-blue-light: var(--admin-electric-blue-light);
+  --color-admin-blue-dark: var(--admin-electric-blue-dark);
+
+  --color-admin-purple: var(--admin-vibrant-purple);
+  --color-admin-purple-light: var(--admin-vibrant-purple-light);
+  --color-admin-purple-dark: var(--admin-vibrant-purple-dark);
+
+  --color-admin-emerald: var(--admin-emerald-green);
+  --color-admin-emerald-light: var(--admin-emerald-green-light);
+  --color-admin-emerald-dark: var(--admin-emerald-green-dark);
+
+  --color-admin-coral: var(--admin-coral-orange);
+  --color-admin-coral-light: var(--admin-coral-orange-light);
+  --color-admin-coral-dark: var(--admin-coral-orange-dark);
+
+  --color-admin-rose: var(--admin-rose-pink);
+  --color-admin-amber: var(--admin-amber-yellow);
+
+  --color-admin-bg: var(--admin-bg-light);
+  --color-admin-card: var(--admin-bg-card);
+  --color-admin-border: var(--admin-border);
+  --color-admin-text: var(--admin-text-primary);
+  --color-admin-text-secondary: var(--admin-text-secondary);
 
   --font-heading: "Playfair Display", serif;
   --font-body: "Inter", sans-serif;
