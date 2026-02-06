@@ -153,6 +153,58 @@ export default function AllInquiriesClient() {
 
                     {/* Date Range */}
                     <div className="flex items-center gap-2">
+                        <select
+                            className="border border-admin-border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                const today = new Date();
+                                let start = '';
+                                let end = '';
+
+                                if (val === 'today') {
+                                    start = end = today.toISOString().split('T')[0];
+                                } else if (val === 'yesterday') {
+                                    const y = new Date(today);
+                                    y.setDate(today.getDate() - 1);
+                                    start = end = y.toISOString().split('T')[0];
+                                } else if (val === 'thisWeek') {
+                                    const d = new Date(today);
+                                    const day = d.getDay();
+                                    const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+                                    const monday = new Date(d.setDate(diff));
+                                    const sunday = new Date(d.setDate(monday.getDate() + 6));
+                                    start = monday.toISOString().split('T')[0];
+                                    end = sunday.toISOString().split('T')[0];
+                                } else if (val === 'lastWeek') {
+                                    const d = new Date(today);
+                                    const day = d.getDay();
+                                    const diff = d.getDate() - day + (day === 0 ? -6 : 1) - 7;
+                                    const monday = new Date(d.setDate(diff));
+                                    const sunday = new Date(d.setDate(monday.getDate() + 6));
+                                    start = monday.toISOString().split('T')[0];
+                                    end = sunday.toISOString().split('T')[0];
+                                } else if (val === 'thisMonth') {
+                                    start = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+                                    end = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0];
+                                } else if (val === 'lastMonth') {
+                                    start = new Date(today.getFullYear(), today.getMonth() - 1, 1).toISOString().split('T')[0];
+                                    end = new Date(today.getFullYear(), today.getMonth(), 0).toISOString().split('T')[0];
+                                }
+
+                                if (val !== 'custom') {
+                                    setDateStart(start);
+                                    setDateEnd(end);
+                                }
+                            }}
+                        >
+                            <option value="custom">Quick Select...</option>
+                            <option value="today">Today</option>
+                            <option value="yesterday">Yesterday</option>
+                            <option value="thisWeek">This Week</option>
+                            <option value="lastWeek">Last Week</option>
+                            <option value="thisMonth">This Month</option>
+                            <option value="lastMonth">Last Month</option>
+                        </select>
                         <Calendar size={18} className="text-gray-500" />
                         <div className="flex items-center gap-2">
                             <input

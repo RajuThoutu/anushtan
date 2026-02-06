@@ -35,7 +35,6 @@ const priorityOptions = [
 
 export function InquiryFilters({ filters, onFilterChange }: InquiryFiltersProps) {
     const [localSearch, setLocalSearch] = useState(filters.search);
-    const [showDateFilters, setShowDateFilters] = useState(false);
 
     // Debounce search
     useEffect(() => {
@@ -101,17 +100,69 @@ export function InquiryFilters({ filters, onFilterChange }: InquiryFiltersProps)
                     ))}
                 </select>
 
-                {/* Date Filter Toggle */}
-                <button
-                    onClick={() => setShowDateFilters(!showDateFilters)}
-                    className={`flex items-center gap-2 px-4 py-2 border rounded-lg transition-all ${showDateFilters || filters.dateFrom || filters.dateTo
-                            ? 'border-anushtan-terracotta text-anushtan-terracotta bg-anushtan-terracotta/5'
-                            : 'border-anushtan-border text-anushtan-charcoal/60 hover:border-anushtan-charcoal/30'
-                        }`}
+                {/* Date Quick Select - Inline */}
+                <select
+                    className="px-4 py-2 border border-anushtan-border rounded-lg focus:outline-none focus:border-anushtan-terracotta bg-white"
+                    onChange={(e) => {
+                        const val = e.target.value;
+                        const today = new Date();
+                        let start = '';
+                        let end = '';
+
+                        if (val === 'today') {
+                            start = end = today.toISOString().split('T')[0];
+                        } else if (val === 'yesterday') {
+                            const y = new Date(today);
+                            y.setDate(today.getDate() - 1);
+                            start = end = y.toISOString().split('T')[0];
+                        } else if (val === 'thisWeek') {
+                            const d = new Date(today);
+                            const day = d.getDay();
+                            const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+                            const monday = new Date(d.setDate(diff));
+                            const sunday = new Date(d.setDate(monday.getDate() + 6));
+                            start = monday.toISOString().split('T')[0];
+                            end = sunday.toISOString().split('T')[0];
+                        } else if (val === 'lastWeek') {
+                            const d = new Date(today);
+                            const day = d.getDay();
+                            const diff = d.getDate() - day + (day === 0 ? -6 : 1) - 7;
+                            const monday = new Date(d.setDate(diff));
+                            const sunday = new Date(d.setDate(monday.getDate() + 6));
+                            start = monday.toISOString().split('T')[0];
+                            end = sunday.toISOString().split('T')[0];
+                        } else if (val === 'thisMonth') {
+                            start = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+                            end = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0];
+                        } else if (val === 'lastMonth') {
+                            start = new Date(today.getFullYear(), today.getMonth() - 1, 1).toISOString().split('T')[0];
+                            end = new Date(today.getFullYear(), today.getMonth(), 0).toISOString().split('T')[0];
+                        }
+
+                        if (val !== 'custom') {
+                            handleChange('dateFrom', start);
+                            handleChange('dateTo', end);
+                        }
+                    }}
                 >
-                    <Calendar size={18} />
-                    <span className="hidden sm:inline">Date Range</span>
-                </button>
+                    <option value="">Date Range...</option>
+                    <option value="today">Today</option>
+                    <option value="yesterday">Yesterday</option>
+                    <option value="thisWeek">This Week</option>
+                    <option value="lastWeek">Last Week</option>
+                    <option value="thisMonth">This Month</option>
+                    <option value="lastMonth">Last Month</option>
+                </select>
+
+                {/* Display Selected Dates (Small, Inline) */}
+                {(filters.dateFrom || filters.dateTo) && (
+                    <div className="flex items-center gap-2 text-sm text-gray-500 bg-gray-50 px-2 py-1 rounded border border-gray-200">
+                        <Calendar size={14} />
+                        <span>{filters.dateFrom || '...'}</span>
+                        <span>-</span>
+                        <span>{filters.dateTo || '...'}</span>
+                    </div>
+                )}
 
                 {/* Clear Filters */}
                 {hasActiveFilters && (
@@ -124,30 +175,6 @@ export function InquiryFilters({ filters, onFilterChange }: InquiryFiltersProps)
                     </button>
                 )}
             </div>
-
-            {/* Date Range Inputs */}
-            {showDateFilters && (
-                <div className="flex gap-3 mt-3 pt-3 border-t border-anushtan-border/50">
-                    <div className="flex items-center gap-2">
-                        <label className="text-sm text-anushtan-charcoal/60">From:</label>
-                        <input
-                            type="date"
-                            value={filters.dateFrom}
-                            onChange={(e) => handleChange('dateFrom', e.target.value)}
-                            className="px-3 py-1.5 border border-anushtan-border rounded-lg focus:outline-none focus:border-anushtan-terracotta"
-                        />
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <label className="text-sm text-anushtan-charcoal/60">To:</label>
-                        <input
-                            type="date"
-                            value={filters.dateTo}
-                            onChange={(e) => handleChange('dateTo', e.target.value)}
-                            className="px-3 py-1.5 border border-anushtan-border rounded-lg focus:outline-none focus:border-anushtan-terracotta"
-                        />
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
