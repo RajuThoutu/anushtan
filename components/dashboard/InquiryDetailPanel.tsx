@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Save, User, Phone, Mail, School, BookOpen, Calendar, MessageSquare } from 'lucide-react';
+import { X, Save, User, Phone, Mail, School, BookOpen, MessageSquare, ArrowLeft } from 'lucide-react';
 import type { Inquiry } from '@/lib/sheets/client';
 
 interface InquiryDetailPanelProps {
@@ -77,20 +77,32 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
     };
 
     return (
-        <div className="h-full flex flex-col bg-white">
+        <div className="h-full flex flex-col bg-white safe-area-inset">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-anushtan-border">
-                <div>
-                    <h2 className="font-heading text-xl font-bold text-anushtan-charcoal">
+            <div className="flex items-center gap-3 p-4 border-b border-anushtan-border bg-white sticky top-0 z-10">
+                {/* Back Button - More prominent on mobile */}
+                <button
+                    onClick={onClose}
+                    className="flex items-center justify-center w-10 h-10 -ml-2 rounded-full hover:bg-anushtan-parchment transition-all lg:hidden"
+                    aria-label="Go back"
+                >
+                    <ArrowLeft size={24} className="text-anushtan-charcoal" />
+                </button>
+
+                <div className="flex-1 min-w-0">
+                    <h2 className="font-heading text-lg lg:text-xl font-bold text-anushtan-charcoal truncate">
                         {inquiry.studentName}
                     </h2>
                     <p className="text-sm text-anushtan-charcoal/60">
                         Inquiry {inquiry.id}
                     </p>
                 </div>
+
+                {/* Close button - Desktop only */}
                 <button
                     onClick={onClose}
-                    className="p-2 hover:bg-anushtan-parchment rounded-lg transition-all"
+                    className="hidden lg:flex items-center justify-center w-10 h-10 rounded-full hover:bg-anushtan-parchment transition-all"
+                    aria-label="Close panel"
                 >
                     <X size={20} />
                 </button>

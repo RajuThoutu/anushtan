@@ -146,9 +146,9 @@ export default function DashboardClient() {
 
     return (
         <DashboardLayout>
-            <div className="h-screen flex flex-col lg:flex-row">
+            <div className="h-screen flex flex-col lg:flex-row relative">
                 {/* Main Content Area */}
-                <div className={`flex-1 flex flex-col min-w-0 ${selectedInquiry ? 'lg:w-1/2' : 'w-full'}`}>
+                <div className={`flex-1 flex flex-col min-w-0 ${selectedInquiry ? 'hidden lg:flex lg:w-1/2' : 'w-full'}`}>
                     {/* Tabs */}
                     <InquiryTabs
                         activeTab={activeTab}
@@ -174,15 +174,27 @@ export default function DashboardClient() {
                     </div>
                 </div>
 
-                {/* Detail Panel */}
+                {/* Detail Panel - Full screen on mobile, side panel on desktop */}
                 {selectedInquiry && (
-                    <div className="lg:w-1/2 xl:w-2/5 border-l border-anushtan-border h-screen overflow-hidden">
-                        <InquiryDetailPanel
-                            inquiry={selectedInquiry}
-                            onClose={() => setSelectedInquiry(null)}
-                            onSave={handleSave}
-                        />
-                    </div>
+                    <>
+                        {/* Mobile: Full screen overlay */}
+                        <div className="lg:hidden fixed inset-0 z-50 bg-white">
+                            <InquiryDetailPanel
+                                inquiry={selectedInquiry}
+                                onClose={() => setSelectedInquiry(null)}
+                                onSave={handleSave}
+                            />
+                        </div>
+
+                        {/* Desktop: Side panel */}
+                        <div className="hidden lg:block lg:w-1/2 xl:w-2/5 border-l border-anushtan-border h-screen overflow-hidden">
+                            <InquiryDetailPanel
+                                inquiry={selectedInquiry}
+                                onClose={() => setSelectedInquiry(null)}
+                                onSave={handleSave}
+                            />
+                        </div>
+                    </>
                 )}
             </div>
         </DashboardLayout>
