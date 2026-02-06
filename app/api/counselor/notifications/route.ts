@@ -5,7 +5,7 @@ export async function GET() {
     try {
         // TODO: Fetch from Google Sheets "Notifications" sheet
         // For now, return empty array
-        const notifications = [];
+        const notifications: any[] = [];
 
         return NextResponse.json({
             success: true,

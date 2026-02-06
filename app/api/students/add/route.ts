@@ -14,6 +14,19 @@ export async function POST(req: Request) {
 
     try {
         const data = await req.json()
+        console.log('Received add student request:', {
+            studentName: data.studentName,
+            email: data.email,
+            phone: data.primaryContact
+        });
+
+        // Debug Env Vars
+        console.log('Environment Check:', {
+            hasSheetId: !!process.env.GOOGLE_SHEET_ID,
+            hasClientEmail: !!process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+            hasPrivateKey: !!process.env.GOOGLE_SHEETS_PRIVATE_KEY,
+            sheetId: process.env.GOOGLE_SHEET_ID?.substring(0, 5) + '...'
+        });
 
         // Map form data to Google Sheets structure (all 21 columns)
         const result = await createInquiry({
@@ -34,11 +47,13 @@ export async function POST(req: Request) {
             howHeard: data.leadSource || 'Digital',
             dayScholarHostel: data.dsHostel || '',
             priority: data.priority || '',
-            createdBy: session.user.name,
+            createdBy: session.user.name || 'Unknown',
             source: 'Digital',
             notes: data.comments || 'Added via Add Student form',
             status: data.status || 'New',
         });
+
+        console.log('Inquiry created successfully:', result);
 
         return NextResponse.json({
             success: true,
@@ -47,6 +62,10 @@ export async function POST(req: Request) {
         })
     } catch (error) {
         console.error('Error adding student inquiry:', error)
+        // Log full error details
+        if (error instanceof Error) {
+            console.error('Stack:', error.stack);
+        }
         return NextResponse.json({
             error: error instanceof Error ? error.message : 'Failed to add student inquiry'
         }, { status: 500 })

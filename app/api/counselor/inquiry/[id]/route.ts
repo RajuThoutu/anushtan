@@ -3,12 +3,12 @@ import { getInquiryById } from '@/lib/sheets/client';
 
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const id = parseInt(params.id);
+        const { id } = await context.params;
 
-        if (isNaN(id)) {
+        if (!id) {
             return NextResponse.json(
                 { success: false, error: 'Invalid inquiry ID' },
                 { status: 400 }

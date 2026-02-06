@@ -13,7 +13,7 @@ export async function POST(request: Request) {
             );
         }
 
-        await updateCounselorActions(parseInt(id), {
+        await updateCounselorActions(id, {
             status,
             assignedTo,
             notes,

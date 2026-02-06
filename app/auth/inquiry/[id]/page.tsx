@@ -4,14 +4,15 @@ import { authOptions } from '@/lib/auth/auth-config';
 import { getInquiryById } from '@/lib/sheets/client';
 import { InquiryDetailView } from './InquiryDetailView';
 
-export default async function InquiryDetailPage({ params }: { params: { id: string } }) {
+export default async function InquiryDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const session = await getServerSession(authOptions);
 
     if (!session) {
-        redirect('/auth');
+        redirect('/api/auth/signin');
     }
 
-    const inquiryId = params.id; // Keep as string (S-1, S-2, etc.)
+    const { id } = await params;
+    const inquiryId = id; // Keep as string (S-1, S-2, etc.)
 
     if (!inquiryId) {
         return (

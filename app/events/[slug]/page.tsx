@@ -30,16 +30,24 @@ async function getEvent(slug: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const event = await getEvent(params.slug);
-    if (!event) return { title: 'Event Not Found' };
+    const { slug } = await params;
+    const event = await getEvent(slug);
+
+    if (!event) {
+        return {
+            title: 'Event Not Found | Anushtan Indic School',
+        };
+    }
+
     return {
         title: `${event.title} | Anushtan Indic School`,
-        description: event.description || `View photos from ${event.title}`,
+        description: event.description || `Join us for ${event.title}`,
     };
 }
 
 export default async function EventPage({ params }: Props) {
-    const event = await getEvent(params.slug);
+    const { slug } = await params;
+    const event = await getEvent(slug);
 
     if (!event) {
         notFound();
