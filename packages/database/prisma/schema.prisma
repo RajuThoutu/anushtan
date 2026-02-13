@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Inquiry {
+  id                String   @id @default(cuid())
+  inquiryId         String   @unique // The S-1, S-2 ID
+  studentName       String
+  currentClass      String
+  currentSchool     String?
+  board             String?
+  parentName        String
+  occupation        String?
+  phone             String
+  secondaryContact  String?
+  email             String?
+  educationGuide    String?
+  learningMethod    String?
+  teacherPreference String?
+  childImportance   String?
+  schoolEnvironment String?
+  howHeard          String?
+  dayScholarHostel  String?
+  inquiryDate       DateTime @default(now())
+  priority          String?
+  notes             String?
+  
+  // Counselor Fields
+  counselorName     String?
+  status            String   @default("New")
+  caseStatus        String   @default("Active")
+  followUpDate      DateTime?
+  counselorComments String?
+  lastUpdated       DateTime @updatedAt
+  
+  // Legacy fields
+  source            String?
+  createdBy         String?
+  address           String?
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          String    @default("user")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
