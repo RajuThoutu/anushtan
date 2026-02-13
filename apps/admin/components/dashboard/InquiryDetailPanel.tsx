@@ -58,10 +58,12 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
     }
 
     const handleSave = async () => {
+        console.log('Save button clicked', { id: inquiry.id, formData });
         setSaving(true);
         setSaveSuccess(false);
         try {
             await onSave(inquiry.id, formData);
+            console.log('Save successful');
             setSaveSuccess(true);
             setTimeout(() => setSaveSuccess(false), 3000);
         } catch (error) {
