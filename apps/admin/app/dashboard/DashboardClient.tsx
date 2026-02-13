@@ -59,7 +59,7 @@ export default function DashboardClient() {
             if (activeTab === 'today') {
                 const today = new Date().toDateString();
                 result = result.filter(inq => {
-                    const inquiryDate = new Date(inq.inquiryDate || inq.timestamp);
+                    const inquiryDate = new Date(inq.inquiryDate || inq.createdAt);
                     return inquiryDate.toDateString() === today;
                 });
             } else if (activeTab === 'mywork') {
@@ -98,7 +98,7 @@ export default function DashboardClient() {
         if (filters.dateFrom) {
             const fromDate = new Date(filters.dateFrom);
             result = result.filter(inq => {
-                const inquiryDate = new Date(inq.inquiryDate || inq.timestamp);
+                const inquiryDate = new Date(inq.inquiryDate || inq.createdAt);
                 return inquiryDate >= fromDate;
             });
         }
@@ -106,7 +106,7 @@ export default function DashboardClient() {
             const toDate = new Date(filters.dateTo);
             toDate.setHours(23, 59, 59, 999);
             result = result.filter(inq => {
-                const inquiryDate = new Date(inq.inquiryDate || inq.timestamp);
+                const inquiryDate = new Date(inq.inquiryDate || inq.createdAt);
                 return inquiryDate <= toDate;
             });
         }
@@ -118,7 +118,7 @@ export default function DashboardClient() {
     const todayCount = useMemo(() => {
         const today = new Date().toDateString();
         return inquiries.filter(inq => {
-            const inquiryDate = new Date(inq.inquiryDate || inq.timestamp);
+            const inquiryDate = new Date(inq.inquiryDate || inq.createdAt);
             return inquiryDate.toDateString() === today;
         }).length;
     }, [inquiries]);

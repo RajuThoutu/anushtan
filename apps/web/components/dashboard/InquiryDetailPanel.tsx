@@ -114,8 +114,8 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                     <div className="space-y-3">
                         <InfoRow icon={<User size={16} />} label="Student Name" value={inquiry.studentName} />
                         <InfoRow icon={<School size={16} />} label="Current Class" value={inquiry.currentClass} />
-                        <InfoRow icon={<BookOpen size={16} />} label="Current School" value={inquiry.currentSchool} />
-                        <InfoRow icon={<BookOpen size={16} />} label="Board" value={inquiry.board} />
+                        <InfoRow icon={<BookOpen size={16} />} label="Current School" value={inquiry.currentSchool ?? undefined} />
+                        <InfoRow icon={<BookOpen size={16} />} label="Board" value={inquiry.board ?? undefined} />
                     </div>
                 </section>
 
@@ -125,10 +125,10 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                     </h3>
                     <div className="space-y-3">
                         <InfoRow icon={<User size={16} />} label="Parent Name" value={inquiry.parentName} />
-                        <InfoRow icon={<BookOpen size={16} />} label="Occupation" value={inquiry.occupation} />
+                        <InfoRow icon={<BookOpen size={16} />} label="Occupation" value={inquiry.occupation ?? undefined} />
                         <InfoRow icon={<Phone size={16} />} label="Phone" value={inquiry.phone} />
-                        <InfoRow icon={<Phone size={16} />} label="Secondary Contact" value={inquiry.secondaryContact} />
-                        <InfoRow icon={<Mail size={16} />} label="Email" value={inquiry.email} />
+                        <InfoRow icon={<Phone size={16} />} label="Secondary Contact" value={inquiry.secondaryContact ?? undefined} />
+                        <InfoRow icon={<Mail size={16} />} label="Email" value={inquiry.email ?? undefined} />
                     </div>
                 </section>
 
@@ -137,8 +137,8 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                         Preferences
                     </h3>
                     <div className="space-y-3">
-                        <InfoRow icon={<MessageSquare size={16} />} label="Day Scholar / Hostel" value={inquiry.dayScholarHostel} />
-                        <InfoRow icon={<MessageSquare size={16} />} label="How Heard About Us" value={inquiry.howHeard} />
+                        <InfoRow icon={<MessageSquare size={16} />} label="Day Scholar / Hostel" value={inquiry.dayScholarHostel ?? undefined} />
+                        <InfoRow icon={<MessageSquare size={16} />} label="How Heard About Us" value={inquiry.howHeard ?? undefined} />
                     </div>
                 </section>
 

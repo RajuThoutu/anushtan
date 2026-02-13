@@ -146,7 +146,7 @@ function InquiryListItem({ inquiry, isSelected, onClick }: InquiryListItemProps)
                 {/* Date */}
                 <div className="text-xs text-anushtan-charcoal/40 flex items-center gap-1 shrink-0">
                     <Calendar size={12} />
-                    {formatDate(inquiry.inquiryDate || inquiry.timestamp)}
+                    {formatDate(inquiry.inquiryDate || inquiry.createdAt)}
                 </div>
             </div>
         </button>
