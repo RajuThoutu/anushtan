@@ -138,10 +138,12 @@ export async function updateCounselorActions(
         updatedBy: string; // Required: counselor name from session
     }
 ) {
+    console.log(`[GoogleSheets] Starting update for inquiry: ${inquiryId}`);
     try {
         const sheets = getGoogleSheetsClient();
 
         // Find the row with this inquiry ID
+        console.log(`[GoogleSheets] Searching for ID in ${WORKING_SHEET_NAME}!A2:A`);
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: SHEET_ID,
             range: `${WORKING_SHEET_NAME}!A2:A`,
@@ -151,10 +153,12 @@ export async function updateCounselorActions(
         const rowIndex = ids.findIndex(row => row[0] === inquiryId);
 
         if (rowIndex === -1) {
-            throw new Error('Inquiry not found');
+            console.error(`[GoogleSheets] Inquiry ID '${inquiryId}' not found in column A`);
+            throw new Error(`Inquiry '${inquiryId}' not found`);
         }
 
         const actualRow = rowIndex + 2; // +2 because: +1 for 0-index, +1 for header
+        console.log(`[GoogleSheets] Found ID at row: ${actualRow}`);
 
         // Get current values to preserve unchanged fields (columns V-Z: 5 columns)
         const currentResponse = await sheets.spreadsheets.values.get({
@@ -172,12 +176,6 @@ export async function updateCounselorActions(
         }
 
         // Prepare update data (columns V-AA: 6 columns)
-        // V: Counselor Name (who updated)
-        // W: Status (from UI)
-        // X: Inq Status (case status - auto-calculated)
-        // Y: Follow-up Date
-        // Z: Counselor Comments
-        // AA: Last Updated (new)
         const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' });
 
         const values = [
@@ -191,16 +189,20 @@ export async function updateCounselorActions(
             ],
         ];
 
-        await sheets.spreadsheets.values.update({
+        console.log(`[GoogleSheets] Updating range: ${WORKING_SHEET_NAME}!V${actualRow}:AA${actualRow} with values:`, JSON.stringify(values[0]));
+
+        const updateResponse = await sheets.spreadsheets.values.update({
             spreadsheetId: SHEET_ID,
             range: `${WORKING_SHEET_NAME}!V${actualRow}:AA${actualRow}`,
             valueInputOption: 'USER_ENTERED',
             requestBody: { values },
         });
 
+        console.log(`[GoogleSheets] Update success. Status: ${updateResponse.status}, Updates: ${updateResponse.data.updatedCells} cells`);
+
         return { success: true };
     } catch (error) {
-        console.error(`Error updating counselor actions for ${inquiryId}:`, error);
+        console.error(`[GoogleSheets] Error updating counselor actions for ${inquiryId}:`, error);
         throw error; // Re-throw to propagate
     }
 }
