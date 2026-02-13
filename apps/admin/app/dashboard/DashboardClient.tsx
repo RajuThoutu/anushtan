@@ -6,7 +6,7 @@ import { InquiryTabs, type Tab } from '@/components/dashboard/InquiryTabs';
 import { InquiryFilters, type FilterState } from '@/components/dashboard/InquiryFilters';
 import { InquiryList } from '@/components/dashboard/InquiryList';
 import { InquiryDetailPanel, type CounselorUpdates } from '@/components/dashboard/InquiryDetailPanel';
-import type { Inquiry } from '@repo/database';
+import type { SheetInquiry as Inquiry } from '@repo/database';
 import { useSession } from 'next-auth/react';
 
 export default function DashboardClient() {
@@ -59,7 +59,7 @@ export default function DashboardClient() {
             if (activeTab === 'today') {
                 const today = new Date().toDateString();
                 result = result.filter(inq => {
-                    const inquiryDate = new Date(inq.inquiryDate || inq.createdAt);
+                    const inquiryDate = new Date(inq.inquiryDate || inq.timestamp);
                     return inquiryDate.toDateString() === today;
                 });
             } else if (activeTab === 'mywork') {
@@ -98,7 +98,7 @@ export default function DashboardClient() {
         if (filters.dateFrom) {
             const fromDate = new Date(filters.dateFrom);
             result = result.filter(inq => {
-                const inquiryDate = new Date(inq.inquiryDate || inq.createdAt);
+                const inquiryDate = new Date(inq.inquiryDate || inq.timestamp);
                 return inquiryDate >= fromDate;
             });
         }
@@ -106,7 +106,7 @@ export default function DashboardClient() {
             const toDate = new Date(filters.dateTo);
             toDate.setHours(23, 59, 59, 999);
             result = result.filter(inq => {
-                const inquiryDate = new Date(inq.inquiryDate || inq.createdAt);
+                const inquiryDate = new Date(inq.inquiryDate || inq.timestamp);
                 return inquiryDate <= toDate;
             });
         }
@@ -118,7 +118,7 @@ export default function DashboardClient() {
     const todayCount = useMemo(() => {
         const today = new Date().toDateString();
         return inquiries.filter(inq => {
-            const inquiryDate = new Date(inq.inquiryDate || inq.createdAt);
+            const inquiryDate = new Date(inq.inquiryDate || inq.timestamp);
             return inquiryDate.toDateString() === today;
         }).length;
     }, [inquiries]);
@@ -152,7 +152,7 @@ export default function DashboardClient() {
         if (selectedInquiry?.id === id) {
             const updated = inquiries.find(inq => inq.id === id);
             if (updated) {
-                setSelectedInquiry({ ...updated, ...updates });
+                setSelectedInquiry(updated);
             }
         }
     };

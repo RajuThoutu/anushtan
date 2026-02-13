@@ -1,7 +1,7 @@
 'use client';
 
 import { User, Phone, Calendar, Tag } from 'lucide-react';
-import type { Inquiry } from '@repo/database';
+import type { SheetInquiry as Inquiry } from '@repo/database';
 
 interface InquiryListProps {
     inquiries: Inquiry[];

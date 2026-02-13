@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { InquiryCard } from '@/components/inquiry/InquiryCard';
-import type { Inquiry } from '@repo/database';
+import type { SheetInquiry as Inquiry } from '@repo/database';
 
 export function NewInquiriesSection() {
     const [inquiries, setInquiries] = useState<Inquiry[]>([]);

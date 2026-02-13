@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { X, Save, User, Phone, Mail, School, BookOpen, MessageSquare, ArrowLeft } from 'lucide-react';
-import type { Inquiry } from '@repo/database';
+import type { SheetInquiry as Inquiry } from '@repo/database';
 
 interface InquiryDetailPanelProps {
     inquiry: Inquiry | null;

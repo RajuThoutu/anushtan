@@ -70,7 +70,7 @@ export async function getAllInquiries() {
 }
 
 // Fetch single inquiry by ID (S-1, S-2, etc.)
-export async function getInquiryById(inquiryId: string): Promise<Inquiry> {
+export async function getInquiryById(inquiryId: string): Promise<SheetInquiry> {
     try {
         const sheets = getGoogleSheetsClient();
 
@@ -329,8 +329,8 @@ export async function createInquiry(data: {
     }
 }
 
-// TypeScript types
-export interface Inquiry {
+// TypeScript types (renamed to avoid conflict with Prisma's Inquiry type)
+export interface SheetInquiry {
     id: string;              // Column A: Inquiry ID (S-1, S-2, etc.)
     timestamp: string;       // Column B: Timestamp
     studentName: string;     // Column C: Student Name

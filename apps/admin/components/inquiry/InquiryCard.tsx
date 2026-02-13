@@ -1,4 +1,4 @@
-import type { Inquiry } from '@repo/database';
+import type { SheetInquiry as Inquiry } from '@repo/database';
 import Link from 'next/link';
 
 interface InquiryCardProps {
@@ -59,7 +59,7 @@ export function InquiryCard({ inquiry, showAssignButton = false, onAssign }: Inq
                 </div>
 
                 <div className="mt-3 flex items-center justify-between text-xs text-anushtan-charcoal/50">
-                    <span>{timeAgo(inquiry.createdAt)}</span>
+                    <span>{timeAgo(inquiry.timestamp)}</span>
                     {inquiry.source && (
                         <span className="px-2 py-1 bg-anushtan-parchment rounded">
                             {inquiry.source}

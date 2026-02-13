@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import type { Inquiry } from '@repo/database';
+import type { SheetInquiry as Inquiry } from '@repo/database';
 
 interface InquiryDetailViewProps {
     inquiry: Inquiry;
@@ -137,7 +137,7 @@ export function InquiryDetailView({ inquiry, userName }: InquiryDetailViewProps)
                         </div>
                         <div>
                             <p className="text-sm text-anushtan-charcoal/60">Submitted</p>
-                            <p className="font-medium">{new Date(inquiry.createdAt).toLocaleString()}</p>
+                            <p className="font-medium">{new Date(inquiry.timestamp).toLocaleString()}</p>
                         </div>
                         <div>
                             <p className="text-sm text-anushtan-charcoal/60">Source</p>

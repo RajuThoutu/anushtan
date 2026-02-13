@@ -1,4 +1,4 @@
-import type { Inquiry } from '@repo/database';
+import type { SheetInquiry as Inquiry } from '@repo/database';
 import Link from 'next/link';
 
 interface InquiryCardProps {

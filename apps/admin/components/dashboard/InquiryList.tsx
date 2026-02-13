@@ -1,7 +1,7 @@
 'use client';
 
 import { User, Phone, Calendar, Tag } from 'lucide-react';
-import type { Inquiry } from '@repo/database';
+import type { SheetInquiry as Inquiry } from '@repo/database';
 
 interface InquiryListProps {
     inquiries: Inquiry[];
@@ -146,7 +146,7 @@ function InquiryListItem({ inquiry, isSelected, onClick }: InquiryListItemProps)
                 {/* Date */}
                 <div className="text-xs text-anushtan-charcoal/40 flex items-center gap-1 shrink-0">
                     <Calendar size={12} />
-                    {formatDate(inquiry.inquiryDate || inquiry.createdAt)}
+                    {formatDate(inquiry.inquiryDate || inquiry.timestamp)}
                 </div>
             </div>
         </button>
