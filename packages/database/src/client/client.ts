@@ -175,6 +175,21 @@ export async function updateCounselorActions(
             inqStatus = 'Resolved-Completed';
         }
 
+        // Prepare new comments
+        let finalComments = currentValues[4]; // Default to existing
+        if (data.counselorComments && data.counselorComments.trim()) {
+            const timestampShort = new Date().toLocaleString('en-US', {
+                month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true
+            });
+            const newEntry = `[${timestampShort}] ${data.updatedBy}:\n${data.counselorComments.trim()}`;
+
+            if (finalComments) {
+                finalComments = `${finalComments}\n\n${newEntry}`;
+            } else {
+                finalComments = newEntry;
+            }
+        }
+
         // Prepare update data (columns V-AA: 6 columns)
         const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' });
 
@@ -184,7 +199,7 @@ export async function updateCounselorActions(
                 data.status !== undefined ? data.status : currentValues[1],         // Column W: Status
                 inqStatus,                                                           // Column X: Inq Status (auto-calculated)
                 data.followUpDate !== undefined ? data.followUpDate : currentValues[3], // Column Y: Follow-up Date
-                data.counselorComments !== undefined ? data.counselorComments : currentValues[4], // Column Z: Counselor Comments
+                finalComments,                                                       // Column Z: Counselor Comments (History)
                 timestamp,                                                           // Column AA: Last Updated
             ],
         ];

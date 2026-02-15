@@ -29,7 +29,7 @@ const priorityOptions = ['High', 'Medium', 'Low'];
 export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPanelProps) {
     const [formData, setFormData] = useState<CounselorUpdates>({
         status: inquiry?.status || 'New',
-        counselorComments: inquiry?.counselorComments || '',
+        counselorComments: '', // Start empty for new notes
         followUpDate: '',
     });
     const [saving, setSaving] = useState(false);
@@ -40,7 +40,7 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
         if (inquiry) {
             setFormData({
                 status: inquiry.status || 'New',
-                counselorComments: inquiry.counselorComments || '',
+                counselorComments: '', // Always empty when switching inquiry
                 followUpDate: '',
             });
         }
@@ -58,13 +58,12 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
     }
 
     const handleSave = async () => {
-        console.log('Save button clicked', { id: inquiry.id, formData });
         setSaving(true);
         setSaveSuccess(false);
         try {
             await onSave(inquiry.id, formData);
-            console.log('Save successful');
             setSaveSuccess(true);
+            setFormData(prev => ({ ...prev, counselorComments: '' })); // Clear comment box
             setTimeout(() => setSaveSuccess(false), 3000);
         } catch (error) {
             console.error('Failed to save:', error);
@@ -197,16 +196,28 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                             />
                         </div>
 
-                        {/* Notes */}
+                        {/* Comment History (Read-Only) */}
+                        {inquiry.counselorComments && (
+                            <div>
+                                <label className="block text-sm font-medium text-anushtan-charcoal mb-1">
+                                    Comment History
+                                </label>
+                                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 text-sm text-gray-700 whitespace-pre-wrap max-h-48 overflow-y-auto">
+                                    {inquiry.counselorComments}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* New Comment Input */}
                         <div>
                             <label className="block text-sm font-medium text-anushtan-charcoal mb-1">
-                                Notes / Comments
+                                Add New Note
                             </label>
                             <textarea
                                 value={formData.counselorComments}
                                 onChange={(e) => setFormData({ ...formData, counselorComments: e.target.value })}
-                                rows={4}
-                                placeholder="Add notes about your conversation with the parent..."
+                                rows={3}
+                                placeholder="Type a new note here..."
                                 className="w-full px-3 py-2 border border-anushtan-border rounded-lg focus:outline-none focus:border-anushtan-terracotta resize-none"
                             />
                         </div>

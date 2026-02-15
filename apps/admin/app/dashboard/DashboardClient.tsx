@@ -131,7 +131,6 @@ export default function DashboardClient() {
 
     // Handle save
     const handleSave = async (id: string, updates: CounselorUpdates) => {
-        console.log('DashboardClient: handleSave called', { id, updates });
         try {
             const response = await fetch('/api/counselor/update', {
                 method: 'POST',
@@ -142,9 +141,7 @@ export default function DashboardClient() {
                 }),
             });
 
-            console.log('DashboardClient: Fetch response status:', response.status);
             const data = await response.json();
-            console.log('DashboardClient: Fetch response data:', data);
 
             if (!data.success) {
                 throw new Error(data.error || 'Failed to save');
