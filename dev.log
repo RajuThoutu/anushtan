@@ -26958,3 +26958,173 @@ admin:dev:     ./apps/admin/app/api/counselor/inquiries/route.ts [App Route]
 admin:dev: 
 admin:dev: 
 admin:dev:  GET /api/counselor/inquiries 200 in 540ms (compile: 25ms, render: 515ms)
+admin:dev: ⚠ [externals]/@prisma/client
+admin:dev: unexpected export *
+admin:dev: export * used with module [externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client) which is a CommonJS module with exports only available at runtime
+admin:dev: List all export names manually (`export { a, b, c } from "...") or rewrite the module to ESM, to avoid the additional runtime code.`
+admin:dev: 
+admin:dev: Import trace:
+admin:dev:   external:
+admin:dev:     [externals]/@prisma/client [external]
+admin:dev:     ./packages/database/src/index.ts [App Route]
+admin:dev:     ./apps/admin/app/api/counselor/inquiries/route.ts [App Route]
+admin:dev: 
+admin:dev: 
+admin:dev:  GET /api/counselor/inquiries 200 in 462ms (compile: 15ms, render: 447ms)
+admin:dev: ⚠ [externals]/@prisma/client
+admin:dev: unexpected export *
+admin:dev: export * used with module [externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client) which is a CommonJS module with exports only available at runtime
+admin:dev: List all export names manually (`export { a, b, c } from "...") or rewrite the module to ESM, to avoid the additional runtime code.`
+admin:dev: 
+admin:dev: Import trace:
+admin:dev:   external:
+admin:dev:     [externals]/@prisma/client [external]
+admin:dev:     ./packages/database/src/index.ts [App Route]
+admin:dev:     ./apps/admin/app/api/counselor/inquiries/route.ts [App Route]
+admin:dev: 
+admin:dev: 
+admin:dev:  GET /api/counselor/inquiries 200 in 619ms (compile: 16ms, render: 604ms)
+admin:dev: ⚠ [externals]/@prisma/client
+admin:dev: unexpected export *
+admin:dev: export * used with module [externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client) which is a CommonJS module with exports only available at runtime
+admin:dev: List all export names manually (`export { a, b, c } from "...") or rewrite the module to ESM, to avoid the additional runtime code.`
+admin:dev: 
+admin:dev: Import trace:
+admin:dev:   external:
+admin:dev:     [externals]/@prisma/client [external]
+admin:dev:     ./packages/database/src/index.ts [App Route]
+admin:dev:     ./apps/admin/app/api/counselor/inquiries/route.ts [App Route]
+admin:dev: 
+admin:dev: 
+admin:dev:  GET /api/counselor/inquiries 200 in 508ms (compile: 28ms, render: 480ms)
+admin:dev: ⚠ [externals]/@prisma/client
+admin:dev: unexpected export *
+admin:dev: export * used with module [externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client) which is a CommonJS module with exports only available at runtime
+admin:dev: List all export names manually (`export { a, b, c } from "...") or rewrite the module to ESM, to avoid the additional runtime code.`
+admin:dev: 
+admin:dev: Import trace:
+admin:dev:   external:
+admin:dev:     [externals]/@prisma/client [external]
+admin:dev:     ./packages/database/src/index.ts [App Route]
+admin:dev:     ./apps/admin/app/api/counselor/inquiries/route.ts [App Route]
+admin:dev: 
+admin:dev: 
+admin:dev:  GET /api/counselor/inquiries 200 in 348ms (compile: 23ms, render: 324ms)
+admin:dev: ⚠ [externals]/@prisma/client
+admin:dev: unexpected export *
+admin:dev: export * used with module [externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client) which is a CommonJS module with exports only available at runtime
+admin:dev: List all export names manually (`export { a, b, c } from "...") or rewrite the module to ESM, to avoid the additional runtime code.`
+admin:dev: 
+admin:dev: Import trace:
+admin:dev:   external:
+admin:dev:     [externals]/@prisma/client [external]
+admin:dev:     ./packages/database/src/index.ts [App Route]
+admin:dev:     ./apps/admin/app/api/counselor/inquiries/route.ts [App Route]
+admin:dev: 
+admin:dev: 
+admin:dev:  GET /api/counselor/inquiries 200 in 417ms (compile: 11ms, render: 406ms)
+admin:dev: ⚠ [externals]/@prisma/client
+admin:dev: unexpected export *
+admin:dev: export * used with module [externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client) which is a CommonJS module with exports only available at runtime
+admin:dev: List all export names manually (`export { a, b, c } from "...") or rewrite the module to ESM, to avoid the additional runtime code.`
+admin:dev: 
+admin:dev: Import trace:
+admin:dev:   external:
+admin:dev:     [externals]/@prisma/client [external]
+admin:dev:     ./packages/database/src/index.ts [App Route]
+admin:dev:     ./apps/admin/app/api/counselor/inquiries/route.ts [App Route]
+admin:dev: 
+admin:dev: 
+admin:dev: ⚠ [externals]/@prisma/client
+admin:dev: unexpected export *
+admin:dev: export * used with module [externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client) which is a CommonJS module with exports only available at runtime
+admin:dev: List all export names manually (`export { a, b, c } from "...") or rewrite the module to ESM, to avoid the additional runtime code.`
+admin:dev: 
+admin:dev: Import trace:
+admin:dev:   external:
+admin:dev:     [externals]/@prisma/client [external]
+admin:dev:     ./packages/database/src/index.ts [App Route]
+admin:dev:     ./apps/admin/app/api/students/add/route.ts [App Route]
+admin:dev: 
+admin:dev: 
+admin:dev: ⚠ [externals]/@prisma/client
+admin:dev: unexpected export *
+admin:dev: export * used with module [externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client) which is a CommonJS module with exports only available at runtime
+admin:dev: List all export names manually (`export { a, b, c } from "...") or rewrite the module to ESM, to avoid the additional runtime code.`
+admin:dev: 
+admin:dev: Import trace:
+admin:dev:   external:
+admin:dev:     [externals]/@prisma/client [external]
+admin:dev:     ./packages/database/src/index.ts [App Route]
+admin:dev:     ./apps/admin/app/api/counselor/update/route.ts [App Route]
+admin:dev: 
+admin:dev: 
+admin:dev: ⚠ [externals]/@prisma/client
+admin:dev: unexpected export *
+admin:dev: export * used with module [externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client) which is a CommonJS module with exports only available at runtime
+admin:dev: List all export names manually (`export { a, b, c } from "...") or rewrite the module to ESM, to avoid the additional runtime code.`
+admin:dev: 
+admin:dev: Import trace:
+admin:dev:   external:
+admin:dev:     [externals]/@prisma/client [external]
+admin:dev:     ./packages/database/src/index.ts [App Route]
+admin:dev:     ./apps/admin/app/api/counselor/inquiries/route.ts [App Route]
+admin:dev: 
+admin:dev: 
+admin:dev:  GET /api/counselor/inquiries 200 in 772ms (compile: 49ms, render: 722ms)
+admin:dev: ⚠ [externals]/@prisma/client
+admin:dev: unexpected export *
+admin:dev: export * used with module [externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client) which is a CommonJS module with exports only available at runtime
+admin:dev: List all export names manually (`export { a, b, c } from "...") or rewrite the module to ESM, to avoid the additional runtime code.`
+admin:dev: 
+admin:dev: Import trace:
+admin:dev:   external:
+admin:dev:     [externals]/@prisma/client [external]
+admin:dev:     ./packages/database/src/index.ts [App Route]
+admin:dev:     ./apps/admin/app/api/counselor/inquiries/route.ts [App Route]
+admin:dev: 
+admin:dev: 
+admin:dev:  GET /api/counselor/inquiries 200 in 508ms (compile: 9ms, render: 499ms)
+admin:dev: ⚠ [externals]/@prisma/client
+admin:dev: unexpected export *
+admin:dev: export * used with module [externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client) which is a CommonJS module with exports only available at runtime
+admin:dev: List all export names manually (`export { a, b, c } from "...") or rewrite the module to ESM, to avoid the additional runtime code.`
+admin:dev: 
+admin:dev: Import trace:
+admin:dev:   external:
+admin:dev:     [externals]/@prisma/client [external]
+admin:dev:     ./packages/database/src/index.ts [App Route]
+admin:dev:     ./apps/admin/app/api/counselor/inquiries/route.ts [App Route]
+admin:dev: 
+admin:dev: 
+admin:dev:  GET /api/counselor/inquiries 200 in 368ms (compile: 33ms, render: 335ms)
+admin:dev: ⚠ [externals]/@prisma/client
+admin:dev: unexpected export *
+admin:dev: export * used with module [externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client) which is a CommonJS module with exports only available at runtime
+admin:dev: List all export names manually (`export { a, b, c } from "...") or rewrite the module to ESM, to avoid the additional runtime code.`
+admin:dev: 
+admin:dev: Import trace:
+admin:dev:   external:
+admin:dev:     [externals]/@prisma/client [external]
+admin:dev:     ./packages/database/src/index.ts [App Route]
+admin:dev:     ./apps/admin/app/api/counselor/inquiries/route.ts [App Route]
+admin:dev: 
+admin:dev: 
+admin:dev:  GET /api/counselor/inquiries 200 in 447ms (compile: 9ms, render: 439ms)
+admin:dev: ⚠ [externals]/@prisma/client
+admin:dev: unexpected export *
+admin:dev: export * used with module [externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client) which is a CommonJS module with exports only available at runtime
+admin:dev: List all export names manually (`export { a, b, c } from "...") or rewrite the module to ESM, to avoid the additional runtime code.`
+admin:dev: 
+admin:dev: Import trace:
+admin:dev:   external:
+admin:dev:     [externals]/@prisma/client [external]
+admin:dev:     ./packages/database/src/index.ts [App Route]
+admin:dev:     ./apps/admin/app/api/counselor/inquiries/route.ts [App Route]
+admin:dev: 
+admin:dev: 
+admin:dev:  GET /api/counselor/inquiries 200 in 365ms (compile: 23ms, render: 342ms)
+ ELIFECYCLE  Command failed.
+admin:dev: [?25h
+web:dev: [?25h
+ ERROR  run failed: command  exited (1)

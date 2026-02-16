@@ -1,4 +1,5 @@
 import { google } from 'googleapis';
+import { prisma } from '../index'; // Import Prisma client to check for existing IDs
 
 // Google Sheets configuration
 const SHEET_ID = process.env.GOOGLE_SHEET_ID || '1iCw9yiZ4R_yrR82V2TvmOH9mfiXDIrFdHrXdRnxxNIg';
@@ -215,6 +216,32 @@ export async function updateCounselorActions(
 
         console.log(`[GoogleSheets] Update success. Status: ${updateResponse.status}, Updates: ${updateResponse.data.updatedCells} cells`);
 
+        // Trigger n8n webhook to sync with Postgres
+        const n8nUrl = process.env.N8N_WEBHOOK_URL || 'https://api.anushtansiddipet.in/webhook/school-inquiry';
+        // Use global fetch (available in Next.js environment)
+        console.log(`[Database] Triggering n8n sync at: ${n8nUrl}`);
+
+        // Don't await strictly if we don't want to block the UI response, but good for data integrity. 
+        // Given it's an admin action, awaiting is safer.
+        try {
+            const n8nPayload = {
+                inquiry_id: inquiryId,
+                status: data.status !== undefined ? data.status : currentValues[1],
+                message: finalComments, // sending full history
+                update_only: true
+            };
+
+            const n8nRes = await fetch(n8nUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(n8nPayload)
+            });
+            console.log(`[Database] n8n Sync Response: ${n8nRes.status}`);
+        } catch (syncError) {
+            console.error('[Database] Failed to sync with n8n:', syncError);
+            // We don't throw here to avoid failing the main Google Sheets update
+        }
+
         return { success: true };
     } catch (error) {
         console.error(`[GoogleSheets] Error updating counselor actions for ${inquiryId}:`, error);
@@ -286,7 +313,35 @@ export async function createInquiry(data: {
         const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' });
 
         // Generate ID manually
-        const inquiryId = await getNextInquiryId(sheets);
+        let inquiryId = await getNextInquiryId(sheets);
+
+        // Verify ID uniqueness against Postgres (Prevent overwriting existing records)
+        // This handles cases where Google Sheets rows were deleted but Postgres records remain.
+        try {
+            let exists = await prisma.inquiry.findUnique({
+                where: { inquiryId: inquiryId }
+            });
+
+            while (exists) {
+                console.warn(`[createInquiry] ID ${inquiryId} exists in DB but not in Sheet. Incrementing...`);
+                // Parse number and increment
+                const num = parseInt(inquiryId.replace('S-', ''), 10);
+                if (!isNaN(num)) {
+                    inquiryId = `S-${num + 1}`;
+                    exists = await prisma.inquiry.findUnique({
+                        where: { inquiryId: inquiryId }
+                    });
+                } else {
+                    // Fallback if ID parsing fails
+                    inquiryId = `S-${Date.now()}`;
+                    break;
+                }
+            }
+        } catch (dbError) {
+            console.error('[createInquiry] Failed to verify ID uniqueness in DB:', dbError);
+            // Verify if we should proceed or fail. Proceeding might risk duplicate error in n8n if n8n is set to INSERT.
+            // But if DB is down, n8n might also fail. We'll proceed and let n8n handle it (since we revert to Insert).
+        }
 
         // Base data (Columns A-U)
         const baseRowData = [

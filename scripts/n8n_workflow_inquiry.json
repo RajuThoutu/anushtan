@@ -19,6 +19,67 @@
         },
         {
             "parameters": {
+                "conditions": {
+                    "boolean": [
+                        {
+                            "value1": "={{ $json.update_only }}",
+                            "value2": true
+                        }
+                    ]
+                }
+            },
+            "id": "check-update-mode",
+            "name": "Check Update Mode",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                680,
+                340
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "schema": {
+                    "__rl": true,
+                    "value": "public",
+                    "mode": "list",
+                    "cachedResultName": "public"
+                },
+                "table": {
+                    "__rl": true,
+                    "value": "inquiries",
+                    "mode": "list",
+                    "cachedResultName": "inquiries"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "status": "={{ $json.status }}",
+                        "notes": "={{ $json.message }}"
+                    },
+                    "matchingColumns": [
+                        "inquiry_id"
+                    ]
+                }
+            },
+            "id": "update-postgres",
+            "name": "Update DB Record",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2.4,
+            "position": [
+                900,
+                140
+            ],
+            "credentials": {
+                "postgres": {
+                    "id": "Postgres Credentials",
+                    "name": "Postgres account"
+                }
+            }
+        },
+        {
+            "parameters": {
                 "jsCode": "// Format Phone Number to E.164\nconst phone = $input.item.json.body.phone || '';\nlet formatted = phone.replace(/\\D/g, ''); // Remove non-digits\n\n// Assuming India (+91) default if not present\nif (formatted.length === 10) {\n  formatted = '91' + formatted;\n}\n\n// Add + prefix\nformatted = '+' + formatted;\n\nreturn {\n  json: {\n    ...$input.item.json.body,\n    phone_formatted: formatted,\n    received_at: new Date().toISOString()\n  }\n};"
             },
             "id": "format-phone",
@@ -26,8 +87,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                680,
-                340
+                900,
+                540
             ]
         },
         {
@@ -53,7 +114,10 @@
                         "parent_name": "={{ $json.parent_name }}",
                         "email": "={{ $json.email }}",
                         "phone": "={{ $json.phone_formatted }}",
-                        "source": "={{ $json.source || 'Website' }}"
+                        "source": "={{ $json.source || 'Website' }}",
+                        "inquiry_id": "={{ $json.inquiry_id }}",
+                        "current_class": "={{ $json.current_class }}",
+                        "notes": "={{ $json.message }}"
                     },
                     "matchingColumns": [],
                     "schema": [
@@ -121,12 +185,12 @@
                 }
             },
             "id": "insert-postgres",
-            "name": "Insert to DB",
+            "name": "Insert/Upsert to DB",
             "type": "n8n-nodes-base.postgres",
             "typeVersion": 2.4,
             "position": [
-                900,
-                340
+                1120,
+                540
             ],
             "credentials": {
                 "postgres": {
@@ -141,6 +205,24 @@
             "main": [
                 [
                     {
+                        "node": "Check Update Mode",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Check Update Mode": {
+            "main": [
+                [
+                    {
+                        "node": "Update DB Record",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
                         "node": "Format Phone",
                         "type": "main",
                         "index": 0
@@ -152,7 +234,7 @@
             "main": [
                 [
                     {
-                        "node": "Insert to DB",
+                        "node": "Insert/Upsert to DB",
                         "type": "main",
                         "index": 0
                     }
