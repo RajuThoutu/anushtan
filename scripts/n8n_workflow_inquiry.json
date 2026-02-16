@@ -1,0 +1,163 @@
+{
+    "name": "Anushtan Inquiry Pipeline",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "school-inquiry",
+                "options": {}
+            },
+            "id": "webhook-trigger",
+            "name": "Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                460,
+                340
+            ],
+            "webhookId": "school-inquiry"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Format Phone Number to E.164\nconst phone = $input.item.json.body.phone || '';\nlet formatted = phone.replace(/\\D/g, ''); // Remove non-digits\n\n// Assuming India (+91) default if not present\nif (formatted.length === 10) {\n  formatted = '91' + formatted;\n}\n\n// Add + prefix\nformatted = '+' + formatted;\n\nreturn {\n  json: {\n    ...$input.item.json.body,\n    phone_formatted: formatted,\n    received_at: new Date().toISOString()\n  }\n};"
+            },
+            "id": "format-phone",
+            "name": "Format Phone",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                680,
+                340
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "insert",
+                "schema": {
+                    "__rl": true,
+                    "value": "public",
+                    "mode": "list",
+                    "cachedResultName": "public"
+                },
+                "table": {
+                    "__rl": true,
+                    "value": "inquiries",
+                    "mode": "list",
+                    "cachedResultName": "inquiries"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "student_name": "={{ $json.student_name }}",
+                        "child_age": "={{ $json.child_age }}",
+                        "parent_name": "={{ $json.parent_name }}",
+                        "email": "={{ $json.email }}",
+                        "phone": "={{ $json.phone_formatted }}",
+                        "source": "={{ $json.source || 'Website' }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "student_name",
+                            "displayName": "student_name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "child_age",
+                            "displayName": "child_age",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "integer",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "parent_name",
+                            "displayName": "parent_name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "email",
+                            "displayName": "email",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "phone",
+                            "displayName": "phone",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "source",
+                            "displayName": "source",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        }
+                    ]
+                }
+            },
+            "id": "insert-postgres",
+            "name": "Insert to DB",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2.4,
+            "position": [
+                900,
+                340
+            ],
+            "credentials": {
+                "postgres": {
+                    "id": "Postgres Credentials",
+                    "name": "Postgres account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Format Phone",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Format Phone": {
+            "main": [
+                [
+                    {
+                        "node": "Insert to DB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}
