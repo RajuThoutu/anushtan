@@ -55,8 +55,7 @@ export async function submitInquiry(data: InquiryData): Promise<{ success: boole
                     child_age: 0, // Default or derived?
                     message: data.message,
                     source: "Website",
-                    inquiry_id: "", // We don't have the Google Sheet S-ID here easily unless we wait for createInquiry? 
-                    // createInquiry returns { success: true, id: inquiryId }
+                    inquiry_id: inquiryId,
                 })
             }).catch(err => console.error("Background n8n Error:", err));
         }
