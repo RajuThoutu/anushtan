@@ -40,24 +40,32 @@ export async function submitInquiry(data: InquiryData): Promise<{ success: boole
             }).catch(err => console.error("Background Twilio Error:", err));
         }
 
-        // Trigger n8n Automation (Fire and forget)
+        // Trigger n8n Automation (DEBUG: Awaiting to ensure execution)
         const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL || 'https://api.anushtansiddipet.in/webhook/school-inquiry';
+        console.log(`[Inquiry] Attempting to trigger n8n Webhook at: ${n8nWebhookUrl}`);
+
         if (n8nWebhookUrl) {
-            fetch(n8nWebhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    student_name: data.studentName,
-                    parent_name: "Not Provided", // Or map correctly if form adds it
-                    email: data.email || "",
-                    phone: data.phone,
-                    current_class: data.course,
-                    child_age: 0, // Default or derived?
-                    message: data.message,
-                    source: "Website",
-                    inquiry_id: inquiryId,
-                })
-            }).catch(err => console.error("Background n8n Error:", err));
+            try {
+                const n8nResponse = await fetch(n8nWebhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        student_name: data.studentName,
+                        parent_name: "Not Provided",
+                        email: data.email || "",
+                        phone: data.phone,
+                        current_class: data.course,
+                        child_age: 0,
+                        message: data.message,
+                        source: "Website",
+                        inquiry_id: inquiryId,
+                    })
+                });
+                const n8nText = await n8nResponse.text();
+                console.log(`[Inquiry] n8n Response: ${n8nResponse.status} - ${n8nText}`);
+            } catch (err) {
+                console.error("[Inquiry] n8n Webhook Error:", err);
+            }
         }
 
         return { success: true };
