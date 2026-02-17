@@ -22,7 +22,7 @@
                 "conditions": {
                     "boolean": [
                         {
-                            "value1": "={{ $json.update_only }}",
+                            "value1": "={{ $json.body.update_only }}",
                             "value2": true
                         }
                     ]
@@ -55,11 +55,24 @@
                 "columns": {
                     "mappingMode": "defineBelow",
                     "value": {
-                        "status": "={{ $json.status }}",
-                        "notes": "={{ $json.message }}"
+                        "status": "={{ $json.body.status }}",
+                        "notes": "={{ $json.body.message }}",
+                        "inquiry_id": "={{ $json.body.inquiry_id }}"
                     },
                     "matchingColumns": [
                         "inquiry_id"
+                    ],
+                    "schema": [
+                        {
+                            "id": "inquiry_id",
+                            "displayName": "inquiry_id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        }
                     ]
                 }
             },
@@ -198,6 +211,28 @@
                     "name": "Postgres account"
                 }
             }
+        },
+        {
+            "parameters": {
+                "operation": "send",
+                "message": "={{ $json.body.student_name }}, Thank you for your inquiry at Anushtan. We will contact you shortly.",
+                "phoneNumber": "={{ $json.body.phone_formatted }}"
+            },
+            "id": "send-whatsapp",
+            "name": "Send WhatsApp Greeting",
+            "type": "n8n-nodes-base.whatsapp",
+            "typeVersion": 1,
+            "position": [
+                1340,
+                540
+            ],
+            "credentials": {
+                "whatsappApi": {
+                    "id": "WhatsApp Production Credentials",
+                    "name": "WhatsApp account"
+                }
+            },
+            "continueOnFail": true
         }
     ],
     "connections": {
@@ -235,6 +270,17 @@
                 [
                     {
                         "node": "Insert/Upsert to DB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Insert/Upsert to DB": {
+            "main": [
+                [
+                    {
+                        "node": "Send WhatsApp Greeting",
                         "type": "main",
                         "index": 0
                     }
