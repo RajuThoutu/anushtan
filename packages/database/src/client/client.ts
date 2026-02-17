@@ -252,9 +252,10 @@ export async function updateCounselorActions(
 // Helper to generate the next Inquiry ID (S-1, S-2, etc.)
 async function getNextInquiryId(sheets: any): Promise<string> {
     try {
+        // SCANNED WORKING SHEET: This is safer as it acts as the long-term storage
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: SHEET_ID,
-            range: `${SOR_SHEET_NAME}!A:A`, // Check SOR sheet ID column
+            range: `${WORKING_SHEET_NAME}!A:A`,
         });
 
         const rows = response.data.values || [];
@@ -378,7 +379,7 @@ export async function createInquiry(data: {
             requestBody: { values: [baseRowData] },
         });
 
-        // 2. Append to "Inquiries (Working)" - Full data with Counselor fields (A-Z)
+        // 2. Append to "Inquiries (Working)" - Full data with Counselor fields (A-AA)
         const workingRowData = [
             ...baseRowData,
             // Counselor Columns V-Z
@@ -387,11 +388,12 @@ export async function createInquiry(data: {
             'Active',                       // Column X: Case Status (default)
             data.followUpDate || '',        // Column Y: Follow-up Date
             data.counselorComments || '',   // Column Z: Counselor Comments
+            timestamp,                      // Column AA: Last Updated (Set to Created Time initially)
         ];
 
         await sheets.spreadsheets.values.append({
             spreadsheetId: SHEET_ID,
-            range: `${WORKING_SHEET_NAME}!A:Z`,
+            range: `${WORKING_SHEET_NAME}!A:AA`,
             valueInputOption: 'USER_ENTERED',
             requestBody: { values: [workingRowData] },
         });
