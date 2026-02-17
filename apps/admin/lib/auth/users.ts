@@ -68,7 +68,7 @@ export const users: User[] = [
         id: '6',
         email: 'bhargavi',
         // Password: Bhargavi@2026
-        password_hash: '$2b$10$FTz5jh2atiFqblyjnsfFJOyi1Hbf.xPLZEvPFh/UwOvc0ZemrYHWu',
+        password_hash: '$2b$10$hRp.tLndRdG5L19olFEbg.gQej9Y0/7SJxHxVPK4hvFgh9D6zjOgO',
         name: 'Bhargavi',
         role: 'hr', // HR & Counsellor
         is_active: true
@@ -77,8 +77,53 @@ export const users: User[] = [
         id: '7',
         email: 'sravani',
         // Password: Sravani@2026
-        password_hash: '$2b$10$hdGzQZXIMd4gnv9VmBDGYOsJFX3eoQkdEDJPj5a92TH/5z0D/rGtu',
+        password_hash: '$2b$10$1N7LVFw0Px.m5egLSewGV.Av/mhougBu6CzNOUzJcGPV1Eb9w2sXu',
         name: 'Sravani',
+        role: 'career_councillor',
+        is_active: true
+    },
+    {
+        id: '8',
+        email: 'bhavani',
+        // Password: Bhavani@2026
+        password_hash: '$2b$10$ZHcXr860IePr4lJHMaHil.atF6q908BCaxwveUdRKHsj410wjoj2S',
+        name: 'Bhavani',
+        role: 'career_councillor',
+        is_active: true
+    },
+    {
+        id: '9',
+        email: 'kavitha',
+        // Password: Kavitha@2026
+        password_hash: '$2b$10$7mTX.DFPMrsih9YTPcVYfe8uLtWd99xfy7QW2esUIARZNrpPli6Qi',
+        name: 'Kavitha',
+        role: 'career_councillor',
+        is_active: true
+    },
+    {
+        id: '10',
+        email: 'cc1',
+        // Password: CC1@2026
+        password_hash: '$2b$10$zeJr8XLxbwZVzX96nnveROzL/EahQtRR6wUF9cqR4iNQuZCZZWBG6',
+        name: 'CC1',
+        role: 'career_councillor',
+        is_active: true
+    },
+    {
+        id: '11',
+        email: 'cc2',
+        // Password: CC2@2026
+        password_hash: '$2b$10$L1Ssxn2H7gsVdupQGIkX6Oh1Ap4pZWe8oYR4WToR6e4705jdK8/Iq',
+        name: 'CC2',
+        role: 'career_councillor',
+        is_active: true
+    },
+    {
+        id: '12',
+        email: 'cc3',
+        // Password: CC3@2026
+        password_hash: '$2b$10$iDyS8T3qGmltVif.xR5u1OvZEIQGhQjRbz4Oo5FYjdttktsVhdiTW',
+        name: 'CC3',
         role: 'career_councillor',
         is_active: true
     }
