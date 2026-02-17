@@ -376,6 +376,7 @@ export async function createInquiry(data: {
             spreadsheetId: SHEET_ID,
             range: `${SOR_SHEET_NAME}!A:U`,
             valueInputOption: 'USER_ENTERED',
+            insertDataOption: 'INSERT_ROWS', // Force new row creation
             requestBody: { values: [baseRowData] },
         });
 
@@ -395,6 +396,7 @@ export async function createInquiry(data: {
             spreadsheetId: SHEET_ID,
             range: `${WORKING_SHEET_NAME}!A:AA`,
             valueInputOption: 'USER_ENTERED',
+            insertDataOption: 'INSERT_ROWS', // Force new row creation
             requestBody: { values: [workingRowData] },
         });
 
