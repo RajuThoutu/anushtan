@@ -258,22 +258,24 @@ async function getNextInquiryId(sheets: any): Promise<string> {
         });
 
         const rows = response.data.values || [];
-        const lastRow = rows.length;
 
-        // If no data (just header), start at S-1
-        if (lastRow <= 1) return 'S-1';
+        let maxId = 0;
 
-        // Try to parse the last ID
-        const lastId = rows[lastRow - 1][0];
-        if (lastId && lastId.startsWith('S-')) {
-            const num = parseInt(lastId.replace('S-', ''), 10);
-            if (!isNaN(num)) {
-                return `S-${num + 1}`;
+        // Scan all rows to find the highest ID number
+        // This is robust against deleted rows (e.g. if S-138, S-139 deleted, but S-140 exists, next is S-141)
+        // Also allows manual "bumping" by adding a dummy row like S-500.
+        rows.forEach((row: any[]) => {
+            const id = row[0];
+            if (id && typeof id === 'string' && id.startsWith('S-')) {
+                const num = parseInt(id.replace('S-', ''), 10);
+                if (!isNaN(num) && num > maxId) {
+                    maxId = num;
+                }
             }
-        }
+        });
 
-        // Fallback: Use row count as ID
-        return `S-${lastRow}`;
+        // Use Max ID + 1. If sheet is empty/no IDs found, start at S-1.
+        return `S-${maxId + 1}`;
     } catch (error) {
         console.error('Error generating ID:', error);
         return `S-${Date.now()}`; // Fallback constant if generation fails
