@@ -19,13 +19,7 @@ const envSchema = z.object({
         .string({ required_error: 'DATABASE_URL is required' })
         .min(1, 'DATABASE_URL cannot be empty'),
 
-    USE_PROD_DB: z
-        .enum(['true', 'false'])
-        .default('false')
-        .transform(v => v === 'true'),
 
-    PROD_DATABASE_URL: z.string().default(''),
-    DEV_DATABASE_URL: z.string().default(''),
 
     // ── Google Sheets (downstream mirror) ─────────────────────────────────
     SHEETS_SYNC_ENABLED: z
@@ -115,9 +109,6 @@ export const isDev = env.NODE_ENV === 'development';
 /** Structured PostgreSQL connection config */
 export const dbConfig = {
     url: env.DATABASE_URL,
-    useProdDb: env.USE_PROD_DB,
-    prodUrl: env.PROD_DATABASE_URL,
-    devUrl: env.DEV_DATABASE_URL,
     isProd,
 } as const;
 

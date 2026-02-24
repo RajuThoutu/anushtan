@@ -2,36 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import { dbConfig } from '@repo/env-config';
 
 const prismaClientSingleton = () => {
-    let targetUrl: string | undefined = undefined;
-
-    if (process.env.NODE_ENV === 'development') {
-        // Enforce Dev DB in local environment if devUrl is explicit
-        if (dbConfig.devUrl) {
-            targetUrl = dbConfig.devUrl;
-            console.log('🧪 [Prisma] Local Development: Using DEV Database override');
-        }
-    } else if (dbConfig.useProdDb && dbConfig.prodUrl) {
-        targetUrl = dbConfig.prodUrl;
-        console.log('🔄 [Prisma] Database override active: Using PROD Database');
-    } else if (dbConfig.useProdDb === false && dbConfig.devUrl) {
-        targetUrl = dbConfig.devUrl;
-        console.log('🧪 [Prisma] Database override active: Using DEV Database');
-    }
-
-    if (targetUrl) {
-        // Strip any accidental quotes from the connection string
-        targetUrl = targetUrl.replace(/^["']|["']$/g, '');
-        return new PrismaClient({
-            datasources: {
-                db: {
-                    url: targetUrl,
-                },
-            },
-        });
-    }
-
-    // Default to natural Prisma resolution, explicitly passing the generic DATABASE_URL
-    // This is required in some serverless environments where `env("DATABASE_URL")` fails to resolve at runtime
+    // Rely exclusively on the standard DATABASE_URL environment variable
+    // We explicitly pass it to handle Vercel serverless environment quirks
     return new PrismaClient({
         datasources: {
             db: {
