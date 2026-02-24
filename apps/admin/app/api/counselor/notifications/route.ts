@@ -1,25 +1,29 @@
 import { NextResponse } from 'next/server';
+import { getUnreadNotifications, markNotificationRead } from '@repo/database';
 
-// Mock notifications for now - will integrate with Google Sheets later
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
     try {
-        // TODO: Fetch from Google Sheets "Notifications" sheet
-        // For now, return empty array
-        const notifications: any[] = [];
-
-        return NextResponse.json({
-            success: true,
-            notifications,
-        });
+        const notifications = await getUnreadNotifications();
+        return NextResponse.json({ success: true, data: notifications });
     } catch (error) {
-        console.error('API Error:', error);
+        console.error('[Notifications] GET error:', error);
+        return NextResponse.json({ success: false, data: [] }, { status: 500 });
+    }
+}
 
-        return NextResponse.json(
-            {
-                success: false,
-                error: error instanceof Error ? error.message : 'Failed to fetch notifications',
-            },
-            { status: 500 }
-        );
+export async function PATCH(request: Request) {
+    try {
+        const { id } = await request.json();
+        if (!id || typeof id !== 'number') {
+            return NextResponse.json({ success: false, error: 'Invalid id' }, { status: 400 });
+        }
+        await markNotificationRead(id);
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error('[Notifications] PATCH error:', error);
+        return NextResponse.json({ success: false, error: 'Failed to mark as read' }, { status: 500 });
     }
 }

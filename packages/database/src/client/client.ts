@@ -360,7 +360,16 @@ export async function createInquiry(data: {
         },
     });
 
-    // 3. Async Sheets sync (fire-and-forget — does NOT block the response)
+    // 3. Create notification for counselor bell (fire-and-forget)
+    prisma.notification.create({
+        data: {
+            inquiryId,
+            message: `New inquiry from ${data.studentName} — ${data.source ?? 'Website'} (${data.phone})`,
+            type: 'new_inquiry',
+        },
+    }).catch(err => console.error('[Notifications] Failed to create notification:', err));
+
+    // 4. Async Sheets sync (fire-and-forget — does NOT block the response)
     syncInsertToSheets(inquiryId, {
         inquiryId,
         studentName: data.studentName,
@@ -465,4 +474,23 @@ export async function updateCounselorActions(
     });
 
     return { success: true };
+}
+
+// ─── Notifications ────────────────────────────────────────────────────────────
+
+/** Return the 20 most recent unread notifications, newest first. */
+export async function getUnreadNotifications() {
+    return prisma.notification.findMany({
+        where: { isRead: false },
+        orderBy: { createdAt: 'desc' },
+        take: 20,
+    });
+}
+
+/** Mark a single notification as read. */
+export async function markNotificationRead(id: number) {
+    return prisma.notification.update({
+        where: { id },
+        data: { isRead: true },
+    });
 }

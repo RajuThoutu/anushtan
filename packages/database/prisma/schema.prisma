@@ -33,6 +33,7 @@ enum InquirySource {
   PaperForm  @map("Paper Form")
   PhoneCall  @map("Phone Call")
   Referral
+  QRScan     @map("QR Scan")
   Other
 }
 
@@ -218,4 +219,18 @@ model SheetsSyncLog {
   @@index([inquiryId])
   @@index([status])
   @@index([syncedAt])
+}
+
+// notifications — Bell icon alerts for counselors when new inquiries arrive
+model Notification {
+  id        Int      @id @default(autoincrement())
+  inquiryId String   @map("inquiry_id")
+  message   String
+  type      String   @default("new_inquiry")
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("notifications")
+  @@index([isRead])
+  @@index([createdAt])
 }

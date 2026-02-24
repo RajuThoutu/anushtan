@@ -5,16 +5,17 @@ import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import {
     LayoutDashboard,
-    UserPlus,
     ClipboardList,
     BarChart3,
     Users,
     LogOut,
     Menu,
-    X
+    X,
+    QrCode
 } from 'lucide-react';
 import { useState } from 'react';
 import { AddInquiryButton } from './AddInquiryButton';
+import { NotificationBell } from '@/components/inquiry/NotificationBell';
 
 interface NavItem {
     label: string;
@@ -46,6 +47,11 @@ const navItems: NavItem[] = [
         href: '/users',
         icon: <Users size={20} />,
         roles: ['super_admin'],
+    },
+    {
+        label: 'QR Code',
+        href: '/qr',
+        icon: <QrCode size={20} />,
     },
 ];
 
@@ -87,8 +93,9 @@ export function DashboardSidebar() {
                     </h1>
                 </div>
 
-                {/* Mobile Add Button */}
-                <div className="ml-auto">
+                {/* Mobile: Bell + Add */}
+                <div className="ml-auto flex items-center gap-1">
+                    <NotificationBell />
                     <AddInquiryButton />
                 </div>
             </div>
@@ -210,11 +217,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             {/* Add top padding on mobile to account for fixed header */}
             <main className="lg:ml-64 min-h-screen pt-16 lg:pt-0 flex flex-col">
                 {/* Desktop Header */}
-                <header className="hidden lg:flex items-center justify-between px-8 py-4 bg-white border-b border-anushtan-border sticky top-0 z-30">
-                    <div className="font-heading text-xl font-bold text-anushtan-charcoal">
+                <header className="hidden lg:flex items-center justify-between px-8 py-4 bg-gradient-to-r from-admin-blue to-admin-purple border-b border-white/10 sticky top-0 z-30">
+                    <div className="font-heading text-xl font-bold text-white">
                         Management Console
                     </div>
-                    <AddInquiryButton />
+                    <div className="flex items-center gap-3">
+                        <NotificationBell />
+                        <AddInquiryButton />
+                    </div>
                 </header>
 
                 <div className="flex-1">
