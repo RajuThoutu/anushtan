@@ -9,7 +9,20 @@ const GRADES = [
     'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10',
 ];
 
+/** Today's access code: ddmm in IST */
+function todayCode(): string {
+    const now = new Date();
+    const ist = new Date(now.getTime() + 5.5 * 60 * 60 * 1000);
+    const dd = String(ist.getUTCDate()).padStart(2, '0');
+    const mm = String(ist.getUTCMonth() + 1).padStart(2, '0');
+    return `${dd}${mm}`;
+}
+
 export function MobileInquiryForm() {
+    const [unlocked, setUnlocked] = useState(false);
+    const [codeInput, setCodeInput] = useState('');
+    const [codeError, setCodeError] = useState(false);
+
     const [state, setState] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
     const [error, setError] = useState('');
     const [form, setForm] = useState({
@@ -24,9 +37,19 @@ export function MobileInquiryForm() {
         setForm(prev => ({ ...prev, [field]: value }));
 
     const handlePhone = (val: string) => {
-        // strip non-digits then cap at 10
         const digits = val.replace(/\D/g, '').slice(0, 10);
         set('phone', digits);
+    };
+
+    const handleCodeSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (codeInput.trim() === todayCode()) {
+            setUnlocked(true);
+            setCodeError(false);
+        } else {
+            setCodeError(true);
+            setCodeInput('');
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -84,7 +107,63 @@ export function MobileInquiryForm() {
         );
     }
 
-    // ── Form ─────────────────────────────────────────────────────────────────
+    // ── Access code gate ────────────────────────────────────────────────────
+    if (!unlocked) {
+        return (
+            <form onSubmit={handleCodeSubmit} className="space-y-6">
+                <div className="flex flex-col items-center text-center gap-3 py-4">
+                    <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center">
+                        <svg className="w-7 h-7 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-bold text-gray-900">Enter Access Code</h3>
+                        <p className="text-sm text-gray-500 mt-1">
+                            Ask our team at the event for today's code.
+                        </p>
+                    </div>
+                </div>
+
+                <div>
+                    <input
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={4}
+                        required
+                        autoFocus
+                        value={codeInput}
+                        onChange={e => {
+                            setCodeInput(e.target.value.replace(/\D/g, '').slice(0, 4));
+                            setCodeError(false);
+                        }}
+                        placeholder="4-digit code"
+                        className={`w-full px-4 py-4 text-center text-2xl font-bold tracking-widest rounded-xl border ${
+                            codeError
+                                ? 'border-red-400 bg-red-50 text-red-700 focus:ring-red-400'
+                                : 'border-gray-200 bg-white text-gray-900 focus:ring-amber-400'
+                        } focus:outline-none focus:ring-2 focus:border-transparent transition`}
+                    />
+                    {codeError && (
+                        <p className="mt-2 text-sm text-red-600 text-center font-medium">
+                            Incorrect code. Please try again.
+                        </p>
+                    )}
+                </div>
+
+                <button
+                    type="submit"
+                    disabled={codeInput.length < 4}
+                    className="w-full py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-base rounded-xl shadow-lg active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                    Continue
+                </button>
+            </form>
+        );
+    }
+
+    // ── Inquiry form ─────────────────────────────────────────────────────────
     return (
         <form onSubmit={handleSubmit} className="space-y-5">
             {/* Student Name */}

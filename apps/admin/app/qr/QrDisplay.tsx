@@ -8,8 +8,18 @@ interface QrDisplayProps {
     url: string;
 }
 
+/** Access code shown to counselors: ddmm in IST */
+function todayCode(): string {
+    const now = new Date();
+    const ist = new Date(now.getTime() + 5.5 * 60 * 60 * 1000);
+    const dd = String(ist.getUTCDate()).padStart(2, '0');
+    const mm = String(ist.getUTCMonth() + 1).padStart(2, '0');
+    return `${dd}${mm}`;
+}
+
 export function QrDisplay({ url }: QrDisplayProps) {
     const svgRef = useRef<HTMLDivElement>(null);
+    const code = todayCode();
 
     const downloadPNG = () => {
         const svg = svgRef.current?.querySelector('svg');
@@ -94,13 +104,26 @@ export function QrDisplay({ url }: QrDisplayProps) {
                 </button>
             </div>
 
+            {/* Today's access code */}
+            <div className="w-full max-w-sm p-4 bg-gradient-to-r from-admin-purple/10 to-admin-rose/10 border border-admin-purple/30 rounded-xl text-center">
+                <p className="text-xs font-semibold text-admin-text-secondary uppercase tracking-wider mb-1">
+                    Today's Access Code
+                </p>
+                <p className="text-5xl font-bold tracking-[0.3em] text-admin-charcoal">
+                    {code}
+                </p>
+                <p className="text-xs text-admin-text-secondary mt-2">
+                    Tell this code to parents at the event. Resets at midnight.
+                </p>
+            </div>
+
             {/* Instructions */}
             <div className="mt-2 p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800 max-w-sm text-left">
                 <p className="font-semibold mb-1">How to use</p>
                 <ul className="space-y-1 list-disc list-inside text-amber-700">
                     <li>Print and place at reception, events, or notice boards</li>
-                    <li>Parents scan with phone camera</li>
-                    <li>Mobile-optimized form opens instantly</li>
+                    <li>Parents scan → enter today's code → fill form</li>
+                    <li>Code changes daily (ddmm format)</li>
                     <li>Counselors get notified within seconds</li>
                 </ul>
             </div>
