@@ -397,7 +397,7 @@ export async function createInquiry(data: {
  * 3. UPDATE Google Sheet Working tab counselor columns (async)
  */
 export async function updateCounselorActions(
-    inquiryId: string,
+    idOrInquiryId: string,
     data: {
         status?: string;
         assignedTo?: string;
@@ -408,17 +408,20 @@ export async function updateCounselorActions(
         priority?: string;
     }
 ) {
-    console.log(`[DB] updateCounselorActions: ${inquiryId}`, data);
+    console.log(`[DB] updateCounselorActions: ${idOrInquiryId}`, data);
 
     const counselorName = data.assignedTo ?? data.updatedBy ?? 'Unknown';
 
-    // Fetch current state for audit diff
+    // Flexible fetch to allow UI to pass either the UUID (id) or the sequence (S-XXX)
+    const isUuid = idOrInquiryId.length > 20 && !idOrInquiryId.startsWith('S-');
     const current = await prisma.inquiry.findUnique({
-        where: { inquiryId },
-        select: { status: true, caseStatus: true, followUpDate: true, assignedTo: true },
+        where: isUuid ? { id: idOrInquiryId } : { inquiryId: idOrInquiryId },
+        select: { inquiryId: true, status: true, caseStatus: true, followUpDate: true, assignedTo: true },
     });
 
-    if (!current) throw new Error(`Inquiry '${inquiryId}' not found`);
+    if (!current) throw new Error(`Inquiry '${idOrInquiryId}' not found`);
+
+    const trueInquiryId = current.inquiryId;
 
     // Auto-calculate case status
     let newCaseStatus: CaseStatus = current.caseStatus;
@@ -438,12 +441,12 @@ export async function updateCounselorActions(
     if (data.priority) updateData.priority = data.priority;
 
     // 1. PostgreSQL UPDATE
-    await prisma.inquiry.update({ where: { inquiryId }, data: updateData });
+    await prisma.inquiry.update({ where: { inquiryId: trueInquiryId }, data: updateData });
 
     // 2. Activity log
     await prisma.counselorActivityLog.create({
         data: {
-            inquiryId,
+            inquiryId: trueInquiryId,
             counselorName,
             action: data.status ? 'status_change' : data.counselorComments ? 'note_added' : 'assigned',
             oldValue: current.status,
@@ -453,7 +456,7 @@ export async function updateCounselorActions(
     });
 
     // 3. Async Sheets sync (fire-and-forget)
-    syncUpdateToSheets(inquiryId, {
+    syncUpdateToSheets(trueInquiryId, {
         counselorName,
         status: data.status ?? current.status,
         caseStatus: newCaseStatus,
