@@ -93,7 +93,7 @@ export default function AllInquiriesClient() {
     const filteredInquiries = inquiries.filter(inq => {
         const matchesSearch =
             inq.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            inq.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (inq.inquiryId || inq.id).toLowerCase().includes(searchTerm.toLowerCase()) ||
             inq.phone.includes(searchTerm);
 
         const matchesStatus = statusFilter === 'All' || inq.status === statusFilter;
