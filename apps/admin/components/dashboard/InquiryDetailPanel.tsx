@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Save, User, Phone, Mail, School, BookOpen, MessageSquare, ArrowLeft } from 'lucide-react';
 import type { SheetInquiry as Inquiry } from '@repo/database';
 
@@ -30,21 +30,21 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
     const [formData, setFormData] = useState<CounselorUpdates>({
         status: inquiry?.status || 'New',
         counselorComments: '', // Start empty for new notes
-        followUpDate: '',
+        followUpDate: inquiry?.followUpDate ? new Date(inquiry.followUpDate).toISOString().split('T')[0] : '',
     });
     const [saving, setSaving] = useState(false);
     const [saveSuccess, setSaveSuccess] = useState(false);
 
     // Reset form when inquiry changes
-    useState(() => {
+    useEffect(() => {
         if (inquiry) {
             setFormData({
                 status: inquiry.status || 'New',
                 counselorComments: '', // Always empty when switching inquiry
-                followUpDate: '',
+                followUpDate: inquiry.followUpDate ? new Date(inquiry.followUpDate).toISOString().split('T')[0] : '',
             });
         }
-    });
+    }, [inquiry]);
 
     if (!inquiry) {
         return (
