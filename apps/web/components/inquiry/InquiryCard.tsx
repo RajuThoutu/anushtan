@@ -23,9 +23,9 @@ export function InquiryCard({ inquiry, showAssignButton = false, onAssign }: Inq
         }
     };
 
-    const timeAgo = (timestamp: string) => {
+    const timeAgo = (timestamp: string | Date) => {
         const now = new Date();
-        const then = new Date(timestamp);
+        const then = typeof timestamp === 'string' ? new Date(timestamp) : timestamp;
         const diffMs = now.getTime() - then.getTime();
         const diffMins = Math.floor(diffMs / 60000);
 
@@ -59,7 +59,7 @@ export function InquiryCard({ inquiry, showAssignButton = false, onAssign }: Inq
                 </div>
 
                 <div className="mt-3 flex items-center justify-between text-xs text-anushtan-charcoal/50">
-                    <span>{timeAgo(inquiry.timestamp)}</span>
+                    <span>{timeAgo(inquiry.createdAt)}</span>
                     {inquiry.source && (
                         <span className="px-2 py-1 bg-anushtan-parchment rounded">
                             {inquiry.source}

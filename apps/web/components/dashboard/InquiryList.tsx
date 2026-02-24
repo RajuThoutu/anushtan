@@ -76,13 +76,13 @@ function InquiryListItem({ inquiry, isSelected, onClick }: InquiryListItemProps)
     };
 
     // Format date for display
-    const formatDate = (dateStr: string) => {
-        if (!dateStr) return '';
+    const formatDate = (dateInput: Date | string | null | undefined) => {
+        if (!dateInput) return '';
         try {
-            const date = new Date(dateStr);
+            const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         } catch {
-            return dateStr;
+            return String(dateInput);
         }
     };
 
@@ -146,7 +146,7 @@ function InquiryListItem({ inquiry, isSelected, onClick }: InquiryListItemProps)
                 {/* Date */}
                 <div className="text-xs text-anushtan-charcoal/40 flex items-center gap-1 shrink-0">
                     <Calendar size={12} />
-                    {formatDate(inquiry.inquiryDate || inquiry.timestamp)}
+                    {formatDate(inquiry.createdAt)}
                 </div>
             </div>
         </button>

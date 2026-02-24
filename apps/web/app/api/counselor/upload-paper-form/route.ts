@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
         const formData = await request.formData();
 
-        const inquiryData = {
+        const inquiryData: any = {
             studentName: formData.get('studentName') as string,
             currentClass: formData.get('currentClass') as string,
             // Defaults for removed fields
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
         await createInquiry({
             ...inquiryData,
             createdBy: session.user.name,
-            source: 'Paper',
+            source: 'PaperForm' as any,
         });
 
         return NextResponse.json({

@@ -40,8 +40,8 @@ async function createUsers() {
                 await prisma.user.update({
                     where: { email: u.email },
                     data: {
-                        role: u.role,
-                        password: hashedPassword,
+                        role: u.role as any,
+                        passwordHash: hashedPassword,
                         name: u.name
                     }
                 });
@@ -51,8 +51,8 @@ async function createUsers() {
                     data: {
                         name: u.name,
                         email: u.email,
-                        role: u.role,
-                        password: hashedPassword,
+                        role: u.role as any,
+                        passwordHash: hashedPassword,
                         emailVerified: new Date(),
                     }
                 });

@@ -29,7 +29,7 @@ const priorityOptions = ['High', 'Medium', 'Low'];
 export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPanelProps) {
     const [formData, setFormData] = useState<CounselorUpdates>({
         status: inquiry?.status || 'New',
-        counselorComments: inquiry?.counselorComments || '',
+        counselorComments: inquiry?.notes || '',
         followUpDate: '',
     });
     const [saving, setSaving] = useState(false);
@@ -40,7 +40,7 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
         if (inquiry) {
             setFormData({
                 status: inquiry.status || 'New',
-                counselorComments: inquiry.counselorComments || '',
+                counselorComments: inquiry.notes || '',
                 followUpDate: '',
             });
         }
@@ -113,7 +113,7 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                     </h3>
                     <div className="space-y-3">
                         <InfoRow icon={<User size={16} />} label="Student Name" value={inquiry.studentName} />
-                        <InfoRow icon={<School size={16} />} label="Current Class" value={inquiry.currentClass} />
+                        <InfoRow icon={<School size={16} />} label="Current Class" value={inquiry.currentClass ?? undefined} />
                         <InfoRow icon={<BookOpen size={16} />} label="Current School" value={inquiry.currentSchool ?? undefined} />
                         <InfoRow icon={<BookOpen size={16} />} label="Board" value={inquiry.board ?? undefined} />
                     </div>
@@ -127,7 +127,7 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                         <InfoRow icon={<User size={16} />} label="Parent Name" value={inquiry.parentName} />
                         <InfoRow icon={<BookOpen size={16} />} label="Occupation" value={inquiry.occupation ?? undefined} />
                         <InfoRow icon={<Phone size={16} />} label="Phone" value={inquiry.phone} />
-                        <InfoRow icon={<Phone size={16} />} label="Secondary Contact" value={inquiry.secondaryContact ?? undefined} />
+                        <InfoRow icon={<Phone size={16} />} label="Secondary Contact" value={inquiry.secondaryPhone ?? undefined} />
                         <InfoRow icon={<Mail size={16} />} label="Email" value={inquiry.email ?? undefined} />
                     </div>
                 </section>
@@ -212,7 +212,7 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                 </section>
 
                 {/* Audit Trail Section */}
-                {(inquiry.counselorName || inquiry.caseStatus) && (
+                {(inquiry.assignedTo || inquiry.caseStatus) && (
                     <section className="bg-gray-50 p-4 rounded-lg">
                         <h3 className="text-sm font-semibold text-admin-text/60 uppercase tracking-wide mb-3">
                             Workflow Information
@@ -221,7 +221,7 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                             {inquiry.caseStatus && (
                                 <div className="flex justify-between">
                                     <span className="text-admin-text/60">Case Status:</span>
-                                    <span className={`font-medium px-2 py-1 rounded ${inquiry.caseStatus === 'Resolved-Completed'
+                                    <span className={`font-medium px-2 py-1 rounded ${inquiry.caseStatus === 'ResolvedCompleted'
                                         ? 'bg-admin-emerald/10 text-admin-emerald'
                                         : 'bg-admin-blue/10 text-admin-blue'
                                         }`}>
@@ -229,10 +229,10 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                                     </span>
                                 </div>
                             )}
-                            {inquiry.counselorName && (
+                            {inquiry.assignedTo && (
                                 <div className="flex justify-between">
                                     <span className="text-admin-text/60">Last Updated By:</span>
-                                    <span className="font-medium text-admin-text">{inquiry.counselorName}</span>
+                                    <span className="font-medium text-admin-text">{inquiry.assignedTo}</span>
                                 </div>
                             )}
                         </div>
