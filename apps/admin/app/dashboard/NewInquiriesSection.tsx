@@ -24,7 +24,7 @@ export function NewInquiriesSection() {
             if (data.success) {
                 // Filter unassigned inquiries
                 const newInquiries = data.data.filter(
-                    (inquiry: Inquiry) => inquiry.status === 'New' && !inquiry.counselorName
+                    (inquiry: any) => inquiry.status === 'New' && !inquiry.counselorName
                 );
                 setInquiries(newInquiries);
             }

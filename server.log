@@ -1,0 +1,39 @@
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +8
+++++++++
+Progress: resolved 8, reused 0, downloaded 8, added 8, done
+
+> anushtan-monorepo@ dev /Applications/anushtan
+> TZ="Asia/Kolkata" turbo dev "--filter" "admin" "--" "-p" "3001"
+
+• turbo 2.8.3
+• Packages in scope: admin
+• Running dev in 1 packages
+• Remote caching disabled
+admin:dev: cache bypass, force executing a70625594f880de3
+admin:dev: 
+admin:dev: > admin@0.1.0 dev /Applications/anushtan/apps/admin
+admin:dev: > next dev -p 3001 "-p" "3001"
+admin:dev: 
+admin:dev: ⨯ Failed to start server
+admin:dev: Error: listen EADDRINUSE: address already in use :::3001
+admin:dev:     at <unknown> (Error: listen EADDRINUSE: address already in use :::3001)
+admin:dev:     at new Promise (<anonymous>) {
+admin:dev:   code: 'EADDRINUSE',
+admin:dev:   errno: -48,
+admin:dev:   syscall: 'listen',
+admin:dev:   address: '::',
+admin:dev:   port: 3001
+admin:dev: }
+admin:dev: [?25h
+admin:dev:  ELIFECYCLE  Command failed with exit code 1.
+admin:dev: ERROR: command finished with error: command (/Applications/anushtan/apps/admin) /Users/thoutu/Library/pnpm/.tools/pnpm/8.15.4/bin/pnpm run dev -p 3001 exited (1)
+admin#dev: command (/Applications/anushtan/apps/admin) /Users/thoutu/Library/pnpm/.tools/pnpm/8.15.4/bin/pnpm run dev -p 3001 exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    1.258s 
+Failed:    admin#dev
+
+ ERROR  run failed: command  exited (1)
+ ELIFECYCLE  Command failed with exit code 1.

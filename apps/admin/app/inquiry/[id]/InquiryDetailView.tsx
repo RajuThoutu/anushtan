@@ -6,7 +6,7 @@ import Link from 'next/link';
 import type { SheetInquiry as Inquiry } from '@repo/database';
 
 interface InquiryDetailViewProps {
-    inquiry: Inquiry;
+    inquiry: any;
     userName: string;
 }
 

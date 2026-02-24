@@ -6,11 +6,11 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
     try {
         const inquiries = await getAllInquiries();
-        const unassigned = inquiries.filter(inq => !inq.counselorName || inq.counselorName.trim() === '');
+        const unassigned = inquiries.filter(inq => !inq.assignedTo || inq.assignedTo.trim() === '');
 
         const counts: Record<string, number> = {};
         inquiries.forEach(inq => {
-            const name = inq.counselorName || 'Unassigned';
+            const name = inq.assignedTo || 'Unassigned';
             counts[name] = (counts[name] || 0) + 1;
         });
 

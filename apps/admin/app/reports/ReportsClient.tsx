@@ -8,15 +8,12 @@ import {
     AlertCircle,
     Download
 } from 'lucide-react';
-import { KpiCard } from '@/components/dashboard/reports/KpiCard';
-import { InquiryTrendChart } from '@/components/dashboard/reports/InquiryTrendChart';
 import { AdmissionFunnelChart } from '@/components/dashboard/reports/AdmissionFunnelChart';
-import { CounselorStatsTable } from '@/components/dashboard/reports/CounselorStatsTable';
-import { DailyActivityLog } from '@/components/dashboard/reports/DailyActivityLog';
+import { CounselorPerformanceChart } from '@/components/dashboard/reports/CounselorPerformanceChart';
 import { GradeDistributionChart } from '@/components/dashboard/reports/GradeDistributionChart';
-import { SourceEffectivenessChart } from '@/components/dashboard/reports/SourceEffectivenessChart';
-import { PredictionCard } from '@/components/dashboard/reports/PredictionCard';
-import { CustomizeView } from '@/components/dashboard/reports/CustomizeView';
+import { BoardingTypeChart } from '@/components/dashboard/reports/BoardingTypeChart';
+import { SchoolDrilldownChart } from '@/components/dashboard/reports/SchoolDrilldownChart';
+import { ExportButton } from '@/components/reports/ExportButton';
 
 interface Inquiry {
     id: string;
@@ -25,6 +22,7 @@ interface Inquiry {
     counselorName: string;
     currentClass?: string;
     source?: string;
+    dayScholarHostel?: string;
 }
 
 export default function ReportsClient() {
@@ -66,9 +64,11 @@ export default function ReportsClient() {
     // Aggregated Data for new reports
     const [counselorStats, setCounselorStats] = useState<any[]>([]);
     const [dailyLogs, setDailyLogs] = useState<any[]>([]);
-    const [gradeData, setGradeData] = useState<{ grade: string; count: number }[]>([]);
+    const [gradeData, setGradeData] = useState<{ grade: string; count: number; admissions: number }[]>([]);
     const [sourceData, setSourceData] = useState<{ source: string; count: number }[]>([]);
     const [prediction, setPrediction] = useState({ confirmed: 0, predicted: 0, confidence: 85 });
+
+    const [boardingData, setBoardingData] = useState<{ name: string; value: number }[]>([]);
 
     useEffect(() => {
         fetchData();
@@ -181,12 +181,23 @@ export default function ReportsClient() {
 
 
         // 6. Grade Distribution
-        const gradeMap = new Map<string, number>();
+        const gradeMap = new Map<string, { count: number; admissions: number }>();
         data.forEach(i => {
             const grade = i.currentClass || 'Unknown';
-            gradeMap.set(grade, (gradeMap.get(grade) || 0) + 1);
+            if (!gradeMap.has(grade)) {
+                gradeMap.set(grade, { count: 0, admissions: 0 });
+            }
+            const gData = gradeMap.get(grade)!;
+            gData.count += 1;
+            if (i.status === 'Converted') {
+                gData.admissions += 1;
+            }
         });
-        const gradeArr = Array.from(gradeMap.entries()).map(([grade, count]) => ({ grade, count }));
+        const gradeArr = Array.from(gradeMap.entries()).map(([grade, stats]) => ({
+            grade,
+            count: stats.count,
+            admissions: stats.admissions
+        }));
         gradeArr.sort((a, b) => b.count - a.count);
         setGradeData(gradeArr.slice(0, 10)); // Top 10 grades
 
@@ -200,7 +211,16 @@ export default function ReportsClient() {
         sourceArr.sort((a, b) => b.count - a.count);
         setSourceData(sourceArr);
 
-        // 8. Prediction Calculation
+        // 8. Boarding Type Data
+        const boardMap = new Map<string, number>();
+        data.forEach(i => {
+            const type = i.dayScholarHostel || 'Not Specified';
+            boardMap.set(type, (boardMap.get(type) || 0) + 1);
+        });
+        const boardArr = Array.from(boardMap.entries()).map(([name, value]) => ({ name, value }));
+        setBoardingData(boardArr);
+
+        // 9. Prediction Calculation
         const openCount = data.filter(i => i.status === 'Open').length;
         const followUpCount = data.filter(i => i.status === 'Follow-up').length;
         const predictedVal = (openCount * 0.1) + (followUpCount * 0.3);
@@ -223,13 +243,8 @@ export default function ReportsClient() {
     return (
         <div className="space-y-8">
             {/* Header / Actions */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h2 className="text-2xl font-bold text-admin-text">Executive Overview</h2>
-                    <p className="text-admin-text-secondary">Real-time insights into admission performance</p>
-                </div>
+            <div className="flex justify-end gap-4">
                 <div className="flex gap-3">
-                    <CustomizeView sections={sectionOptions} onToggle={toggleSection} />
                     <button className="flex items-center gap-2 px-4 py-2 bg-white border border-admin-border rounded-lg text-admin-text hover:bg-gray-50 transition shadow-sm">
                         <Download size={18} />
                         <span>Export Report</span>
@@ -237,63 +252,7 @@ export default function ReportsClient() {
                 </div>
             </div>
 
-            {/* KPI Grid */}
-            {visibleSections.kpi && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <KpiCard
-                        title="Total Inquiries"
-                        value={metrics.total}
-                        icon={Users}
-                        color="blue"
-                        subtext="All time volume"
-                    />
-                    <KpiCard
-                        title="Conversion Rate"
-                        value={`${metrics.conversionRate}%`}
-                        icon={TrendingUp}
-                        color="emerald"
-                        trend={metrics.conversionRate > 10 ? 'up' : 'neutral'}
-                        trendValue={metrics.conversionRate > 10 ? 'Good' : 'Avg'}
-                        subtext="Converted vs Total"
-                    />
-                    <KpiCard
-                        title="Active Pipeline"
-                        value={metrics.activePipeline}
-                        icon={ClipboardList}
-                        color="amber"
-                        subtext="Open & Follow-up cases"
-                    />
-                    <KpiCard
-                        title="Action Needed"
-                        value={metrics.actionNeeded}
-                        icon={AlertCircle}
-                        color="rose"
-                        subtext="New & Pending Follow-ups"
-                    />
-                </div>
-            )}
-
-            {/* Prediction Section */}
-            {visibleSections.prediction && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
-                    <div className="md:col-span-1">
-                        <PredictionCard
-                            confirmed={prediction.confirmed}
-                            predicted={prediction.predicted}
-                            confidence={prediction.confidence}
-                        />
-                    </div>
-                    <div className="md:col-span-2 bg-gradient-to-br from-admin-blue to-admin-purple p-6 rounded-xl text-white shadow-lg flex flex-col justify-center">
-                        <h3 className="text-lg font-bold mb-2">Director's Insight</h3>
-                        <p className="opacity-90 mb-4 text-lg">
-                            "You are on track to reach <span className="font-bold">{Math.round(prediction.confirmed + prediction.predicted)} students</span>.
-                            Aggressive follow-up on the <span className="font-bold underline text-yellow-300">{metrics.activePipeline} active leads</span> could push this to {Math.round((prediction.confirmed + prediction.predicted) * 1.1)}."
-                        </p>
-                    </div>
-                </div>
-            )}
-
-            {/* Market Insights (Grade & Source) */}
+            {/* Market Insights */}
             {visibleSections.gradeSource && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-150">
                     <div className="bg-white p-6 rounded-xl border border-admin-border shadow-sm">
@@ -301,22 +260,16 @@ export default function ReportsClient() {
                         <GradeDistributionChart data={gradeData} />
                     </div>
                     <div className="bg-white p-6 rounded-xl border border-admin-border shadow-sm">
-                        <h3 className="text-lg font-semibold text-admin-text mb-6">Marketing Source ROI</h3>
-                        <SourceEffectivenessChart data={sourceData} />
+                        <h3 className="text-lg font-semibold text-admin-text mb-6">Boarding Type Preference</h3>
+                        <BoardingTypeChart data={boardingData} />
                     </div>
                 </div>
             )}
 
             {/* Trends & Funnel */}
             {visibleSections.charts && (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
-                    {/* Main Trend Chart (2/3 width) */}
-                    <div className="lg:col-span-2 bg-white p-6 rounded-xl border border-admin-border shadow-sm">
-                        <h3 className="text-lg font-semibold text-admin-text mb-6">Inquiry Volume Trend</h3>
-                        <InquiryTrendChart data={trendData} />
-                    </div>
-
-                    {/* Funnel Chart (1/3 width) */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
+                    <SchoolDrilldownChart inquiries={inquiries} />
                     <div className="bg-white p-6 rounded-xl border border-admin-border shadow-sm">
                         <h3 className="text-lg font-semibold text-admin-text mb-6">Admission Pipeline</h3>
                         <AdmissionFunnelChart data={funnelData} />
@@ -326,12 +279,8 @@ export default function ReportsClient() {
 
             {/* Counselor Performance Section */}
             {visibleSections.counselor && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300">
-                    {/* Stats Table */}
-                    <CounselorStatsTable data={counselorStats} />
-
-                    {/* Daily Activity */}
-                    <DailyActivityLog data={dailyLogs} />
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300">
+                    <CounselorPerformanceChart data={counselorStats} />
                 </div>
             )}
         </div>

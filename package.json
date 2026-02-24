@@ -2,8 +2,8 @@
     "name": "anushtan-monorepo",
     "private": true,
     "scripts": {
-        "build": "turbo build",
-        "dev": "turbo dev",
+        "build": "TZ=\"Asia/Kolkata\" turbo build",
+        "dev": "TZ=\"Asia/Kolkata\" turbo dev",
         "lint": "turbo lint",
         "format": "prettier --write \"**/*.{ts,tsx,md}\""
     },

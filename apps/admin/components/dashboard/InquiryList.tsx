@@ -79,8 +79,14 @@ function InquiryListItem({ inquiry, isSelected, onClick }: InquiryListItemProps)
     const formatDate = (dateStr: string) => {
         if (!dateStr) return '';
         try {
+            // Get local date safely using the same en-CA method built into filters
             const date = new Date(dateStr);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const localDateStr = date.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }); // YYYY-MM-DD
+
+            // Parse local components to format safely
+            const [, m, d] = localDateStr.split('-');
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            return `${monthNames[parseInt(m) - 1]} ${parseInt(d)}`;
         } catch {
             return dateStr;
         }
@@ -146,7 +152,7 @@ function InquiryListItem({ inquiry, isSelected, onClick }: InquiryListItemProps)
                 {/* Date */}
                 <div className="text-xs text-anushtan-charcoal/40 flex items-center gap-1 shrink-0">
                     <Calendar size={12} />
-                    {formatDate(inquiry.inquiryDate || inquiry.timestamp)}
+                    {formatDate(String(inquiry.inquiryDate || inquiry.createdAt))}
                 </div>
             </div>
         </button>

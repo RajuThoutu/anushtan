@@ -49,27 +49,30 @@ export default function DashboardClient() {
 
     // Filter inquiries based on tab and filters
     const filteredInquiries = useMemo(() => {
+        // If active tab is "Today", strictly ignore all other user filters
+        if (activeTab === 'today') {
+            const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+            return inquiries.filter(inq => {
+                const inqDateObj = new Date(inq.inquiryDate || inq.createdAt);
+                const dayString = inqDateObj.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                return dayString === todayStr;
+            });
+        }
+
         let result = [...inquiries];
 
         // If date filters are set, use them instead of tab filter
         const hasDateFilter = filters.dateFrom || filters.dateTo;
 
-        // Tab filter (only if no date filters are active)
         if (!hasDateFilter) {
-            if (activeTab === 'today') {
-                const today = new Date().toDateString();
-                result = result.filter(inq => {
-                    const inquiryDate = new Date(inq.inquiryDate || inq.timestamp);
-                    return inquiryDate.toDateString() === today;
-                });
-            } else if (activeTab === 'mywork') {
-                result = result.filter(inq => inq.counselorName === userName);
+            if (activeTab === 'mywork') {
+                result = result.filter(inq => inq.assignedTo === userName || inq.activityLog?.[0]?.counselorName === userName);
             }
             // 'all' tab shows everything, no filter
         } else {
             // If date filters are active, still apply "My Work" filter if on that tab
             if (activeTab === 'mywork') {
-                result = result.filter(inq => inq.counselorName === userName);
+                result = result.filter(inq => inq.assignedTo === userName || inq.activityLog?.[0]?.counselorName === userName);
             }
         }
 
@@ -96,18 +99,17 @@ export default function DashboardClient() {
 
         // Date range filter
         if (filters.dateFrom) {
-            const fromDate = new Date(filters.dateFrom);
             result = result.filter(inq => {
-                const inquiryDate = new Date(inq.inquiryDate || inq.timestamp);
-                return inquiryDate >= fromDate;
+                const inqDateObj = new Date(inq.inquiryDate || inq.createdAt);
+                const dayString = inqDateObj.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                return dayString >= filters.dateFrom;
             });
         }
         if (filters.dateTo) {
-            const toDate = new Date(filters.dateTo);
-            toDate.setHours(23, 59, 59, 999);
             result = result.filter(inq => {
-                const inquiryDate = new Date(inq.inquiryDate || inq.timestamp);
-                return inquiryDate <= toDate;
+                const inqDateObj = new Date(inq.inquiryDate || inq.createdAt);
+                const dayString = inqDateObj.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                return dayString <= filters.dateTo;
             });
         }
 
@@ -116,15 +118,16 @@ export default function DashboardClient() {
 
     // Count for tabs
     const todayCount = useMemo(() => {
-        const today = new Date().toDateString();
+        const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
         return inquiries.filter(inq => {
-            const inquiryDate = new Date(inq.inquiryDate || inq.timestamp);
-            return inquiryDate.toDateString() === today;
+            const inqDateObj = new Date(inq.inquiryDate || inq.createdAt);
+            const dayString = inqDateObj.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+            return dayString === todayStr;
         }).length;
     }, [inquiries]);
 
     const myWorkCount = useMemo(() => {
-        return inquiries.filter(inq => inq.counselorName === userName).length;
+        return inquiries.filter(inq => inq.assignedTo === userName || inq.activityLog?.[0]?.counselorName === userName).length;
     }, [inquiries, userName]);
 
     const allCount = inquiries.length;
@@ -177,11 +180,13 @@ export default function DashboardClient() {
                         allCount={allCount}
                     />
 
-                    {/* Filters */}
-                    <InquiryFilters
-                        filters={filters}
-                        onFilterChange={setFilters}
-                    />
+                    {/* Filters - Hidden on Today tab as it intrinsically filters by date */}
+                    {activeTab !== 'today' && (
+                        <InquiryFilters
+                            filters={filters}
+                            onFilterChange={setFilters}
+                        />
+                    )}
 
                     {/* List */}
                     <div className="flex-1 bg-white overflow-hidden">

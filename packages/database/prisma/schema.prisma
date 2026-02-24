@@ -1,63 +1,220 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Anushtan — PostgreSQL-first Prisma Schema
+// Source of truth: PostgreSQL. Google Sheets is a downstream sync mirror.
+// Provider: postgresql (dev: anushtan_dev, prod: anushtan_prod)
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Inquiry {
-  id                String   @id @default(cuid())
-  inquiryId         String   @unique // The S-1, S-2 ID
-  studentName       String
-  currentClass      String
-  currentSchool     String?
-  board             String?
-  parentName        String
-  occupation        String?
-  phone             String
-  secondaryContact  String?
-  email             String?
-  educationGuide    String?
-  learningMethod    String?
-  teacherPreference String?
-  childImportance   String?
-  schoolEnvironment String?
-  howHeard          String?
-  dayScholarHostel  String?
-  inquiryDate       DateTime @default(now())
-  priority          String?
-  notes             String?
-  
-  // Counselor Fields
-  counselorName     String?
-  status            String   @default("New")
-  caseStatus        String   @default("Active")
-  followUpDate      DateTime?
-  counselorComments String?
-  lastUpdated       DateTime @updatedAt
-  
-  // Legacy fields
-  source            String?
-  createdBy         String?
-  address           String?
+// ─── Enums ──────────────────────────────────────────────────────────────────
 
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+enum InquiryStatus {
+  New
+  Open
+  FollowUp   @map("Follow-up")
+  Converted
+  Closed
 }
 
+enum CaseStatus {
+  Active
+  ResolvedCompleted @map("Resolved-Completed")
+}
+
+enum InquirySource {
+  Website
+  WhatsApp
+  PaperForm  @map("Paper Form")
+  PhoneCall  @map("Phone Call")
+  Referral
+  Other
+}
+
+enum UserRole {
+  admin
+  counselor
+  viewer
+}
+
+// ─── Models ─────────────────────────────────────────────────────────────────
+
+// inquiries — Primary source of truth for all student inquiries
+model Inquiry {
+  id          String   @id @default(uuid())
+  inquiryId   String   @unique @map("inquiry_id") // Human-readable: S-1, S-2, …
+
+  // Multi-tenant support (school/branch isolation)
+  tenantId    String   @default("anushtan-siddipet") @map("tenant_id")
+
+  // Student Details
+  studentName       String  @map("student_name")
+  currentClass      String? @map("current_class")
+  currentSchool     String? @map("current_school")
+  board             String?
+
+  // Parent / Guardian
+  parentName      String  @map("parent_name")
+  phone           String
+  secondaryPhone  String? @map("secondary_phone")
+  email           String?
+  occupation      String?
+
+  // Admission Survey
+  educationGuide    String? @map("education_guide")
+  learningMethod    String? @map("learning_method")
+  teacherPreference String? @map("teacher_preference")
+  childImportance   String? @map("child_importance")
+  schoolEnvironment String? @map("school_environment")
+  dayScholarHostel  String? @map("day_scholar_hostel")
+
+  // Referral
+  referralName  String? @map("referral_name")
+  referralPhone String? @map("referral_phone")
+
+  // Source & Routing
+  source    InquirySource @default(Website)
+  howHeard  String?       @map("how_heard")
+  createdBy String?       @map("created_by")
+
+  // Additional Info
+  siblingsAtSchool   Boolean @default(false) @map("siblings_at_school")
+  preferredLanguage  String? @map("preferred_language")
+
+  // Counselor Workflow
+  status         InquiryStatus @default(New)
+  caseStatus     CaseStatus    @default(Active) @map("case_status")
+  assignedTo     String?       @map("assigned_to")
+  followUpDate   DateTime?     @map("follow_up_date") @db.Date
+  priority       String?
+  notes          String?
+
+  // Campus Visit
+  visitScheduledDate DateTime? @map("visit_scheduled_date") @db.Date
+  visitDone          Boolean   @default(false) @map("visit_done")
+
+  // Timestamps
+  inquiryDate    DateTime @default(now()) @map("inquiry_date") @db.Timestamptz(6)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt      @map("updated_at") @db.Timestamptz(6)
+
+  // Google Sheets sync flag — true once successfully pushed
+  isSyncedToSheet Boolean @default(false) @map("is_synced_to_sheet")
+
+  // Relations
+  activityLog   CounselorActivityLog[]
+  student       Student?
+  syncLogs      SheetsSyncLog[]
+
+  @@map("inquiries")
+  @@index([tenantId])
+  @@index([phone])
+  @@index([status])
+  @@index([assignedTo])
+  @@index([inquiryDate])
+  @@index([source])
+}
+
+// counselor_activity_log — Immutable audit trail; one row per counselor action
+model CounselorActivityLog {
+  id            BigInt   @id @default(autoincrement())
+  inquiryId     String   @map("inquiry_id")
+  counselorName String   @map("counselor_name")
+  action        String   // "status_change" | "note_added" | "assigned" | "follow_up_set" | "created"
+  oldValue      String?  @map("old_value")
+  newValue      String?  @map("new_value")
+  comments      String?
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  inquiry Inquiry @relation(fields: [inquiryId], references: [inquiryId], onDelete: Cascade)
+
+  @@map("counselor_activity_log")
+  @@index([inquiryId])
+  @@index([counselorName])
+  @@index([createdAt])
+}
+
+// users — Admin / counselor accounts (NextAuth compatible)
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(uuid())
   name          String?
-  email         String?   @unique
-  emailVerified DateTime?
+  email         String    @unique
+  passwordHash  String?   @map("password_hash")
+  role          UserRole  @default(counselor)
+  isActive      Boolean   @default(true)  @map("is_active")
+
+  // NextAuth fields
+  emailVerified DateTime? @map("email_verified") @db.Timestamptz(6)
   image         String?
-  password      String?
-  role          String    @default("user")
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt      @map("updated_at") @db.Timestamptz(6)
+
+  @@map("users")
+}
+
+// students — Enrolled students; created when inquiry status becomes 'Converted'
+model Student {
+  id          String   @id @default(uuid())
+  inquiryId   String?  @unique @map("inquiry_id")
+
+  studentName String  @map("student_name")
+  parentName  String  @map("parent_name")
+  phone       String
+  email       String?
+
+  // Enrollment
+  studentId     String?   @unique @map("student_id")  // STU-001, STU-002, …
+  rollNumber    String?   @map("roll_number")
+  class         String?
+  section       String?
+  admissionDate DateTime? @map("admission_date") @db.Date
+  batchYear     Int?      @map("batch_year")
+  hostel        Boolean   @default(false)
+
+  // Personal Details
+  dateOfBirth DateTime? @map("date_of_birth") @db.Date
+  gender      String?
+  aadharNumber String?  @map("aadhar_number")
+
+  // Fees & Transport
+  feePlan           String? @map("fee_plan")            // Monthly / Quarterly / Annual
+  transportRequired Boolean @default(false) @map("transport_required")
+  transportRoute    String? @map("transport_route")
+
+  // Emergency & Medical
+  emergencyContactName  String? @map("emergency_contact_name")
+  emergencyContactPhone String? @map("emergency_contact_phone")
+  medicalNotes          String? @map("medical_notes")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt      @map("updated_at") @db.Timestamptz(6)
+
+  inquiry Inquiry? @relation(fields: [inquiryId], references: [inquiryId], onDelete: SetNull)
+
+  @@map("students")
+  @@index([phone])
+  @@index([batchYear])
+}
+
+// sheets_sync_log — Tracks Google Sheets sync attempts; enables retry logic
+model SheetsSyncLog {
+  id          BigInt   @id @default(autoincrement())
+  inquiryId   String   @map("inquiry_id")
+  operation   String   @default("insert") // "insert" | "update"
+  sheetRow    Int?     @map("sheet_row")
+  status      String   @default("pending") // "pending" | "success" | "failed"
+  errorMessage String? @map("error_message")
+  syncedAt    DateTime @default(now()) @map("synced_at") @db.Timestamptz(6)
+
+  inquiry Inquiry @relation(fields: [inquiryId], references: [inquiryId], onDelete: Cascade)
+
+  @@map("sheets_sync_log")
+  @@index([inquiryId])
+  @@index([status])
+  @@index([syncedAt])
 }

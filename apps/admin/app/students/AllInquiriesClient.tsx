@@ -12,6 +12,7 @@ import {
     MoreHorizontal,
     Download
 } from 'lucide-react';
+import { ExportButton } from '@/components/reports/ExportButton';
 
 interface Inquiry {
     id: string;
@@ -25,6 +26,24 @@ interface Inquiry {
     caseStatus: string;
     followUpDate?: string;
     lastUpdated?: string;
+    // Extra fields for ExportButton
+    inquiryId?: string;
+    currentSchool?: string;
+    board?: string;
+    secondaryPhone?: string;
+    email?: string;
+    occupation?: string;
+    educationGuide?: string;
+    learningMethod?: string;
+    teacherPreference?: string;
+    childImportance?: string;
+    schoolEnvironment?: string;
+    dayScholarHostel?: string;
+    howHeard?: string;
+    source?: string;
+    assignedTo?: string;
+    priority?: string;
+    notes?: string;
 }
 
 export default function AllInquiriesClient() {
@@ -81,12 +100,9 @@ export default function AllInquiriesClient() {
 
         let matchesDate = true;
         if (dateStart && dateEnd) {
-            const inqDate = new Date(inq.inquiryDate);
-            const start = new Date(dateStart);
-            const end = new Date(dateEnd);
-            // Set end date to end of day
-            end.setHours(23, 59, 59, 999);
-            matchesDate = inqDate >= start && inqDate <= end;
+            const inqDateObj = new Date(inq.inquiryDate);
+            const inqDateStr = inqDateObj.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+            matchesDate = inqDateStr >= dateStart && inqDateStr <= dateEnd;
         }
 
         return matchesSearch && matchesStatus && matchesDate;
@@ -193,33 +209,33 @@ export default function AllInquiriesClient() {
                                 let end = '';
 
                                 if (val === 'today') {
-                                    start = end = today.toISOString().split('T')[0];
+                                    start = end = today.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                                 } else if (val === 'yesterday') {
                                     const y = new Date(today);
                                     y.setDate(today.getDate() - 1);
-                                    start = end = y.toISOString().split('T')[0];
+                                    start = end = y.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                                 } else if (val === 'thisWeek') {
                                     const d = new Date(today);
                                     const day = d.getDay();
                                     const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
                                     const monday = new Date(d.setDate(diff));
                                     const sunday = new Date(d.setDate(monday.getDate() + 6));
-                                    start = monday.toISOString().split('T')[0];
-                                    end = sunday.toISOString().split('T')[0];
+                                    start = monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                                    end = sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                                 } else if (val === 'lastWeek') {
                                     const d = new Date(today);
                                     const day = d.getDay();
                                     const diff = d.getDate() - day + (day === 0 ? -6 : 1) - 7;
                                     const monday = new Date(d.setDate(diff));
                                     const sunday = new Date(d.setDate(monday.getDate() + 6));
-                                    start = monday.toISOString().split('T')[0];
-                                    end = sunday.toISOString().split('T')[0];
+                                    start = monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                                    end = sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                                 } else if (val === 'thisMonth') {
-                                    start = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-                                    end = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0];
+                                    start = new Date(today.getFullYear(), today.getMonth(), 1).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                                    end = new Date(today.getFullYear(), today.getMonth() + 1, 0).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                                 } else if (val === 'lastMonth') {
-                                    start = new Date(today.getFullYear(), today.getMonth() - 1, 1).toISOString().split('T')[0];
-                                    end = new Date(today.getFullYear(), today.getMonth(), 0).toISOString().split('T')[0];
+                                    start = new Date(today.getFullYear(), today.getMonth() - 1, 1).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                                    end = new Date(today.getFullYear(), today.getMonth(), 0).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                                 }
 
                                 if (val !== 'custom') {
@@ -252,6 +268,10 @@ export default function AllInquiriesClient() {
                                 onChange={(e) => setDateEnd(e.target.value)}
                             />
                         </div>
+                    </div>
+                    {/* Export Button */}
+                    <div className="flex-shrink-0 ml-auto">
+                        <ExportButton data={filteredInquiries} filename="All_Inquiries" />
                     </div>
                 </div>
             </div>

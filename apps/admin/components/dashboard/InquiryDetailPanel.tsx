@@ -5,7 +5,7 @@ import { X, Save, User, Phone, Mail, School, BookOpen, MessageSquare, ArrowLeft 
 import type { SheetInquiry as Inquiry } from '@repo/database';
 
 interface InquiryDetailPanelProps {
-    inquiry: Inquiry | null;
+    inquiry: any;
     onClose: () => void;
     onSave: (id: string, updates: CounselorUpdates) => Promise<void>;
 }

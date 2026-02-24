@@ -2,7 +2,7 @@
 -- Create Inquiries Table for Anushtan
 -- Compatible with PostgreSQL 16
 
-CREATE TABLE IF NOT EXISTS inquiries (
+docker compose exec -T postgres psql -U n8n_admin -d n8n_prod -cCREATE TABLE IF NOT EXISTS inquiries (
     id SERIAL PRIMARY KEY,                    -- Internal Auto-incrementing ID
     inquiry_id VARCHAR(50) UNIQUE,            -- External ID (e.g., S-123 from Google Sheets)
     

@@ -37,7 +37,7 @@ export async function POST(req: Request) {
             parentName: data.parentName,
             occupation: data.occupation || '',
             phone: data.primaryContact, // Map primaryContact to phone
-            secondaryContact: data.secondaryContact || '',
+            secondaryPhone: data.secondaryContact || '',
             email: data.email || '',
             educationGuide: data.q1_education_guide || '',
             learningMethod: data.q2_learning_approach || '',
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
             dayScholarHostel: data.dsHostel || '',
             priority: data.priority || '',
             createdBy: session.user.name || 'Unknown',
-            source: 'Digital',
+            source: 'Website',
             notes: data.comments || 'Added via Add Student form',
             status: data.status || 'New',
         });

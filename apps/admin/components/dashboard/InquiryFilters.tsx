@@ -110,38 +110,41 @@ export function InquiryFilters({ filters, onFilterChange }: InquiryFiltersProps)
                         let end = '';
 
                         if (val === 'today') {
-                            start = end = today.toISOString().split('T')[0];
+                            start = end = today.toLocaleDateString('en-CA');
                         } else if (val === 'yesterday') {
                             const y = new Date(today);
                             y.setDate(today.getDate() - 1);
-                            start = end = y.toISOString().split('T')[0];
+                            start = end = y.toLocaleDateString('en-CA');
                         } else if (val === 'thisWeek') {
                             const d = new Date(today);
                             const day = d.getDay();
                             const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
                             const monday = new Date(d.setDate(diff));
                             const sunday = new Date(d.setDate(monday.getDate() + 6));
-                            start = monday.toISOString().split('T')[0];
-                            end = sunday.toISOString().split('T')[0];
+                            start = monday.toLocaleDateString('en-CA');
+                            end = sunday.toLocaleDateString('en-CA');
                         } else if (val === 'lastWeek') {
                             const d = new Date(today);
                             const day = d.getDay();
                             const diff = d.getDate() - day + (day === 0 ? -6 : 1) - 7;
                             const monday = new Date(d.setDate(diff));
                             const sunday = new Date(d.setDate(monday.getDate() + 6));
-                            start = monday.toISOString().split('T')[0];
-                            end = sunday.toISOString().split('T')[0];
+                            start = monday.toLocaleDateString('en-CA');
+                            end = sunday.toLocaleDateString('en-CA');
                         } else if (val === 'thisMonth') {
-                            start = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-                            end = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0];
+                            start = new Date(today.getFullYear(), today.getMonth(), 1).toLocaleDateString('en-CA');
+                            end = new Date(today.getFullYear(), today.getMonth() + 1, 0).toLocaleDateString('en-CA');
                         } else if (val === 'lastMonth') {
-                            start = new Date(today.getFullYear(), today.getMonth() - 1, 1).toISOString().split('T')[0];
-                            end = new Date(today.getFullYear(), today.getMonth(), 0).toISOString().split('T')[0];
+                            start = new Date(today.getFullYear(), today.getMonth() - 1, 1).toLocaleDateString('en-CA');
+                            end = new Date(today.getFullYear(), today.getMonth(), 0).toLocaleDateString('en-CA');
                         }
 
                         if (val !== 'custom') {
-                            handleChange('dateFrom', start);
-                            handleChange('dateTo', end);
+                            onFilterChange({
+                                ...filters,
+                                dateFrom: start,
+                                dateTo: end
+                            });
                         }
                     }}
                 >

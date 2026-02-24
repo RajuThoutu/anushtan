@@ -28,7 +28,7 @@ export function InquirySection({ userName }: InquirySectionProps) {
             if (data.success) {
                 // Filter inquiries assigned to this user
                 const myInquiries = data.data.filter(
-                    (inquiry: Inquiry) => inquiry.counselorName === userName
+                    (inquiry: any) => inquiry.counselorName === userName
                 );
                 setInquiries(myInquiries);
             }
@@ -56,8 +56,8 @@ export function InquirySection({ userName }: InquirySectionProps) {
     // Count by status
     const statusCounts = {
         new: inquiries.filter(i => i.status === 'New').length,
-        followUp: inquiries.filter(i => i.status === 'Follow-up').length,
-        interested: inquiries.filter(i => i.status === 'Interested').length,
+        followUp: inquiries.filter(i => (i.status as any) === 'Follow-up').length,
+        interested: inquiries.filter(i => (i.status as any) === 'Interested').length,
     };
 
     return (

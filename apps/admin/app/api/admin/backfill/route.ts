@@ -5,8 +5,8 @@ export async function GET() {
     try {
         const inquiries = await getAllInquiries();
 
-        // Filter for unassigned inquiries (empty counselorName)
-        const unassigned = inquiries.filter(inq => !inq.counselorName || inq.counselorName.trim() === '');
+        // Filter for unassigned inquiries (empty assignedTo)
+        const unassigned = inquiries.filter(inq => !inq.assignedTo || inq.assignedTo.trim() === '');
 
         const counselors = ['Bhargavi', 'Bhavani'];
         const results = [];
@@ -16,11 +16,8 @@ export async function GET() {
             const randomCounselor = counselors[Math.floor(Math.random() * counselors.length)];
 
             // Update
-            await updateCounselorActions(inq.id, {
-                updatedBy: randomCounselor,
-                // Preserve existing values by not passing them (updateCounselorActions handles this logic partially, 
-                // but we need to be careful. client.ts implementation of updateCounselorActions reads current values if undefined)
-                // However, updatedBy (Column V) IS the counselor name.
+            await updateCounselorActions(inq.inquiryId, {
+                assignedTo: randomCounselor,
             });
 
             results.push({

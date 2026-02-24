@@ -16,21 +16,17 @@ export async function POST(request: Request) {
 
         const formData = await request.formData();
 
-        const inquiryData = {
+        const inquiryData: any = {
             studentName: formData.get('studentName') as string,
             currentClass: formData.get('currentClass') as string,
-            // Defaults for removed fields
-            parentName: 'Paper Form',
-            phone: '0000000000',
-            email: 'paper@example.com',
+            parentName: (formData.get('parentName') as string) || 'Paper Form',
+            phone: (formData.get('phone') as string) || '0000000000',
+            email: (formData.get('email') as string) || '',
             howHeard: 'Paper Form',
-            address: 'See Photo',
-
-            counselorName: formData.get('counselorName') as string || session.user.name,
-            status: formData.get('status') as string || 'New',
-            counselorComments: formData.get('counselorComments') as string || '',
-            followUpDate: formData.get('followUpDate') as string || '',
-            notes: 'Added via paper form upload',
+            assignedTo: (formData.get('counselorName') as string) || session.user?.name || '',
+            status: (formData.get('status') as string) || 'New',
+            followUpDate: (formData.get('followUpDate') as string) || '',
+            notes: (formData.get('counselorComments') as string) || 'Added via paper form upload',
         };
 
         // TODO: Handle photo upload to Google Drive or cloud storage
@@ -38,8 +34,8 @@ export async function POST(request: Request) {
 
         await createInquiry({
             ...inquiryData,
-            createdBy: session.user.name,
-            source: 'Paper',
+            createdBy: session.user?.name ?? 'Admin Portal',
+            source: 'PaperForm',
         });
 
         return NextResponse.json({

@@ -11,6 +11,7 @@
         "postinstall": "prisma generate"
     },
     "dependencies": {
+        "@repo/env-config": "workspace:*",
         "googleapis": "^140.0.0",
         "google-auth-library": "^9.0.0",
         "@prisma/client": "^5.17.0"

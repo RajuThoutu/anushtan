@@ -7,6 +7,7 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
+    Legend,
     ResponsiveContainer,
     Cell
 } from 'recharts';
@@ -14,6 +15,7 @@ import {
 interface GradeData {
     grade: string;
     count: number;
+    admissions: number;
 }
 
 interface GradeDistributionChartProps {
@@ -51,13 +53,11 @@ export function GradeDistributionChart({ data }: GradeDistributionChartProps) {
                             border: '1px solid #e2e8f0',
                             boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                         }}
-                        cursor={{ fill: 'transparent' }}
+                        cursor={{ fill: '#f1f5f9' }}
                     />
-                    <Bar dataKey="count" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={20}>
-                        {data.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#3b82f6' : '#60a5fa'} />
-                        ))}
-                    </Bar>
+                    <Legend iconType="circle" wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
+                    <Bar dataKey="count" name="Total Inquiries" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={12} />
+                    <Bar dataKey="admissions" name="Admissions" fill="#10b981" radius={[0, 4, 4, 0]} barSize={12} />
                 </BarChart>
             </ResponsiveContainer>
         </div>

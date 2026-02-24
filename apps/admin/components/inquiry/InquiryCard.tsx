@@ -2,7 +2,7 @@ import type { SheetInquiry as Inquiry } from '@repo/database';
 import Link from 'next/link';
 
 interface InquiryCardProps {
-    inquiry: Inquiry;
+    inquiry: any;
     showAssignButton?: boolean;
     onAssign?: (id: string) => void;
 }

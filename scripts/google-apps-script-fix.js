@@ -1,10 +1,10 @@
 // -----------------------------------------------------------------------------
-// ANUSHTAN - ROBUST ID GENERATION FOR GOOGLE FORMS
+// ANUSHTAN - ROBUST ID GENERATION & N8N SYNC FOR GOOGLE FORMS
 // -----------------------------------------------------------------------------
 // INSTRUCTIONS:
 // 1. Open your Google Sheet.
 // 2. Go to Extensions > Apps Script.
-// 3. Paste this code into the editor (replacing any old 'onFormSubmit' or ID logic).
+// 3. Paste this code into the editor (replacing any old code).
 // 4. Save the project.
 // 5. If not already set up, add a Trigger:
 //    - Function to run: onFormSubmit
@@ -16,6 +16,19 @@
 var SOR_SHEET_NAME = "Inquiries (SOR)";
 var WORKING_SHEET_NAME = "Inquiries (Working)";
 var ID_COLUMN_INDEX = 1; // Column A is 1
+var N8N_WEBHOOK_URL = "https://api.anushtansiddipet.in/webhook/school-inquiry";
+
+// FIELD MAPPING: Google Form Question Title -> n8n JSON Key
+// Update the LEFT side if your Form Questions are named differently.
+var FIELD_MAP = {
+    "Student Name": "student_name",
+    "Parent Name": "parent_name", // If you collect this
+    "Phone Number": "phone",
+    "Email": "email",
+    "Class": "current_class", // or "Grade"
+    "Message": "message",
+    "Comments": "message"
+};
 
 function onFormSubmit(e) {
     var lock = LockService.getScriptLock();
@@ -39,14 +52,10 @@ function onFormSubmit(e) {
         // 2. SET THE ID IN THE NEW ROW
         sheet.getRange(row, ID_COLUMN_INDEX).setValue(nextId);
 
-        // 3. COPY TO WORKING SHEET (Optional, but recommended to keep in sync)
-        // If you want the new inquiry to immediately appear in Working sheet:
-        // copyToWorkingSheet(ss, e, nextId);
-
-        // 4. TRIGGER N8N WEBHOOK (If your old script did this)
-        // sendToN8n(e, nextId);
-
         Logger.log("Assigned ID: " + nextId + " to Row: " + row);
+
+        // 3. TRIGGER N8N WEBHOOK
+        sendToN8n(e, nextId);
 
     } catch (error) {
         Logger.log("Error in onFormSubmit: " + error.toString());
@@ -97,13 +106,40 @@ function getNextInquiryId(ss) {
     return "S-" + (maxId + 1);
 }
 
-// Optional: Helper to send data to n8n if your form relied on script trigger
+// Helper to send data to n8n
 function sendToN8n(e, id) {
-    var url = "YOUR_N8N_WEBHOOK_URL_HERE";
+    // Construct payload mapping Form Fields to standardized keys
+    var formData = {};
+    var namedValues = e.namedValues;
+
+    // Default mapping
+    Object.keys(FIELD_MAP).forEach(function (formField) {
+        // Check keys case-insensitively just in case
+        var actualKey = findKeyCaseInsensitive(namedValues, formField);
+        if (actualKey) {
+            formData[FIELD_MAP[formField]] = namedValues[actualKey][0];
+        }
+    });
+
+    // Fallback: If no mapping found for crucial fields, try direct key usage
+    if (!formData['student_name'] && namedValues['Student Name']) formData['student_name'] = namedValues['Student Name'][0];
+    if (!formData['phone'] && namedValues['Phone Number']) formData['phone'] = namedValues['Phone Number'][0];
+    if (!formData['phone'] && namedValues['Phone']) formData['phone'] = namedValues['Phone'][0];
+
+    // Final Payload Structure matching what Website sends
     var payload = {
         "inquiry_id": id,
+        "source": "Google Form",
         "timestamp": new Date().toISOString(),
-        "form_data": e.namedValues
+        // Merge mapped fields
+        "student_name": formData['student_name'] || "Unknown Student",
+        "parent_name": formData['parent_name'] || "Not Provided",
+        "email": formData['email'] || "",
+        "phone": formData['phone'] || "",
+        "current_class": formData['current_class'] || "",
+        "message": formData['message'] || "",
+        // Allow access to raw form data if needed by n8n debug
+        "raw_form_data": namedValues
     };
 
     var options = {
@@ -112,5 +148,18 @@ function sendToN8n(e, id) {
         "payload": JSON.stringify(payload)
     };
 
-    UrlFetchApp.fetch(url, options);
+    try {
+        UrlFetchApp.fetch(N8N_WEBHOOK_URL, options);
+        Logger.log("Sent to n8n: " + JSON.stringify(payload));
+    } catch (err) {
+        Logger.log("Failed to send to n8n: " + err.toString());
+    }
+}
+
+function findKeyCaseInsensitive(obj, key) {
+    var lowerKey = key.toLowerCase();
+    for (var k in obj) {
+        if (k.toLowerCase() === lowerKey) return k;
+    }
+    return null;
 }
