@@ -298,7 +298,7 @@ export default function AllInquiriesClient() {
                                     </div>
                                     <div className="flex justify-between items-center mt-2 pt-2 border-t border-gray-100">
                                         <div className="text-xs text-gray-400">
-                                            ID: {inq.id} • {new Date(inq.inquiryDate).toLocaleDateString()}
+                                            ID: {inq.inquiryId || inq.id} • {new Date(inq.inquiryDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })}
                                         </div>
                                         <button
                                             onClick={() => router.push(`/inquiry/${inq.id}`)}
@@ -335,9 +335,9 @@ export default function AllInquiriesClient() {
                                     paginatedInquiries.map((inq) => (
                                         <tr key={inq.id} className="hover:bg-gray-50 transition-colors">
                                             <td className="px-6 py-4">
-                                                <div className="font-medium text-admin-text">{inq.id}</div>
+                                                <div className="font-medium text-admin-text">{inq.inquiryId || inq.id}</div>
                                                 <div className="text-xs text-gray-500">
-                                                    {new Date(inq.inquiryDate).toLocaleDateString()}
+                                                    {new Date(inq.inquiryDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', year: 'numeric', month: 'short', day: 'numeric' })}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
@@ -360,7 +360,7 @@ export default function AllInquiriesClient() {
                                                 {inq.followUpDate ? (
                                                     <div className="flex items-center gap-1 text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded border border-orange-100 w-fit">
                                                         <Calendar size={12} />
-                                                        {new Date(inq.followUpDate).toLocaleDateString()}
+                                                        {new Date(inq.followUpDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', year: 'numeric', month: 'short', day: 'numeric' })}
                                                     </div>
                                                 ) : (
                                                     <span className="text-xs text-gray-400">-</span>
