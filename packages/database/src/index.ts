@@ -30,8 +30,15 @@ const prismaClientSingleton = () => {
         });
     }
 
-    // Default to natural Prisma resolution (env("DATABASE_URL") in schema)
-    return new PrismaClient();
+    // Default to natural Prisma resolution, explicitly passing the generic DATABASE_URL
+    // This is required in some serverless environments where `env("DATABASE_URL")` fails to resolve at runtime
+    return new PrismaClient({
+        datasources: {
+            db: {
+                url: dbConfig.url.replace(/^["']|["']$/g, ''),
+            },
+        },
+    });
 };
 
 declare global {
