@@ -2,12 +2,14 @@ import { PrismaClient } from '@prisma/client';
 import { dbConfig } from '@repo/env-config';
 
 const prismaClientSingleton = () => {
-    let targetUrl = dbConfig.url;
+    let targetUrl: string | undefined = undefined;
 
     if (process.env.NODE_ENV === 'development') {
-        // Enforce Dev DB in local environment to prevent accidental prod writes
-        targetUrl = dbConfig.devUrl || dbConfig.url;
-        console.log('🧪 [Prisma] Local Development: Using DEV Database');
+        // Enforce Dev DB in local environment if devUrl is explicit
+        if (dbConfig.devUrl) {
+            targetUrl = dbConfig.devUrl;
+            console.log('🧪 [Prisma] Local Development: Using DEV Database override');
+        }
     } else if (dbConfig.useProdDb && dbConfig.prodUrl) {
         targetUrl = dbConfig.prodUrl;
         console.log('🔄 [Prisma] Database override active: Using PROD Database');
@@ -16,14 +18,20 @@ const prismaClientSingleton = () => {
         console.log('🧪 [Prisma] Database override active: Using DEV Database');
     }
 
-
-    return new PrismaClient({
-        datasources: {
-            db: {
-                url: targetUrl,
+    if (targetUrl) {
+        // Strip any accidental quotes from the connection string
+        targetUrl = targetUrl.replace(/^["']|["']$/g, '');
+        return new PrismaClient({
+            datasources: {
+                db: {
+                    url: targetUrl,
+                },
             },
-        },
-    });
+        });
+    }
+
+    // Default to natural Prisma resolution (env("DATABASE_URL") in schema)
+    return new PrismaClient();
 };
 
 declare global {
