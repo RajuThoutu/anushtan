@@ -1,288 +1,325 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-    Users,
-    TrendingUp,
-    ClipboardList,
-    AlertCircle,
-    Download
-} from 'lucide-react';
+
 import { AdmissionFunnelChart } from '@/components/dashboard/reports/AdmissionFunnelChart';
 import { CounselorPerformanceChart } from '@/components/dashboard/reports/CounselorPerformanceChart';
 import { GradeDistributionChart } from '@/components/dashboard/reports/GradeDistributionChart';
 import { BoardingTypeChart } from '@/components/dashboard/reports/BoardingTypeChart';
 import { SchoolDrilldownChart } from '@/components/dashboard/reports/SchoolDrilldownChart';
+import { DirectorKpiCards } from '@/components/dashboard/reports/DirectorKpiCards';
+import { FollowUpHealthChart } from '@/components/dashboard/reports/FollowUpHealthChart';
+import { SourceConversionChart } from '@/components/dashboard/reports/SourceConversionChart';
+import { CounselorLeaderboard } from '@/components/dashboard/reports/CounselorLeaderboard';
+import { TrendChart } from '@/components/dashboard/reports/TrendChart';
 import { ExportButton } from '@/components/reports/ExportButton';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Inquiry {
     id: string;
     inquiryDate: string;
+    updatedAt?: string;
     status: string;
-    counselorName: string;
+    counselorName?: string;
+    assignedTo?: string;
     currentClass?: string;
+    currentSchool?: string;
     source?: string;
     dayScholarHostel?: string;
+    followUpDate?: string | null;
+    studentName?: string;
+    parentName?: string;
+    phone?: string;
 }
+
+interface DirectorKpis {
+    thisMonthTotal: number;
+    lastMonthTotal: number;
+    thisMonthConverted: number;
+    lastMonthConverted: number;
+    overdueFollowUps: number;
+    unassigned: number;
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function todayIST(): Date {
+    const now = new Date();
+    const ist = new Date(now.getTime() + 5.5 * 60 * 60 * 1000);
+    ist.setUTCHours(0, 0, 0, 0);
+    return ist;
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function ReportsClient() {
     const [loading, setLoading] = useState(true);
     const [inquiries, setInquiries] = useState<Inquiry[]>([]);
 
-    // View State
-    const [visibleSections, setVisibleSections] = useState({
-        kpi: true,
-        prediction: true,
-        charts: true,
-        gradeSource: true,
-        counselor: true
+    // ── Director Overview ──
+    const [directorKpis, setDirectorKpis] = useState<DirectorKpis>({
+        thisMonthTotal: 0, lastMonthTotal: 0,
+        thisMonthConverted: 0, lastMonthConverted: 0,
+        overdueFollowUps: 0, unassigned: 0,
     });
+    const [followUpHealth, setFollowUpHealth] = useState({ overdue: 0, dueToday: 0, upcoming: 0, noDate: 0 });
+    const [trendData30, setTrendData30] = useState<{ day: string; count: number; label: string }[]>([]);
+    const [sourceConvData, setSourceConvData] = useState<{ source: string; total: number; converted: number; conversionRate: number }[]>([]);
+    const [leaderboard, setLeaderboard] = useState<any[]>([]);
 
-    const toggleSection = (id: string) => {
-        setVisibleSections(prev => ({ ...prev, [id]: !prev[id as keyof typeof prev] }));
-    };
-
-    const sectionOptions = [
-        { id: 'kpi', label: 'Executive Summary (KPIs)', checked: visibleSections.kpi },
-        { id: 'prediction', label: 'Enrollment Forecast', checked: visibleSections.prediction },
-        { id: 'charts', label: 'Trends & Funnel', checked: visibleSections.charts },
-        { id: 'gradeSource', label: 'Market Insights (Grade/Source)', checked: visibleSections.gradeSource },
-        { id: 'counselor', label: 'Counselor Performance', checked: visibleSections.counselor },
-    ];
-
-    // Aggregated Metrics
-    const [metrics, setMetrics] = useState({
-        total: 0,
-        conversionRate: 0,
-        activePipeline: 0,
-        actionNeeded: 0
-    });
-
-    const [trendData, setTrendData] = useState<{ date: string; count: number }[]>([]);
+    // ── Existing sections ──
     const [funnelData, setFunnelData] = useState<{ stage: string; count: number }[]>([]);
-
-    // Aggregated Data for new reports
     const [counselorStats, setCounselorStats] = useState<any[]>([]);
-    const [dailyLogs, setDailyLogs] = useState<any[]>([]);
     const [gradeData, setGradeData] = useState<{ grade: string; count: number; admissions: number }[]>([]);
-    const [sourceData, setSourceData] = useState<{ source: string; count: number }[]>([]);
-    const [prediction, setPrediction] = useState({ confirmed: 0, predicted: 0, confidence: 85 });
-
     const [boardingData, setBoardingData] = useState<{ name: string; value: number }[]>([]);
 
     useEffect(() => {
-        fetchData();
+        fetch('/api/counselor/inquiries')
+            .then(r => r.json())
+            .then(d => { if (d.success) processData(d.data); })
+            .catch(e => console.error('Reports fetch failed', e))
+            .finally(() => setLoading(false));
     }, []);
-
-    const fetchData = async () => {
-        try {
-            const response = await fetch('/api/counselor/inquiries');
-            const data = await response.json();
-
-            if (data.success) {
-                processData(data.data);
-            }
-        } catch (error) {
-            console.error('Failed to fetch reports data', error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const processData = (data: Inquiry[]) => {
         setInquiries(data);
 
-        // 1. KPI Calculations
-        const total = data.length;
-        const converted = data.filter(i => i.status === 'Converted').length;
-        const active = data.filter(i => i.status === 'Open' || i.status === 'Follow-up').length;
-        const newInquiries = data.filter(i => i.status === 'New').length;
-        const actionNeeded = newInquiries + data.filter(i => i.status === 'Follow-up').length;
+        const today = todayIST();
+        const tomorrow = new Date(today); tomorrow.setUTCDate(today.getUTCDate() + 1);
+        const in7Days  = new Date(today); in7Days.setUTCDate(today.getUTCDate() + 7);
 
-        setMetrics({
-            total,
-            conversionRate: total > 0 ? Number(((converted / total) * 100).toFixed(1)) : 0,
-            activePipeline: active,
-            actionNeeded
+        const thisMonthStart = new Date(today); thisMonthStart.setUTCDate(1);
+        const lastMonthStart = new Date(thisMonthStart); lastMonthStart.setUTCMonth(lastMonthStart.getUTCMonth() - 1);
+        const lastMonthEnd   = new Date(thisMonthStart); lastMonthEnd.setUTCMilliseconds(-1);
+
+        const ACTIVE = ['New', 'Open', 'Follow-up'];
+
+        // ── Director KPIs ──────────────────────────────────────────────────────
+        const thisMonth = data.filter(i => new Date(i.inquiryDate) >= thisMonthStart);
+        const lastMonth = data.filter(i => {
+            const d = new Date(i.inquiryDate);
+            return d >= lastMonthStart && d <= lastMonthEnd;
+        });
+        const unassigned = data.filter(i => !i.assignedTo && ACTIVE.includes(i.status)).length;
+        const overdueFollowUps = data.filter(i => {
+            if (!i.followUpDate || !ACTIVE.includes(i.status)) return false;
+            const fd = new Date(i.followUpDate); fd.setUTCHours(0, 0, 0, 0);
+            return fd < today;
+        }).length;
+
+        setDirectorKpis({
+            thisMonthTotal:     thisMonth.length,
+            lastMonthTotal:     lastMonth.length,
+            thisMonthConverted: thisMonth.filter(i => i.status === 'Converted').length,
+            lastMonthConverted: lastMonth.filter(i => i.status === 'Converted').length,
+            overdueFollowUps,
+            unassigned,
         });
 
-        // 2. Trend Data
-        const dateMap = new Map<string, number>();
-        data.forEach(i => {
-            const date = new Date(i.inquiryDate).toLocaleDateString();
-            dateMap.set(date, (dateMap.get(date) || 0) + 1);
+        // ── Follow-up Health ───────────────────────────────────────────────────
+        let overdue = 0, dueToday = 0, upcoming = 0, noDate = 0;
+        data.filter(i => ACTIVE.includes(i.status)).forEach(i => {
+            if (!i.followUpDate) { noDate++; return; }
+            const fd = new Date(i.followUpDate); fd.setUTCHours(0, 0, 0, 0);
+            if (fd < today)                                     overdue++;
+            else if (fd.getTime() === today.getTime())          dueToday++;
+            else if (fd < in7Days)                              upcoming++;
+            else                                                noDate++;
         });
-        const sortedDates = Array.from(dateMap.keys()).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
-        const recentDates = sortedDates.slice(-14);
-        setTrendData(recentDates.map(date => ({ date, count: dateMap.get(date) || 0 })));
+        setFollowUpHealth({ overdue, dueToday, upcoming, noDate });
 
-        // 3. Funnel Data
-        const stages = ['New', 'Open', 'Follow-up', 'Converted', 'Closed'];
-        const funnelCounts = stages.map(stage => ({
-            stage,
-            count: data.filter(i => i.status === stage).length
-        }));
-        setFunnelData(funnelCounts);
-
-        // 4. Counselor Stats Aggregation
-        const counselorMap = new Map<string, any>();
-        data.forEach(i => {
-            const name = i.counselorName || 'Unassigned';
-            if (!counselorMap.has(name)) {
-                counselorMap.set(name, {
-                    name,
-                    total: 0,
-                    statuses: { New: 0, Open: 0, FollowUp: 0, Converted: 0, Closed: 0 },
-                    conversionRate: 0
-                });
-            }
-            const stats = counselorMap.get(name);
-            stats.total += 1;
-            const statusKey = i.status === 'Follow-up' ? 'FollowUp' : i.status;
-            if (stats.statuses[statusKey] !== undefined) {
-                stats.statuses[statusKey] += 1;
-            }
-        });
-        const statsArray = Array.from(counselorMap.values()).map(c => {
-            c.conversionRate = c.total > 0 ? Number(((c.statuses.Converted / c.total) * 100).toFixed(1)) : 0;
-            return c;
-        });
-        setCounselorStats(statsArray);
-
-        // 5. Daily Activity Log
-        const activityMap = new Map<string, any>();
-        data.forEach(i => {
-            const date = new Date(i.inquiryDate).toLocaleDateString();
-            const counselor = i.counselorName || 'Unassigned';
-            const key = `${date}_${counselor}`;
-            if (!activityMap.has(key)) {
-                activityMap.set(key, {
-                    date: i.inquiryDate,
-                    counselorName: counselor,
-                    total: 0,
-                    statusCounts: {} as Record<string, number>
-                });
-            }
-            const entry = activityMap.get(key);
-            entry.total += 1;
-            entry.statusCounts[i.status] = (entry.statusCounts[i.status] || 0) + 1;
-        });
-        const activityArray = Array.from(activityMap.values()).map(entry => {
-            const breakdownParts = Object.entries(entry.statusCounts).map(([status, count]) => `${count} ${status}`);
+        // ── 30-day Trend ───────────────────────────────────────────────────────
+        const thirtyAgo = new Date(today); thirtyAgo.setUTCDate(today.getUTCDate() - 29);
+        const days = Array.from({ length: 30 }, (_, d) => {
+            const date = new Date(thirtyAgo); date.setUTCDate(thirtyAgo.getUTCDate() + d);
+            const dayStr = date.toISOString().split('T')[0];
             return {
-                date: entry.date,
-                counselorName: entry.counselorName,
-                total: entry.total,
-                statusBreakdown: breakdownParts.join(', ')
+                day: dayStr,
+                label: date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' }),
+                count: data.filter(i => new Date(i.inquiryDate).toISOString().split('T')[0] === dayStr).length,
             };
         });
-        activityArray.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        setDailyLogs(activityArray);
+        setTrendData30(days);
 
-
-        // 6. Grade Distribution
-        const gradeMap = new Map<string, { count: number; admissions: number }>();
-        data.forEach(i => {
-            const grade = i.currentClass || 'Unknown';
-            if (!gradeMap.has(grade)) {
-                gradeMap.set(grade, { count: 0, admissions: 0 });
-            }
-            const gData = gradeMap.get(grade)!;
-            gData.count += 1;
-            if (i.status === 'Converted') {
-                gData.admissions += 1;
-            }
-        });
-        const gradeArr = Array.from(gradeMap.entries()).map(([grade, stats]) => ({
-            grade,
-            count: stats.count,
-            admissions: stats.admissions
-        }));
-        gradeArr.sort((a, b) => b.count - a.count);
-        setGradeData(gradeArr.slice(0, 10)); // Top 10 grades
-
-        // 7. Source Effectiveness
-        const sourceMap = new Map<string, number>();
+        // ── Source Conversion ──────────────────────────────────────────────────
+        const srcMap = new Map<string, { total: number; converted: number }>();
         data.forEach(i => {
             const src = i.source || 'Other';
-            sourceMap.set(src, (sourceMap.get(src) || 0) + 1);
+            if (!srcMap.has(src)) srcMap.set(src, { total: 0, converted: 0 });
+            const s = srcMap.get(src)!;
+            s.total++;
+            if (i.status === 'Converted') s.converted++;
         });
-        const sourceArr = Array.from(sourceMap.entries()).map(([source, count]) => ({ source, count }));
-        sourceArr.sort((a, b) => b.count - a.count);
-        setSourceData(sourceArr);
+        setSourceConvData(
+            Array.from(srcMap.entries())
+                .map(([source, s]) => ({
+                    source,
+                    total: s.total,
+                    converted: s.converted,
+                    conversionRate: s.total > 0 ? Number(((s.converted / s.total) * 100).toFixed(1)) : 0,
+                }))
+                .sort((a, b) => b.total - a.total)
+        );
 
-        // 8. Boarding Type Data
-        const boardMap = new Map<string, number>();
+        // ── Counselor Stats + Leaderboard ──────────────────────────────────────
+        const cMap = new Map<string, any>();
         data.forEach(i => {
-            const type = i.dayScholarHostel || 'Not Specified';
-            boardMap.set(type, (boardMap.get(type) || 0) + 1);
+            const name = i.counselorName || i.assignedTo || 'Unassigned';
+            if (!cMap.has(name)) {
+                cMap.set(name, {
+                    name, total: 0,
+                    statuses: { New: 0, Open: 0, FollowUp: 0, Converted: 0, Closed: 0 },
+                    overdue: 0, openFollowUp: 0,
+                });
+            }
+            const c = cMap.get(name)!;
+            c.total++;
+            const sk = i.status === 'Follow-up' ? 'FollowUp' : i.status;
+            if (c.statuses[sk] !== undefined) c.statuses[sk]++;
+            if (ACTIVE.includes(i.status)) {
+                if (i.followUpDate) {
+                    const fd = new Date(i.followUpDate); fd.setUTCHours(0, 0, 0, 0);
+                    if (fd < today) c.overdue++;
+                }
+                if (i.status === 'Open' || i.status === 'Follow-up') c.openFollowUp++;
+            }
         });
-        const boardArr = Array.from(boardMap.entries()).map(([name, value]) => ({ name, value }));
-        setBoardingData(boardArr);
+        const statsArr = Array.from(cMap.values()).map(c => ({
+            ...c,
+            converted: c.statuses.Converted,
+            conversionRate: c.total > 0 ? Number(((c.statuses.Converted / c.total) * 100).toFixed(1)) : 0,
+        }));
+        setCounselorStats(statsArr);
+        setLeaderboard(statsArr);
 
-        // 9. Prediction Calculation
-        const openCount = data.filter(i => i.status === 'Open').length;
-        const followUpCount = data.filter(i => i.status === 'Follow-up').length;
-        const predictedVal = (openCount * 0.1) + (followUpCount * 0.3);
-
-        setPrediction({
-            confirmed: converted,
-            predicted: predictedVal,
-            confidence: 85
+        // ── Grade Distribution ─────────────────────────────────────────────────
+        const gMap = new Map<string, { count: number; admissions: number }>();
+        data.forEach(i => {
+            const g = i.currentClass || 'Unknown';
+            if (!gMap.has(g)) gMap.set(g, { count: 0, admissions: 0 });
+            const gd = gMap.get(g)!;
+            gd.count++;
+            if (i.status === 'Converted') gd.admissions++;
         });
+        setGradeData(
+            Array.from(gMap.entries())
+                .map(([grade, s]) => ({ grade, count: s.count, admissions: s.admissions }))
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 10)
+        );
+
+        // ── Admission Funnel ───────────────────────────────────────────────────
+        setFunnelData(['New', 'Open', 'Follow-up', 'Converted', 'Closed'].map(stage => ({
+            stage,
+            count: data.filter(i => i.status === stage).length,
+        })));
+
+        // ── Boarding Type ──────────────────────────────────────────────────────
+        const bMap = new Map<string, number>();
+        data.forEach(i => {
+            const t = i.dayScholarHostel || 'Not Specified';
+            bMap.set(t, (bMap.get(t) || 0) + 1);
+        });
+        setBoardingData(Array.from(bMap.entries()).map(([name, value]) => ({ name, value })));
     };
 
+    // ── Loading ────────────────────────────────────────────────────────────────
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-admin-emerald"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-admin-emerald" />
+            </div>
+        );
+    }
+
+    // ── Section heading helper ─────────────────────────────────────────────────
+    function SectionHeading({ label, color }: { label: string; color: string }) {
+        return (
+            <div className="flex items-center gap-3 mb-5">
+                <div className={`h-5 w-1 rounded-full ${color}`} />
+                <h2 className="text-xl font-bold text-admin-charcoal">{label}</h2>
             </div>
         );
     }
 
     return (
-        <div className="space-y-8">
-            {/* Header / Actions */}
-            <div className="flex justify-end gap-4">
-                <div className="flex gap-3">
-                    <button className="flex items-center gap-2 px-4 py-2 bg-white border border-admin-border rounded-lg text-admin-text hover:bg-gray-50 transition shadow-sm">
-                        <Download size={18} />
-                        <span>Export Report</span>
-                    </button>
-                </div>
+        <div className="space-y-10">
+            {/* Export */}
+            <div className="flex justify-end">
+                <ExportButton data={inquiries} />
             </div>
 
-            {/* Market Insights */}
-            {visibleSections.gradeSource && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-150">
+            {/* ═══════════════════════════════════════════════════════════════════
+                DIRECTOR OVERVIEW
+            ═══════════════════════════════════════════════════════════════════ */}
+            <section>
+                <div className="flex items-center gap-3 mb-5">
+                    <div className="h-5 w-1 rounded-full bg-gradient-to-b from-admin-purple to-admin-rose" />
+                    <h2 className="text-xl font-bold text-admin-charcoal">Director Overview</h2>
+                    <span className="text-xs font-medium text-admin-text-secondary bg-gray-100 px-2 py-0.5 rounded-full">
+                        Month-to-date
+                    </span>
+                </div>
+                <DirectorKpiCards {...directorKpis} />
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════════════
+                FOLLOW-UP HEALTH  +  30-DAY TREND
+            ═══════════════════════════════════════════════════════════════════ */}
+            <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <FollowUpHealthChart {...followUpHealth} />
+                <div className="lg:col-span-2">
+                    <TrendChart data={trendData30} />
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════════════
+                SOURCE EFFECTIVENESS  +  COUNSELOR LEADERBOARD
+            ═══════════════════════════════════════════════════════════════════ */}
+            <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <SourceConversionChart data={sourceConvData} />
+                <CounselorLeaderboard data={leaderboard} />
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════════════
+                MARKET INSIGHTS
+            ═══════════════════════════════════════════════════════════════════ */}
+            <section>
+                <SectionHeading label="Market Insights" color="bg-blue-400" />
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div className="bg-white p-6 rounded-xl border border-admin-border shadow-sm">
-                        <h3 className="text-lg font-semibold text-admin-text mb-6">Demand by Grade Level</h3>
+                        <h3 className="text-lg font-semibold text-admin-text mb-5">Demand by Grade Level</h3>
                         <GradeDistributionChart data={gradeData} />
                     </div>
                     <div className="bg-white p-6 rounded-xl border border-admin-border shadow-sm">
-                        <h3 className="text-lg font-semibold text-admin-text mb-6">Boarding Type Preference</h3>
+                        <h3 className="text-lg font-semibold text-admin-text mb-5">Boarding Type Preference</h3>
                         <BoardingTypeChart data={boardingData} />
                     </div>
                 </div>
-            )}
+            </section>
 
-            {/* Trends & Funnel */}
-            {visibleSections.charts && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
+            {/* ═══════════════════════════════════════════════════════════════════
+                PIPELINE & SCHOOL BREAKDOWN
+            ═══════════════════════════════════════════════════════════════════ */}
+            <section>
+                <SectionHeading label="Pipeline & Schools" color="bg-amber-400" />
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <SchoolDrilldownChart inquiries={inquiries} />
                     <div className="bg-white p-6 rounded-xl border border-admin-border shadow-sm">
-                        <h3 className="text-lg font-semibold text-admin-text mb-6">Admission Pipeline</h3>
+                        <h3 className="text-lg font-semibold text-admin-text mb-5">Admission Pipeline</h3>
                         <AdmissionFunnelChart data={funnelData} />
                     </div>
                 </div>
-            )}
+            </section>
 
-            {/* Counselor Performance Section */}
-            {visibleSections.counselor && (
-                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300">
-                    <CounselorPerformanceChart data={counselorStats} />
-                </div>
-            )}
+            {/* ═══════════════════════════════════════════════════════════════════
+                COUNSELOR WORKLOAD
+            ═══════════════════════════════════════════════════════════════════ */}
+            <section>
+                <SectionHeading label="Counselor Workload" color="bg-emerald-400" />
+                <CounselorPerformanceChart data={counselorStats} />
+            </section>
         </div>
     );
 }
