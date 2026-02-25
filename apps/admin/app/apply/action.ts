@@ -8,6 +8,9 @@ interface QRInquiryData {
     phone: string;
     grade: string;
     dayScholarHostel?: string;
+    board?: string;
+    currentSchool?: string;
+    howHeard?: string;
 }
 
 export async function submitQRInquiry(data: QRInquiryData): Promise<{ success: boolean; error?: string }> {
@@ -18,8 +21,10 @@ export async function submitQRInquiry(data: QRInquiryData): Promise<{ success: b
             phone: data.phone,
             currentClass: data.grade,
             dayScholarHostel: data.dayScholarHostel,
+            board: data.board,
+            currentSchool: data.currentSchool,
             source: 'QRScan',
-            howHeard: 'QR Code Scan',
+            howHeard: data.howHeard || 'QR Code Scan',
             createdBy: 'QR Form',
             status: 'New',
         });

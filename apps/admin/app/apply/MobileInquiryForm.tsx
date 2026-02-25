@@ -9,6 +9,18 @@ const GRADES = [
     'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10',
 ];
 
+const BOARDS = ['CBSE', 'ICSE', 'Telangana State Board', 'AP State Board', 'IB', 'IGCSE', 'Other'];
+
+const LEAD_SOURCES = [
+    'Word of Mouth',
+    'Social Media',
+    'Newspaper / Print Ad',
+    'Hoarding / Banner',
+    'School Event',
+    'Online Search',
+    'Other',
+];
+
 /** Today's access code: ddmm in IST */
 function todayCode(): string {
     const now = new Date();
@@ -31,6 +43,9 @@ export function MobileInquiryForm() {
         phone: '',
         grade: '',
         dayScholarHostel: '',
+        board: '',
+        currentSchool: '',
+        howHeard: '',
     });
 
     const set = (field: string, value: string) =>
@@ -70,6 +85,9 @@ export function MobileInquiryForm() {
             phone: `+91${form.phone}`,
             grade: form.grade,
             dayScholarHostel: form.dayScholarHostel,
+            board: form.board,
+            currentSchool: form.currentSchool.trim(),
+            howHeard: form.howHeard,
         });
 
         if (result.success) {
@@ -227,6 +245,47 @@ export function MobileInquiryForm() {
                 >
                     <option value="">Select grade</option>
                     {GRADES.map(g => <option key={g} value={g}>{g}</option>)}
+                </select>
+            </div>
+
+            <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                    Current School
+                </label>
+                <input
+                    type="text"
+                    value={form.currentSchool}
+                    onChange={e => set('currentSchool', e.target.value)}
+                    placeholder="Enter current school name"
+                    className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-gray-900 text-base focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                />
+            </div>
+
+            <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                    Board
+                </label>
+                <select
+                    value={form.board}
+                    onChange={e => set('board', e.target.value)}
+                    className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-gray-900 text-base focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent appearance-none"
+                >
+                    <option value="">Select board</option>
+                    {BOARDS.map(b => <option key={b} value={b}>{b}</option>)}
+                </select>
+            </div>
+
+            <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                    How did you hear about us?
+                </label>
+                <select
+                    value={form.howHeard}
+                    onChange={e => set('howHeard', e.target.value)}
+                    className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-gray-900 text-base focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent appearance-none"
+                >
+                    <option value="">Select source</option>
+                    {LEAD_SOURCES.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
             </div>
 
