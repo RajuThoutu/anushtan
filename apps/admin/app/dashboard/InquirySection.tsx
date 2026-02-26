@@ -57,7 +57,7 @@ export function InquirySection({ userName }: InquirySectionProps) {
     const statusCounts = {
         new: inquiries.filter(i => i.status === 'New').length,
         followUp: inquiries.filter(i => (i.status as any) === 'Follow-up').length,
-        interested: inquiries.filter(i => (i.status as any) === 'Interested').length,
+        converted: inquiries.filter(i => (i.status as any) === 'Converted').length,
     };
 
     return (
@@ -69,7 +69,7 @@ export function InquirySection({ userName }: InquirySectionProps) {
                 <div className="flex gap-4 text-sm">
                     <span className="text-orange-600">New: {statusCounts.new}</span>
                     <span className="text-blue-600">Follow-up: {statusCounts.followUp}</span>
-                    <span className="text-green-600">Interested: {statusCounts.interested}</span>
+                    <span className="text-green-600">Converted: {statusCounts.converted}</span>
                 </div>
             </div>
 

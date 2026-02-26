@@ -57,11 +57,9 @@ function InquiryListItem({ inquiry, isSelected, onClick }: InquiryListItemProps)
     const getStatusColor = (status: string) => {
         switch (status?.toLowerCase()) {
             case 'new': return 'bg-gradient-to-r from-admin-coral to-admin-coral-light text-white shadow-sm';
-            case 'interested': return 'bg-gradient-to-r from-admin-emerald to-admin-emerald-light text-white shadow-sm';
             case 'follow-up': return 'bg-gradient-to-r from-admin-blue to-admin-blue-light text-white shadow-sm';
-            case 'in progress': return 'bg-gradient-to-r from-admin-amber to-admin-amber-light text-white shadow-sm';
-            case 'converted': return 'bg-gradient-to-r from-admin-purple to-admin-purple-light text-white shadow-sm';
-            case 'closed': return 'bg-gray-100 text-gray-700';
+            case 'converted': return 'bg-gradient-to-r from-admin-emerald to-admin-emerald-light text-white shadow-sm';
+            case 'casual inquiry': return 'bg-gray-100 text-gray-700';
             default: return 'bg-gray-100 text-gray-700';
         }
     };

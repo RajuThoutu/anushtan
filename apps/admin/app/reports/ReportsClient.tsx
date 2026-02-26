@@ -93,7 +93,7 @@ export default function ReportsClient() {
         const lastMonthStart = new Date(thisMonthStart); lastMonthStart.setUTCMonth(lastMonthStart.getUTCMonth() - 1);
         const lastMonthEnd   = new Date(thisMonthStart); lastMonthEnd.setUTCMilliseconds(-1);
 
-        const ACTIVE = ['New', 'Open', 'Follow-up'];
+        const ACTIVE = ['New', 'Follow-up'];
 
         // ── Director KPIs ──────────────────────────────────────────────────────
         const thisMonth = data.filter(i => new Date(i.inquiryDate) >= thisMonthStart);
@@ -169,20 +169,20 @@ export default function ReportsClient() {
             if (!cMap.has(name)) {
                 cMap.set(name, {
                     name, total: 0,
-                    statuses: { New: 0, Open: 0, FollowUp: 0, Converted: 0, Closed: 0 },
+                    statuses: { New: 0, FollowUp: 0, Converted: 0, CasualInquiry: 0 },
                     overdue: 0, openFollowUp: 0,
                 });
             }
             const c = cMap.get(name)!;
             c.total++;
-            const sk = i.status === 'Follow-up' ? 'FollowUp' : i.status;
+            const sk = i.status === 'Follow-up' ? 'FollowUp' : i.status === 'Casual Inquiry' ? 'CasualInquiry' : i.status;
             if (c.statuses[sk] !== undefined) c.statuses[sk]++;
             if (ACTIVE.includes(i.status)) {
                 if (i.followUpDate) {
                     const fd = new Date(i.followUpDate); fd.setUTCHours(0, 0, 0, 0);
                     if (fd < today) c.overdue++;
                 }
-                if (i.status === 'Open' || i.status === 'Follow-up') c.openFollowUp++;
+                if (i.status === 'Follow-up') c.openFollowUp++;
             }
         });
         const statsArr = Array.from(cMap.values()).map(c => ({
@@ -210,7 +210,7 @@ export default function ReportsClient() {
         );
 
         // ── Admission Funnel ───────────────────────────────────────────────────
-        setFunnelData(['New', 'Open', 'Follow-up', 'Converted', 'Closed'].map(stage => ({
+        setFunnelData(['New', 'Follow-up', 'Converted', 'Casual Inquiry'].map(stage => ({
             stage,
             count: data.filter(i => i.status === stage).length,
         })));

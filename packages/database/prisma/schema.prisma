@@ -16,10 +16,9 @@ datasource db {
 
 enum InquiryStatus {
   New
-  Open
-  FollowUp   @map("Follow-up")
+  FollowUp      @map("Follow-up")
   Converted
-  Closed
+  CasualInquiry @map("Casual Inquiry")
 }
 
 enum CaseStatus {

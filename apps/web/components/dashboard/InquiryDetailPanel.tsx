@@ -18,19 +18,24 @@ export interface CounselorUpdates {
 
 const statusOptions = [
     'New',
-    'Open',
     'Follow-up',
     'Converted',
-    'Closed',
+    'Casual Inquiry',
 ];
 
 const priorityOptions = ['High', 'Medium', 'Low'];
 
 export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPanelProps) {
+    const t2IST = () => {
+        const d = new Date();
+        d.setDate(d.getDate() + 2);
+        return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+    };
+
     const [formData, setFormData] = useState<CounselorUpdates>({
         status: inquiry?.status || 'New',
         counselorComments: inquiry?.notes || '',
-        followUpDate: '',
+        followUpDate: inquiry?.followUpDate || t2IST(),
     });
     const [saving, setSaving] = useState(false);
     const [saveSuccess, setSaveSuccess] = useState(false);
@@ -41,7 +46,7 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
             setFormData({
                 status: inquiry.status || 'New',
                 counselorComments: inquiry.notes || '',
-                followUpDate: '',
+                followUpDate: inquiry.followUpDate || t2IST(),
             });
         }
     });

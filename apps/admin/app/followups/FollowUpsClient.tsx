@@ -33,11 +33,10 @@ function toISTDate(d: Date): string {
 }
 
 const STATUS_STYLE: Record<string, string> = {
-    'New':       'bg-blue-100 text-blue-700',
-    'Open':      'bg-amber-100 text-amber-700',
-    'Follow-up': 'bg-purple-100 text-purple-700',
-    'Converted': 'bg-emerald-100 text-emerald-700',
-    'Closed':    'bg-gray-100 text-gray-600',
+    'New':             'bg-blue-100 text-blue-700',
+    'Follow-up':       'bg-purple-100 text-purple-700',
+    'Converted':       'bg-emerald-100 text-emerald-700',
+    'Casual Inquiry':  'bg-gray-100 text-gray-600',
 };
 
 export function FollowUpsClient() {
@@ -145,10 +144,10 @@ export function FollowUpsClient() {
     // ── Breakdown counts ───────────────────────────────────────────────────
     const counts = {
         total:     filteredItems.length,
-        active:    filteredItems.filter(i => ['New', 'Open', 'Follow-up'].includes(i.status)).length,
+        active:    filteredItems.filter(i => ['New', 'Follow-up'].includes(i.status)).length,
         converted: filteredItems.filter(i => i.status === 'Converted').length,
         overdue:   filteredItems.filter(i => {
-            if (!i.followUpDate || !['New', 'Open', 'Follow-up'].includes(i.status)) return false;
+            if (!i.followUpDate || !['New', 'Follow-up'].includes(i.status)) return false;
             return new Date(i.followUpDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }) < today;
         }).length,
     };
@@ -227,10 +226,9 @@ export function FollowUpsClient() {
                     >
                         <option value="All">All Statuses</option>
                         <option value="New">New</option>
-                        <option value="Open">Open</option>
                         <option value="Follow-up">Follow-up</option>
                         <option value="Converted">Converted</option>
-                        <option value="Closed">Closed</option>
+                        <option value="Casual Inquiry">Casual Inquiry</option>
                     </select>
                 </div>
 
@@ -327,7 +325,7 @@ export function FollowUpsClient() {
                             <tbody className="divide-y divide-gray-50">
                                 {filteredItems.map((item) => {
                                     const isOverdue = item.followUpDate &&
-                                        ['New', 'Open', 'Follow-up'].includes(item.status) &&
+                                        ['New', 'Follow-up'].includes(item.status) &&
                                         new Date(item.followUpDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }) < today;
 
                                     return (

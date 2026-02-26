@@ -183,10 +183,9 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
                                         className="w-full px-4 py-2 border border-admin-border rounded-lg focus:ring-2 focus:ring-admin-emerald focus:border-transparent outline-none bg-white transition-all"
                                     >
                                         <option value="New">New</option>
-                                        <option value="Open">Open (Assigned)</option>
                                         <option value="Follow-up">Follow-up</option>
                                         <option value="Converted">Converted</option>
-                                        <option value="Closed">Closed</option>
+                                        <option value="Casual Inquiry">Casual Inquiry</option>
                                     </select>
                                 </div>
 
@@ -197,6 +196,7 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
                                     <input
                                         type="date"
                                         name="followUpDate"
+                                        defaultValue={(() => { const d = new Date(); d.setDate(d.getDate() + 2); return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }); })()}
                                         className="w-full px-4 py-2 border border-admin-border rounded-lg focus:ring-2 focus:ring-admin-emerald focus:border-transparent outline-none bg-white transition-all"
                                     />
                                 </div>

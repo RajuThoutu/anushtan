@@ -12,10 +12,16 @@ interface InquiryDetailViewProps {
 
 export function InquiryDetailView({ inquiry, userName }: InquiryDetailViewProps) {
     const [saving, setSaving] = useState(false);
+    const t2IST = () => {
+        const d = new Date();
+        d.setDate(d.getDate() + 2);
+        return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+    };
+
     const [formData, setFormData] = useState({
         status: inquiry.status || 'New',
         counselorComments: inquiry.counselorComments || '',
-        followUpDate: inquiry.followUpDate || '',
+        followUpDate: inquiry.followUpDate || t2IST(),
     });
     const router = useRouter();
 
@@ -202,10 +208,9 @@ export function InquiryDetailView({ inquiry, userName }: InquiryDetailViewProps)
                                 required
                             >
                                 <option value="New">New</option>
-                                <option value="Interested">Interested</option>
                                 <option value="Follow-up">Follow-up</option>
-                                <option value="Not Interested">Not Interested</option>
-                                <option value="Enrolled">Enrolled</option>
+                                <option value="Converted">Converted</option>
+                                <option value="Casual Inquiry">Casual Inquiry</option>
                             </select>
                         </div>
 

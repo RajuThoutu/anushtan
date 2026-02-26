@@ -19,11 +19,9 @@ interface InquiryFiltersProps {
 const statusOptions = [
     { value: '', label: 'All Status' },
     { value: 'New', label: 'New' },
-    { value: 'In Progress', label: 'In Progress' },
-    { value: 'Interested', label: 'Interested' },
     { value: 'Follow-up', label: 'Follow-up' },
     { value: 'Converted', label: 'Converted' },
-    { value: 'Closed', label: 'Closed' },
+    { value: 'Casual Inquiry', label: 'Casual Inquiry' },
 ];
 
 const priorityOptions = [

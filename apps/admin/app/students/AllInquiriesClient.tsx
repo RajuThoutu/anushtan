@@ -118,10 +118,9 @@ export default function AllInquiriesClient() {
     const getStatusColor = (status: string) => {
         switch (status) {
             case 'New': return 'bg-blue-100 text-blue-800';
-            case 'Open': return 'bg-yellow-100 text-yellow-800';
             case 'Follow-up': return 'bg-orange-100 text-orange-800';
             case 'Converted': return 'bg-green-100 text-green-800';
-            case 'Closed': return 'bg-gray-100 text-gray-800';
+            case 'Casual Inquiry': return 'bg-gray-100 text-gray-800';
             default: return 'bg-gray-100 text-gray-800';
         }
     };
@@ -130,7 +129,7 @@ export default function AllInquiriesClient() {
     const stats = {
         total: inquiries.length,
         today: inquiries.filter(i => new Date(i.inquiryDate).toDateString() === new Date().toDateString()).length,
-        open: inquiries.filter(i => ['Open', 'New', 'In Progress'].includes(i.status)).length,
+        open: inquiries.filter(i => ['New', 'Follow-up'].includes(i.status)).length,
         converted: inquiries.filter(i => i.status === 'Converted').length
     };
 
@@ -191,10 +190,9 @@ export default function AllInquiriesClient() {
                         >
                             <option value="All">All Statuses</option>
                             <option value="New">New</option>
-                            <option value="Open">Open</option>
                             <option value="Follow-up">Follow-up</option>
                             <option value="Converted">Converted</option>
-                            <option value="Closed">Closed</option>
+                            <option value="Casual Inquiry">Casual Inquiry</option>
                         </select>
                     </div>
 
