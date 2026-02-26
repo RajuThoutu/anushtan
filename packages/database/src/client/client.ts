@@ -400,6 +400,33 @@ export async function createInquiry(data: {
 }
 
 /**
+ * Delete one or more inquiries by their inquiryId or UUID.
+ * 1. DELETE from PostgreSQL (Due to Cascade, this removes activity logs + sync logs).
+ */
+export async function deleteInquiries(ids: string[]) {
+    if (!ids || ids.length === 0) return { success: true, count: 0 };
+
+    console.log(`[DB] deleteInquiries: ${ids.length} inquiries`);
+
+    // Flexible fetch to allow UI to pass either the UUID (id) or the sequence (S-XXX)
+    const uuids = ids.filter(id => id.length > 20 && !id.startsWith('S-'));
+    const sequenceIds = ids.filter(id => id.startsWith('S-'));
+
+    // PostgreSQL DELETE
+    const result = await prisma.inquiry.deleteMany({
+        where: {
+            OR: [
+                { id: { in: uuids } },
+                { inquiryId: { in: sequenceIds } }
+            ]
+        }
+    });
+
+    console.log(`[DB] Deleted ${result.count} inquiries`);
+    return { success: true, count: result.count };
+}
+
+/**
  * Update counselor fields on an inquiry.
  * 1. UPDATE PostgreSQL (source of truth)
  * 2. INSERT activity log row

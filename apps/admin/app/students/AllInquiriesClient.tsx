@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import {
     Search,
     Filter,
@@ -49,9 +50,12 @@ interface Inquiry {
 
 export default function AllInquiriesClient() {
     const router = useRouter();
+    const { data: session } = useSession();
     const [inquiries, setInquiries] = useState<Inquiry[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [selectedInquiries, setSelectedInquiries] = useState<Set<string>>(new Set());
+    const [isDeleting, setIsDeleting] = useState(false);
 
     // Filters
     const [searchTerm, setSearchTerm] = useState('');
@@ -142,6 +146,54 @@ export default function AllInquiriesClient() {
             </div>
         );
     }
+
+    const isSuperAdmin = session?.user?.role === 'super_admin' || session?.user?.email?.toLowerCase() === 'raju';
+
+    const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.checked) {
+            setSelectedInquiries(new Set(paginatedInquiries.map(inq => inq.inquiryId || inq.id)));
+        } else {
+            setSelectedInquiries(new Set());
+        }
+    };
+
+    const handleSelectOne = (id: string, checked: boolean) => {
+        const next = new Set(selectedInquiries);
+        if (checked) {
+            next.add(id);
+        } else {
+            next.delete(id);
+        }
+        setSelectedInquiries(next);
+    };
+
+    const handleBulkDelete = async () => {
+        if (!confirm(`Are you sure you want to permanently delete ${selectedInquiries.size} inquiries? This action cannot be undone.`)) {
+            return;
+        }
+
+        setIsDeleting(true);
+        try {
+            const res = await fetch('/api/counselor/inquiries/bulk-delete', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ inquiryIds: Array.from(selectedInquiries) })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                alert(`Successfully deleted ${data.count} inquiries.`);
+                setSelectedInquiries(new Set());
+                fetchInquiries();
+            } else {
+                alert(data.error || 'Failed to delete inquiries');
+            }
+        } catch (err) {
+            alert('An error occurred during deletion.');
+        } finally {
+            setIsDeleting(false);
+        }
+    };
 
     return (
         <div className="space-y-6">
@@ -277,6 +329,22 @@ export default function AllInquiriesClient() {
                 </div>
             </div>
 
+            {/* Bulk Actions */}
+            {isSuperAdmin && selectedInquiries.size > 0 && (
+                <div className="bg-red-50 p-4 rounded-xl border border-red-200 flex items-center justify-between">
+                    <span className="text-red-800 font-medium">
+                        {selectedInquiries.size} inquiries selected
+                    </span>
+                    <button
+                        onClick={handleBulkDelete}
+                        disabled={isDeleting}
+                        className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 transition-colors"
+                    >
+                        {isDeleting ? 'Deleting...' : 'Delete Selected'}
+                    </button>
+                </div>
+            )}
+
             {/* Table */}
             <div className="bg-white rounded-xl border border-admin-border shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
@@ -287,8 +355,16 @@ export default function AllInquiriesClient() {
                                 <div key={inq.id} className="bg-white p-4 rounded-xl border border-admin-border shadow-sm flex flex-col gap-3">
                                     <div className="flex justify-between items-start">
                                         <div>
-                                            <div className="font-semibold text-admin-text">{inq.studentName}</div>
-                                            <div className="text-xs text-gray-500">{inq.currentClass}</div>
+                                            {isSuperAdmin && (
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedInquiries.has(inq.inquiryId || inq.id)}
+                                                    onChange={e => handleSelectOne(inq.inquiryId || inq.id, e.target.checked)}
+                                                    className="mr-3 rounded border-gray-300 text-admin-emerald focus:ring-admin-emerald"
+                                                />
+                                            )}
+                                            <div className="inline-block font-semibold text-admin-text">{inq.studentName}</div>
+                                            <div className="text-xs text-gray-500 mt-0.5">{inq.currentClass}</div>
                                         </div>
                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(inq.status)}`}>
                                             {inq.status}
@@ -330,6 +406,16 @@ export default function AllInquiriesClient() {
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-admin-bg border-b border-admin-border">
+                                    {isSuperAdmin && (
+                                        <th className="px-6 py-4 w-12 text-center">
+                                            <input
+                                                type="checkbox"
+                                                onChange={handleSelectAll}
+                                                checked={paginatedInquiries.length > 0 && selectedInquiries.size === paginatedInquiries.length}
+                                                className="rounded border-gray-300 text-admin-emerald focus:ring-admin-emerald"
+                                            />
+                                        </th>
+                                    )}
                                     <th className="px-6 py-4 font-semibold text-admin-text text-sm">ID / Date</th>
                                     <th className="px-6 py-4 font-semibold text-admin-text text-sm">Student / Grade</th>
                                     <th className="px-6 py-4 font-semibold text-admin-text text-sm">Contact</th>
@@ -343,6 +429,16 @@ export default function AllInquiriesClient() {
                                 {paginatedInquiries.length > 0 ? (
                                     paginatedInquiries.map((inq) => (
                                         <tr key={inq.id} className="hover:bg-gray-50 transition-colors">
+                                            {isSuperAdmin && (
+                                                <td className="px-6 py-4 text-center">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedInquiries.has(inq.inquiryId || inq.id)}
+                                                        onChange={e => handleSelectOne(inq.inquiryId || inq.id, e.target.checked)}
+                                                        className="rounded border-gray-300 text-admin-emerald focus:ring-admin-emerald"
+                                                    />
+                                                </td>
+                                            )}
                                             <td className="px-6 py-4">
                                                 <div className="font-medium text-admin-text">{inq.inquiryId || inq.id}</div>
                                                 <div className="text-xs text-gray-500">
@@ -388,7 +484,7 @@ export default function AllInquiriesClient() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                                        <td colSpan={isSuperAdmin ? 8 : 7} className="px-6 py-12 text-center text-gray-500">
                                             No inquiries found matching your filters.
                                         </td>
                                     </tr>
