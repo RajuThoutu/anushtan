@@ -17,6 +17,8 @@ const translations = {
         studentInfo: 'Student Information',
         studentName: 'Student Name',
         studentNamePlaceholder: "Enter student's full name",
+        dateOfBirth: 'Date of Birth (For Age Calculation)',
+        checkAge: 'Check CBSE Eligibility',
         currentClass: 'Current Class',
         selectClass: 'Select class',
         currentSchool: 'Current School',
@@ -118,6 +120,8 @@ const translations = {
         studentInfo: 'విద్యార్థి సమాచారం',
         studentName: 'విద్యార్థి పేరు',
         studentNamePlaceholder: 'విద్యార్థి పూర్తి పేరు నమోదు చేయండి',
+        dateOfBirth: 'పుట్టిన తేదీ (వయస్సు లెక్కించడానికి)',
+        checkAge: 'CBSE అర్హతను తనిఖీ చేయండి',
         currentClass: 'ప్రస్తుత తరగతి',
         selectClass: 'తరగతిని ఎంచుకోండి',
         currentSchool: 'ప్రస్తుత పాఠశాల',
@@ -219,7 +223,54 @@ export default function AddStudentPage() {
     const [success, setSuccess] = useState(false)
     const [language, setLanguage] = useState<'en' | 'te'>('en')
 
+    const [dob, setDob] = useState('')
+    const [eligibilityMessage, setEligibilityMessage] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null)
+
     const t = translations[language]
+
+    const checkEligibility = () => {
+        if (!dob) {
+            setEligibilityMessage({ text: 'Please enter a Date of Birth first.', type: 'error' });
+            return;
+        }
+
+        const birthDate = new Date(dob);
+        const cutoffDate = new Date('2026-04-01');
+
+        let ageInMilliseconds = cutoffDate.getTime() - birthDate.getTime();
+        let ageInYears = ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25);
+
+        if (ageInYears < 3) {
+            setEligibilityMessage({ text: `Age ${ageInYears.toFixed(1)} yrs as of Apr 1, 2026. Too young for Nursery (Requires 3+).`, type: 'error' });
+            setFormData(prev => ({ ...prev, currentClass: '' }));
+            return;
+        }
+
+        let eligibleGrade = '';
+        if (ageInYears >= 3 && ageInYears < 4) eligibleGrade = 'Nursery';
+        else if (ageInYears >= 4 && ageInYears < 5) eligibleGrade = 'LKG';
+        else if (ageInYears >= 5 && ageInYears < 6) eligibleGrade = 'UKG';
+        else if (ageInYears >= 6 && ageInYears < 7) eligibleGrade = '1st Grade';
+        else if (ageInYears >= 7 && ageInYears < 8) eligibleGrade = '2nd Grade';
+        else if (ageInYears >= 8 && ageInYears < 9) eligibleGrade = '3rd Grade';
+        else if (ageInYears >= 9 && ageInYears < 10) eligibleGrade = '4th Grade';
+        else if (ageInYears >= 10 && ageInYears < 11) eligibleGrade = '5th Grade';
+        else if (ageInYears >= 11 && ageInYears < 12) eligibleGrade = '6th Grade';
+        else if (ageInYears >= 12 && ageInYears < 13) eligibleGrade = '7th Grade';
+        else if (ageInYears >= 13 && ageInYears < 14) eligibleGrade = '8th Grade';
+        else if (ageInYears >= 14 && ageInYears < 15) eligibleGrade = '9th Grade';
+        else if (ageInYears >= 15 && ageInYears < 16) eligibleGrade = '10th Grade';
+        else {
+            setEligibilityMessage({ text: `Age ${ageInYears.toFixed(1)} yrs as of Apr 1, 2026. Please verify higher classes manually.`, type: 'info' });
+            return;
+        }
+
+        setFormData(prev => ({ ...prev, currentClass: eligibleGrade }));
+        setEligibilityMessage({
+            text: `✅ Eligible for ${eligibleGrade} (Age: ${ageInYears.toFixed(1)} yrs as of April 1, 2026).`,
+            type: 'success'
+        });
+    };
 
     const [formData, setFormData] = useState({
         // Student Information
@@ -600,6 +651,35 @@ export default function AddStudentPage() {
                                         className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                         placeholder={t.studentNamePlaceholder}
                                     />
+                                </div>
+
+                                <div className="md:col-span-2 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                    <label className="block text-sm font-semibold text-admin-text mb-2">
+                                        {t.dateOfBirth}
+                                    </label>
+                                    <div className="flex gap-3">
+                                        <input
+                                            type="date"
+                                            value={dob}
+                                            onChange={e => setDob(e.target.value)}
+                                            className="flex-1 px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue bg-white"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={checkEligibility}
+                                            className="px-6 py-3 bg-white border border-admin-border text-admin-text font-medium rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
+                                        >
+                                            {t.checkAge}
+                                        </button>
+                                    </div>
+                                    {eligibilityMessage && (
+                                        <p className={`text-sm mt-3 font-medium ${eligibilityMessage.type === 'success' ? 'text-green-700' :
+                                            eligibilityMessage.type === 'error' ? 'text-red-600' :
+                                                'text-blue-700'
+                                            }`}>
+                                            {eligibilityMessage.text}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div>
