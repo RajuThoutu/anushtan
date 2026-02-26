@@ -27,10 +27,17 @@ const statusOptions = [
 const priorityOptions = ['High', 'Medium', 'Low'];
 
 export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPanelProps) {
+    // Calculate T+2 days default in IST
+    const getDefaultFollowUpDate = () => {
+        const d = new Date();
+        d.setDate(d.getDate() + 2);
+        return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+    };
+
     const [formData, setFormData] = useState<CounselorUpdates>({
         status: inquiry?.status || 'New',
         counselorComments: '', // Start empty for new notes
-        followUpDate: inquiry?.followUpDate ? new Date(inquiry.followUpDate).toISOString().split('T')[0] : '',
+        followUpDate: inquiry?.followUpDate ? new Date(inquiry.followUpDate).toISOString().split('T')[0] : getDefaultFollowUpDate(),
     });
     const [saving, setSaving] = useState(false);
     const [saveSuccess, setSaveSuccess] = useState(false);
@@ -41,7 +48,7 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
             setFormData({
                 status: inquiry.status || 'New',
                 counselorComments: '', // Always empty when switching inquiry
-                followUpDate: inquiry.followUpDate ? new Date(inquiry.followUpDate).toISOString().split('T')[0] : '',
+                followUpDate: inquiry.followUpDate ? new Date(inquiry.followUpDate).toISOString().split('T')[0] : getDefaultFollowUpDate(),
             });
         }
     }, [inquiry]);
