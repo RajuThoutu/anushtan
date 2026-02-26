@@ -18,10 +18,15 @@ export function InquiryDetailView({ inquiry, userName }: InquiryDetailViewProps)
         return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
     };
 
+    const fmtFollowUpDate = (d?: Date | string | null) => {
+        if (!d) return null;
+        return new Date(d).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+    };
+
     const [formData, setFormData] = useState({
         status: inquiry.status || 'New',
-        counselorComments: inquiry.counselorComments || '',
-        followUpDate: inquiry.followUpDate || t2IST(),
+        counselorComments: inquiry.counselorComments || inquiry.notes || '',
+        followUpDate: fmtFollowUpDate(inquiry.followUpDate) || t2IST(),
     });
     const router = useRouter();
 
@@ -43,7 +48,7 @@ export function InquiryDetailView({ inquiry, userName }: InquiryDetailViewProps)
 
             if (data.success) {
                 alert('Counselor actions saved successfully!');
-                router.push('/auth/dashboard');
+                router.push('/dashboard');
             } else {
                 alert('Failed to save. Please try again.');
             }
@@ -61,7 +66,7 @@ export function InquiryDetailView({ inquiry, userName }: InquiryDetailViewProps)
                 <div className="max-w-4xl mx-auto px-4 py-4">
                     <div className="flex items-center gap-4">
                         <Link
-                            href="/auth/dashboard"
+                            href="/dashboard"
                             className="text-anushtan-charcoal hover:text-anushtan-terracotta"
                         >
                             ← Back to Dashboard

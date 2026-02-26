@@ -16,8 +16,10 @@ datasource db {
 
 enum InquiryStatus {
   New
+  Open          // legacy — kept for existing DB rows; UI does not surface this
   FollowUp      @map("Follow-up")
   Converted
+  Closed        // legacy — kept for existing DB rows; UI does not surface this
   CasualInquiry @map("Casual Inquiry")
 }
 
