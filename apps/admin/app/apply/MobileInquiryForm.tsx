@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { submitQRInquiry } from './action';
 
 const GRADES = [
@@ -38,6 +38,8 @@ export function MobileInquiryForm() {
     const [dob, setDob] = useState('');
     const [eligibilityMessage, setEligibilityMessage] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
 
+    const [schoolsList, setSchoolsList] = useState<string[]>([]);
+
     const [state, setState] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
     const [error, setError] = useState('');
     const [form, setForm] = useState({
@@ -59,6 +61,17 @@ export function MobileInquiryForm() {
         const digits = val.replace(/\D/g, '').slice(0, 10);
         set('phone', digits);
     };
+
+    useEffect(() => {
+        fetch('/api/schools')
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    setSchoolsList(data);
+                }
+            })
+            .catch(err => console.error('Failed to load schools:', err));
+    }, []);
 
     const checkEligibility = () => {
         if (!dob) {
@@ -345,16 +358,23 @@ export function MobileInquiryForm() {
             </div>
 
             <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                <label htmlFor="currentSchool" className="block text-sm font-semibold text-gray-700 mb-1.5" id="currentSchoolLabel">
                     Current School
                 </label>
                 <input
                     type="text"
+                    id="currentSchool"
+                    list="school-suggestions"
                     value={form.currentSchool}
                     onChange={e => set('currentSchool', e.target.value)}
                     placeholder="Enter current school name"
                     className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-gray-900 text-base focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
                 />
+                <datalist id="school-suggestions">
+                    {schoolsList.map(school => (
+                        <option key={school} value={school} />
+                    ))}
+                </datalist>
             </div>
 
             <div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { InquiryTypeToggle } from '@/components/dashboard/InquiryTypeToggle'
@@ -225,6 +225,16 @@ export default function AddStudentPage() {
 
     const [dob, setDob] = useState('')
     const [eligibilityMessage, setEligibilityMessage] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null)
+    const [schoolsList, setSchoolsList] = useState<string[]>([])
+
+    useEffect(() => {
+        fetch('/api/schools')
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) setSchoolsList(data)
+            })
+            .catch(err => console.error('Failed to load schools:', err))
+    }, [])
 
     const t = translations[language]
 
@@ -711,17 +721,24 @@ export default function AddStudentPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-admin-text mb-2">
+                                    <label className="block text-sm font-medium text-admin-text mb-2" htmlFor="currentSchool">
                                         {t.currentSchool}
                                     </label>
                                     <input
                                         type="text"
+                                        id="currentSchool"
                                         name="currentSchool"
+                                        list="school-suggestions-admin"
                                         value={formData.currentSchool}
                                         onChange={handleChange}
                                         className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                         placeholder={t.currentSchoolPlaceholder}
                                     />
+                                    <datalist id="school-suggestions-admin">
+                                        {schoolsList.map(school => (
+                                            <option key={school} value={school} />
+                                        ))}
+                                    </datalist>
                                 </div>
 
                                 <div>
@@ -1104,7 +1121,7 @@ export default function AddStudentPage() {
                         </div>
                     </form>
                 </main>
-            </div>
+            </div >
         </>
     )
 }
