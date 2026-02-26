@@ -1,5 +1,6 @@
 import type { SheetInquiry as Inquiry } from '@repo/database';
 import Link from 'next/link';
+import { User } from 'lucide-react';
 
 interface InquiryCardProps {
     inquiry: any;
@@ -12,9 +13,11 @@ export function InquiryCard({ inquiry, showAssignButton = false, onAssign }: Inq
         switch (status) {
             case 'New':
                 return 'bg-orange-100 text-orange-700 border-orange-200';
+            case 'Open':
+                return 'bg-indigo-100 text-indigo-700 border-indigo-200';
+            case 'Interested':
+                return 'bg-green-100 text-green-700 border-green-200';
             case 'Follow-up':
-                return 'bg-blue-100 text-blue-700 border-blue-200';
-            case 'Converted':
                 return 'bg-green-100 text-green-700 border-green-200';
             case 'Casual Inquiry':
                 return 'bg-gray-100 text-gray-600 border-gray-200';
@@ -59,7 +62,15 @@ export function InquiryCard({ inquiry, showAssignButton = false, onAssign }: Inq
                 </div>
 
                 <div className="mt-3 flex items-center justify-between text-xs text-anushtan-charcoal/50">
-                    <span>{timeAgo(inquiry.timestamp)}</span>
+                    <div className="flex items-center gap-3">
+                        <span>{timeAgo(inquiry.timestamp || inquiry.createdAt)}</span>
+                        {(inquiry.status === 'Open' || inquiry.status === 'Follow-up') && (inquiry.assignedTo || inquiry.counselorName) && (
+                            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100">
+                                <User size={10} />
+                                {inquiry.assignedTo || inquiry.counselorName}
+                            </span>
+                        )}
+                    </div>
                     {inquiry.source && (
                         <span className="px-2 py-1 bg-anushtan-parchment rounded">
                             {inquiry.source}

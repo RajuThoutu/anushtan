@@ -135,6 +135,14 @@ function InquiryListItem({ inquiry, isSelected, onClick }: InquiryListItemProps)
                             {inquiry.status || 'New'}
                         </span>
 
+                        {/* Counselor assigned */}
+                        {(inquiry.status === 'Open' as any || inquiry.status === 'FollowUp' as any) && inquiry.assignedTo && (
+                            <span className="px-2 py-0.5 text-xs bg-blue-50 text-blue-700 border border-blue-100 rounded-full flex items-center gap-1" title="Assigned Counselor">
+                                <User size={10} />
+                                {inquiry.assignedTo}
+                            </span>
+                        )}
+
                         {/* Class */}
                         <span className="px-2 py-0.5 text-xs bg-anushtan-parchment text-anushtan-charcoal/70 rounded-full">
                             {inquiry.currentClass || 'N/A'}

@@ -10,7 +10,8 @@ import {
     ChevronRight,
     Eye,
     MoreHorizontal,
-    Download
+    Download,
+    User
 } from 'lucide-react';
 import { ExportButton } from '@/components/reports/ExportButton';
 
@@ -118,6 +119,7 @@ export default function AllInquiriesClient() {
     const getStatusColor = (status: string) => {
         switch (status) {
             case 'New': return 'bg-blue-100 text-blue-800';
+            case 'Open': return 'bg-indigo-100 text-indigo-800';
             case 'Follow-up': return 'bg-orange-100 text-orange-800';
             case 'Converted': return 'bg-green-100 text-green-800';
             case 'Casual Inquiry': return 'bg-gray-100 text-gray-800';
@@ -190,6 +192,7 @@ export default function AllInquiriesClient() {
                         >
                             <option value="All">All Statuses</option>
                             <option value="New">New</option>
+                            <option value="Open">Open</option>
                             <option value="Follow-up">Follow-up</option>
                             <option value="Converted">Converted</option>
                             <option value="Casual Inquiry">Casual Inquiry</option>
@@ -291,6 +294,14 @@ export default function AllInquiriesClient() {
                                             {inq.status}
                                         </span>
                                     </div>
+
+                                    {(inq.status === 'Open' || inq.status === 'Follow-up') && (inq.assignedTo || inq.counselorName) && (
+                                        <div className="flex items-center gap-1.5 text-xs text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-full px-2.5 py-0.5 w-fit mb-1">
+                                            <User size={12} className="text-indigo-500" />
+                                            <span className="font-medium">{inq.assignedTo || inq.counselorName}</span>
+                                        </div>
+                                    )}
+
                                     <div className="text-sm text-gray-600 flex items-center gap-2">
                                         <span>📞 {inq.phone}</span>
                                     </div>
@@ -352,7 +363,7 @@ export default function AllInquiriesClient() {
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 text-sm text-gray-600">
-                                                {inq.counselorName || '-'}
+                                                {inq.assignedTo || inq.counselorName || '-'}
                                             </td>
                                             <td className="px-6 py-4">
                                                 {inq.followUpDate ? (

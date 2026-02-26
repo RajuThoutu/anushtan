@@ -172,6 +172,31 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                         Counselor Actions
                     </h3>
                     <div className="space-y-4">
+                        {/* Open Inquiry Checkbox */}
+                        {inquiry?.status === 'New' && (
+                            <div
+                                className="mb-4 p-3 bg-blue-50 border border-blue-100 rounded-lg flex items-start gap-3 cursor-pointer hover:bg-blue-100/70 transition-colors"
+                                onClick={async () => {
+                                    const updatedData = { ...formData, status: 'Open' };
+                                    setFormData(updatedData);
+                                    await onSave(inquiry.id, updatedData);
+                                }}
+                            >
+                                <div className="pt-0.5">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.status === 'Open'}
+                                        readOnly
+                                        className="w-5 h-5 text-blue-600 border-blue-300 rounded focus:ring-blue-500 cursor-pointer pointer-events-none"
+                                    />
+                                </div>
+                                <div>
+                                    <h4 className="text-sm font-semibold text-blue-900">Mark as Open</h4>
+                                    <p className="text-xs text-blue-700 mt-0.5">Assign this inquiry to yourself and update the dashboard status so others know you are working on it.</p>
+                                </div>
+                            </div>
+                        )}
+
                         {/* Status */}
                         <div>
                             <label className="block text-sm font-medium text-anushtan-charcoal mb-1">
