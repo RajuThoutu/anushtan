@@ -77,11 +77,9 @@ export default function AllInquiriesClient() {
             const data = await response.json();
 
             if (data.success) {
-                // Sort by lastUpdated desc, fallback to inquiryDate desc
+                // Sort by inquiryDate desc
                 const sorted = data.data.sort((a: Inquiry, b: Inquiry) => {
-                    const dateA = a.lastUpdated ? new Date(a.lastUpdated).getTime() : new Date(a.inquiryDate).getTime();
-                    const dateB = b.lastUpdated ? new Date(b.lastUpdated).getTime() : new Date(b.inquiryDate).getTime();
-                    return dateB - dateA;
+                    return new Date(b.inquiryDate).getTime() - new Date(a.inquiryDate).getTime();
                 });
                 setInquiries(sorted);
             } else {
