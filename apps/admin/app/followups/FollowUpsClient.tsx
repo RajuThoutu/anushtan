@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
     CalendarClock, Phone, AlertCircle, CheckCircle2, Clock, RefreshCw,
-    Search, Filter, Calendar, X, MessageSquare, Edit3
+    Search, Calendar, X, MessageSquare, Edit3
 } from 'lucide-react';
 
 interface Inquiry {
@@ -47,7 +47,6 @@ export function FollowUpsClient() {
 
     // Filters — default to today
     const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState('All');
     const [dateStart, setDateStart] = useState(todayIST());
     const [dateEnd, setDateEnd] = useState(todayIST());
     const [quickSelect, setQuickSelect] = useState('today');
@@ -135,62 +134,39 @@ export function FollowUpsClient() {
     const handleQuickSelect = (val: string) => {
         setQuickSelect(val);
         const now = new Date();
-        let start = '';
-        let end = '';
+        let targetDate = new Date(now);
 
-        if (val === 'today') {
-            start = end = toISTDate(now);
-        } else if (val === 'yesterday') {
-            const d = new Date(now);
-            d.setDate(now.getDate() - 1);
-            start = end = toISTDate(d);
-        } else if (val === 'thisWeek') {
-            const d = new Date(now);
-            const day = d.getDay();
-            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-            const monday = new Date(d.setDate(diff));
-            const sunday = new Date(new Date(monday).setDate(monday.getDate() + 6));
-            start = toISTDate(monday);
-            end = toISTDate(sunday);
-        } else if (val === 'lastWeek') {
-            const d = new Date(now);
-            const day = d.getDay();
-            const diff = d.getDate() - day + (day === 0 ? -6 : 1) - 7;
-            const monday = new Date(d.setDate(diff));
-            const sunday = new Date(new Date(monday).setDate(monday.getDate() + 6));
-            start = toISTDate(monday);
-            end = toISTDate(sunday);
-        } else if (val === 'thisMonth') {
-            start = toISTDate(new Date(now.getFullYear(), now.getMonth(), 1));
-            end = toISTDate(new Date(now.getFullYear(), now.getMonth() + 1, 0));
-        } else if (val === 'lastMonth') {
-            start = toISTDate(new Date(now.getFullYear(), now.getMonth() - 1, 1));
-            end = toISTDate(new Date(now.getFullYear(), now.getMonth(), 0));
+        if (val === 'yesterday') {
+            targetDate.setDate(now.getDate() - 1);
+        } else if (val === 'today') {
+            targetDate.setDate(now.getDate());
+        } else if (val === 'tomorrow') {
+            targetDate.setDate(now.getDate() + 1);
+        } else if (val === 'dayAfterTomorrow') {
+            targetDate.setDate(now.getDate() + 2);
         }
 
-        if (val !== 'custom') {
-            setDateStart(start);
-            setDateEnd(end);
-        }
+        const dateStr = toISTDate(targetDate);
+        setDateStart(dateStr);
+        setDateEnd(dateStr);
     };
 
     const resetToToday = () => {
         setSearchTerm('');
-        setStatusFilter('All');
-        setDateStart(todayIST());
-        setDateEnd(todayIST());
-        setQuickSelect('today');
+        handleQuickSelect('today');
     };
 
-    const isFiltered = searchTerm !== '' || statusFilter !== 'All' || quickSelect !== 'today';
+    const isFiltered = searchTerm !== '' || quickSelect !== 'today';
 
     // ── Filter ─────────────────────────────────────────────────────────────
     const today = todayIST();
 
     const filteredItems = inquiries.filter(i => {
-        const updated = i.updatedAt ?? i.inquiryDate;
-        const updatedStr = new Date(updated).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-        const matchesDate = updatedStr >= dateStart && updatedStr <= dateEnd;
+        // Filter by followUpDate (not updatedAt) so the tab truly shows follow-ups DUE on that day
+        const followUpStr = i.followUpDate
+            ? new Date(i.followUpDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' })
+            : null;
+        const matchesDate = followUpStr !== null && followUpStr >= dateStart && followUpStr <= dateEnd;
 
         const q = searchTerm.toLowerCase();
         const matchesSearch = !searchTerm ||
@@ -199,9 +175,7 @@ export function FollowUpsClient() {
             (i.phone || '').includes(searchTerm) ||
             (i.parentName || '').toLowerCase().includes(q);
 
-        const matchesStatus = statusFilter === 'All' || i.status === statusFilter;
-
-        return matchesDate && matchesSearch && matchesStatus;
+        return matchesDate && matchesSearch;
     });
 
     // ── Breakdown counts ───────────────────────────────────────────────────
@@ -279,53 +253,19 @@ export function FollowUpsClient() {
                     />
                 </div>
 
-                {/* Status */}
-                <div className="flex items-center gap-2">
-                    <Filter size={15} className="text-gray-400 shrink-0" />
-                    <select
-                        value={statusFilter}
-                        onChange={e => setStatusFilter(e.target.value)}
-                        className="text-sm border border-admin-border rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-admin-purple/30"
-                    >
-                        <option value="All">All Statuses</option>
-                        <option value="New">New</option>
-                        <option value="Follow-up">Follow-up</option>
-                        <option value="Converted">Converted</option>
-                        <option value="Casual Inquiry">Casual Inquiry</option>
-                    </select>
-                </div>
-
-                {/* Quick date select + manual range */}
+                {/* Quick date select */}
                 <div className="flex items-center gap-2 flex-wrap">
+                    <Calendar size={15} className="text-gray-400 shrink-0" />
                     <select
                         value={quickSelect}
                         onChange={e => handleQuickSelect(e.target.value)}
                         className="text-sm border border-admin-border rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-admin-purple/30"
                     >
-                        <option value="today">Today</option>
                         <option value="yesterday">Yesterday</option>
-                        <option value="thisWeek">This Week</option>
-                        <option value="lastWeek">Last Week</option>
-                        <option value="thisMonth">This Month</option>
-                        <option value="lastMonth">Last Month</option>
-                        <option value="custom">Custom…</option>
+                        <option value="today">Today</option>
+                        <option value="tomorrow">Tomorrow</option>
+                        <option value="dayAfterTomorrow">Day After Tomorrow</option>
                     </select>
-
-                    <Calendar size={15} className="text-gray-400 shrink-0" />
-
-                    <input
-                        type="date"
-                        className="text-sm border border-admin-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-admin-purple/30"
-                        value={dateStart}
-                        onChange={e => { setDateStart(e.target.value); setQuickSelect('custom'); }}
-                    />
-                    <span className="text-gray-400 text-sm">–</span>
-                    <input
-                        type="date"
-                        className="text-sm border border-admin-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-admin-purple/30"
-                        value={dateEnd}
-                        onChange={e => { setDateEnd(e.target.value); setQuickSelect('custom'); }}
-                    />
                 </div>
 
                 {/* Reset to today */}
