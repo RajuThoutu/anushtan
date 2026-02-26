@@ -326,6 +326,28 @@ export function MobileInquiryForm() {
                 </select>
             </div>
 
+            {/* Day Scholar / Hostel */}
+            <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Preference
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                    {['Day Scholar', 'Hostel'].map(opt => (
+                        <button
+                            key={opt}
+                            type="button"
+                            onClick={() => set('dayScholarHostel', opt)}
+                            className={`py-3.5 rounded-xl border text-sm font-semibold transition-all ${form.dayScholarHostel === opt
+                                ? 'bg-amber-500 border-amber-500 text-white shadow-md'
+                                : 'bg-white border-gray-200 text-gray-600 hover:border-amber-300'
+                                }`}
+                        >
+                            {opt}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
             {/* Error */}
             {(state === 'error' || error) && (
                 <div className="px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">

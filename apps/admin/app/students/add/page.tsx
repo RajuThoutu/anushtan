@@ -748,170 +748,172 @@ export default function AddStudentPage() {
                         </div>
 
                         {/* Parent Preferences Section */}
-                        <div>
-                            <h2 className="font-heading text-xl font-bold text-admin-text mb-4 pb-2 border-b border-admin-border">
-                                {t.parentPreferences}
-                            </h2>
-                            <p className="text-sm text-admin-text/60 mb-6">
-                                {t.preferencesSubtitle}
-                            </p>
-                            <div className="space-y-6">
-                                {/* Question 1 */}
-                                <div>
-                                    <label className="block text-sm font-medium text-admin-text mb-3">
-                                        {`1. ${t.q1}`}
-                                    </label>
-                                    <div className="space-y-2">
-                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                            <input
-                                                type="radio"
-                                                name="q1_education_guide"
-                                                value="schools_marks"
-                                                checked={formData.q1_education_guide === 'schools_marks'}
-                                                onChange={handleChange}
-                                                className="mt-1 mr-3"
-                                            />
-                                            <span className="text-sm">{t.q1_opt1}</span>
+                        {false && (
+                            <div>
+                                <h2 className="font-heading text-xl font-bold text-admin-text mb-4 pb-2 border-b border-admin-border">
+                                    {t.parentPreferences}
+                                </h2>
+                                <p className="text-sm text-admin-text/60 mb-6">
+                                    {t.preferencesSubtitle}
+                                </p>
+                                <div className="space-y-6">
+                                    {/* Question 1 */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-admin-text mb-3">
+                                            {`1. ${t.q1}`}
                                         </label>
-                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                            <input
-                                                type="radio"
-                                                name="q1_education_guide"
-                                                value="teachers_mentors"
-                                                checked={formData.q1_education_guide === 'teachers_mentors'}
-                                                onChange={handleChange}
-                                                className="mt-1 mr-3"
-                                            />
-                                            <span className="text-sm">{t.q1_opt2}</span>
-                                        </label>
+                                        <div className="space-y-2">
+                                            <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                                <input
+                                                    type="radio"
+                                                    name="q1_education_guide"
+                                                    value="schools_marks"
+                                                    checked={formData.q1_education_guide === 'schools_marks'}
+                                                    onChange={handleChange}
+                                                    className="mt-1 mr-3"
+                                                />
+                                                <span className="text-sm">{t.q1_opt1}</span>
+                                            </label>
+                                            <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                                <input
+                                                    type="radio"
+                                                    name="q1_education_guide"
+                                                    value="teachers_mentors"
+                                                    checked={formData.q1_education_guide === 'teachers_mentors'}
+                                                    onChange={handleChange}
+                                                    className="mt-1 mr-3"
+                                                />
+                                                <span className="text-sm">{t.q1_opt2}</span>
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Question 2 */}
-                                <div>
-                                    <label className="block text-sm font-medium text-admin-text mb-3">
-                                        {`2. ${t.q2}`}
-                                    </label>
-                                    <div className="space-y-2">
-                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                            <input
-                                                type="radio"
-                                                name="q2_learning_approach"
-                                                value="memorising"
-                                                checked={formData.q2_learning_approach === 'memorising'}
-                                                onChange={handleChange}
-                                                className="mt-1 mr-3"
-                                            />
-                                            <span className="text-sm">{t.q2_opt1}</span>
+                                    {/* Question 2 */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-admin-text mb-3">
+                                            {`2. ${t.q2}`}
                                         </label>
-                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                            <input
-                                                type="radio"
-                                                name="q2_learning_approach"
-                                                value="understanding"
-                                                checked={formData.q2_learning_approach === 'understanding'}
-                                                onChange={handleChange}
-                                                className="mt-1 mr-3"
-                                            />
-                                            <span className="text-sm">{t.q2_opt2}</span>
-                                        </label>
+                                        <div className="space-y-2">
+                                            <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                                <input
+                                                    type="radio"
+                                                    name="q2_learning_approach"
+                                                    value="memorising"
+                                                    checked={formData.q2_learning_approach === 'memorising'}
+                                                    onChange={handleChange}
+                                                    className="mt-1 mr-3"
+                                                />
+                                                <span className="text-sm">{t.q2_opt1}</span>
+                                            </label>
+                                            <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                                <input
+                                                    type="radio"
+                                                    name="q2_learning_approach"
+                                                    value="understanding"
+                                                    checked={formData.q2_learning_approach === 'understanding'}
+                                                    onChange={handleChange}
+                                                    className="mt-1 mr-3"
+                                                />
+                                                <span className="text-sm">{t.q2_opt2}</span>
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Question 3 */}
-                                <div>
-                                    <label className="block text-sm font-medium text-admin-text mb-3">
-                                        {`3. ${t.q3}`}
-                                    </label>
-                                    <div className="space-y-2">
-                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                            <input
-                                                type="radio"
-                                                name="q3_teacher_preference"
-                                                value="strict_syllabus"
-                                                checked={formData.q3_teacher_preference === 'strict_syllabus'}
-                                                onChange={handleChange}
-                                                className="mt-1 mr-3"
-                                            />
-                                            <span className="text-sm">{t.q3_opt1}</span>
+                                    {/* Question 3 */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-admin-text mb-3">
+                                            {`3. ${t.q3}`}
                                         </label>
-                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                            <input
-                                                type="radio"
-                                                name="q3_teacher_preference"
-                                                value="caring_explaining"
-                                                checked={formData.q3_teacher_preference === 'caring_explaining'}
-                                                onChange={handleChange}
-                                                className="mt-1 mr-3"
-                                            />
-                                            <span className="text-sm">{t.q3_opt2}</span>
-                                        </label>
+                                        <div className="space-y-2">
+                                            <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                                <input
+                                                    type="radio"
+                                                    name="q3_teacher_preference"
+                                                    value="strict_syllabus"
+                                                    checked={formData.q3_teacher_preference === 'strict_syllabus'}
+                                                    onChange={handleChange}
+                                                    className="mt-1 mr-3"
+                                                />
+                                                <span className="text-sm">{t.q3_opt1}</span>
+                                            </label>
+                                            <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                                <input
+                                                    type="radio"
+                                                    name="q3_teacher_preference"
+                                                    value="caring_explaining"
+                                                    checked={formData.q3_teacher_preference === 'caring_explaining'}
+                                                    onChange={handleChange}
+                                                    className="mt-1 mr-3"
+                                                />
+                                                <span className="text-sm">{t.q3_opt2}</span>
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Question 4 */}
-                                <div>
-                                    <label className="block text-sm font-medium text-admin-text mb-3">
-                                        {`4. ${t.q4}`}
-                                    </label>
-                                    <div className="space-y-2">
-                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                            <input
-                                                type="radio"
-                                                name="q4_child_priority"
-                                                value="only_studies"
-                                                checked={formData.q4_child_priority === 'only_studies'}
-                                                onChange={handleChange}
-                                                className="mt-1 mr-3"
-                                            />
-                                            <span className="text-sm">{t.q4_opt1}</span>
+                                    {/* Question 4 */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-admin-text mb-3">
+                                            {`4. ${t.q4}`}
                                         </label>
-                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                            <input
-                                                type="radio"
-                                                name="q4_child_priority"
-                                                value="holistic"
-                                                checked={formData.q4_child_priority === 'holistic'}
-                                                onChange={handleChange}
-                                                className="mt-1 mr-3"
-                                            />
-                                            <span className="text-sm">{t.q4_opt2}</span>
-                                        </label>
+                                        <div className="space-y-2">
+                                            <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                                <input
+                                                    type="radio"
+                                                    name="q4_child_priority"
+                                                    value="only_studies"
+                                                    checked={formData.q4_child_priority === 'only_studies'}
+                                                    onChange={handleChange}
+                                                    className="mt-1 mr-3"
+                                                />
+                                                <span className="text-sm">{t.q4_opt1}</span>
+                                            </label>
+                                            <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                                <input
+                                                    type="radio"
+                                                    name="q4_child_priority"
+                                                    value="holistic"
+                                                    checked={formData.q4_child_priority === 'holistic'}
+                                                    onChange={handleChange}
+                                                    className="mt-1 mr-3"
+                                                />
+                                                <span className="text-sm">{t.q4_opt2}</span>
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Question 5 */}
-                                <div>
-                                    <label className="block text-sm font-medium text-admin-text mb-3">
-                                        {`5. ${t.q5}`}
-                                    </label>
-                                    <div className="space-y-2">
-                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                            <input
-                                                type="radio"
-                                                name="q5_school_environment"
-                                                value="selective_performance"
-                                                checked={formData.q5_school_environment === 'selective_performance'}
-                                                onChange={handleChange}
-                                                className="mt-1 mr-3"
-                                            />
-                                            <span className="text-sm">{t.q5_opt1}</span>
+                                    {/* Question 5 */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-admin-text mb-3">
+                                            {`5. ${t.q5}`}
                                         </label>
-                                        <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                            <input
-                                                type="radio"
-                                                name="q5_school_environment"
-                                                value="nurturing_improvement"
-                                                checked={formData.q5_school_environment === 'nurturing_improvement'}
-                                                onChange={handleChange}
-                                                className="mt-1 mr-3"
-                                            />
-                                            <span className="text-sm">{t.q5_opt2}</span>
-                                        </label>
+                                        <div className="space-y-2">
+                                            <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                                <input
+                                                    type="radio"
+                                                    name="q5_school_environment"
+                                                    value="selective_performance"
+                                                    checked={formData.q5_school_environment === 'selective_performance'}
+                                                    onChange={handleChange}
+                                                    className="mt-1 mr-3"
+                                                />
+                                                <span className="text-sm">{t.q5_opt1}</span>
+                                            </label>
+                                            <label className="flex items-start p-3 border border-admin-border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                                <input
+                                                    type="radio"
+                                                    name="q5_school_environment"
+                                                    value="nurturing_improvement"
+                                                    checked={formData.q5_school_environment === 'nurturing_improvement'}
+                                                    onChange={handleChange}
+                                                    className="mt-1 mr-3"
+                                                />
+                                                <span className="text-sm">{t.q5_opt2}</span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* Inquiry Details Section */}
                         <div>
