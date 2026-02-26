@@ -1,6 +1,6 @@
 'use server';
 
-import { createInquiry } from '@repo/database';
+import { createInquiry, InquirySource } from '@repo/database';
 
 interface QRInquiryData {
     studentName: string;
@@ -8,6 +8,7 @@ interface QRInquiryData {
     phone: string;
     grade: string;
     dayScholarHostel?: string;
+    email?: string;
     board?: string;
     currentSchool?: string;
     howHeard?: string;
@@ -19,11 +20,12 @@ export async function submitQRInquiry(data: QRInquiryData): Promise<{ success: b
             studentName: data.studentName,
             parentName: data.parentName,
             phone: data.phone,
+            email: data.email,
             currentClass: data.grade,
             dayScholarHostel: data.dayScholarHostel,
             board: data.board,
             currentSchool: data.currentSchool,
-            source: 'QRScan',
+            source: InquirySource.QRScan,
             howHeard: data.howHeard || 'QR Code Scan',
             createdBy: 'QR Form',
             status: 'New',

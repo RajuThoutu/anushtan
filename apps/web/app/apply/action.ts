@@ -6,6 +6,7 @@ interface QRInquiryData {
     studentName: string;
     parentName: string;
     phone: string;
+    email?: string;
     grade: string;
     dayScholarHostel?: string;
 }
@@ -16,6 +17,7 @@ export async function submitQRInquiry(data: QRInquiryData): Promise<{ success: b
             studentName: data.studentName,
             parentName: data.parentName,
             phone: data.phone,
+            email: data.email,
             currentClass: data.grade,
             dayScholarHostel: data.dayScholarHostel,
             source: 'QRScan',
