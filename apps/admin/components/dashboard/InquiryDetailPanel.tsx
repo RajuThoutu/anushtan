@@ -104,7 +104,7 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                         {inquiry.studentName}
                     </h2>
                     <p className="text-sm text-anushtan-charcoal/60">
-                        Inquiry {inquiry.id}
+                        Inquiry {inquiry.inquiryId || inquiry.id}
                     </p>
                 </div>
 

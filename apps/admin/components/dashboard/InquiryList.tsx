@@ -112,7 +112,7 @@ function InquiryListItem({ inquiry, isSelected, onClick }: InquiryListItemProps)
                             {inquiry.studentName || 'Unnamed'}
                         </span>
                         <span className="text-xs text-anushtan-charcoal/40">
-                            {inquiry.id}
+                            {inquiry.inquiryId || inquiry.id}
                         </span>
                     </div>
 

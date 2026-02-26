@@ -16,39 +16,44 @@ export async function POST(request: Request) {
 
         const formData = await request.formData();
 
-        const inquiryData: any = {
-            studentName: formData.get('studentName') as string,
-            currentClass: formData.get('currentClass') as string,
+        // Photo is processed in-memory (OCR) and not persisted — by design.
+        // The counselor reviewed & corrected all fields before submitting.
+
+        const inquiryData = {
+            studentName: (formData.get('studentName') as string) || '',
+            currentClass: (formData.get('currentClass') as string) || '',
+            currentSchool: (formData.get('currentSchool') as string) || '',
+            board: (formData.get('board') as string) || '',
             parentName: (formData.get('parentName') as string) || 'Paper Form',
             phone: (formData.get('phone') as string) || '0000000000',
+            secondaryPhone: (formData.get('secondaryPhone') as string) || '',
             email: (formData.get('email') as string) || '',
-            howHeard: 'Paper Form',
+            occupation: (formData.get('occupation') as string) || '',
+            howHeard: (formData.get('howHeard') as string) || 'Paper Form',
+            dayScholarHostel: (formData.get('dayScholarHostel') as string) || '',
             assignedTo: (formData.get('counselorName') as string) || session.user?.name || '',
             status: (formData.get('status') as string) || 'New',
             followUpDate: (formData.get('followUpDate') as string) || '',
             notes: (formData.get('counselorComments') as string) || 'Added via paper form upload',
+            source: 'PaperForm' as const,
+            createdBy: session.user?.name ?? 'Admin Portal',
+            counselorName: (formData.get('counselorName') as string) || session.user?.name || '',
+            counselorComments: (formData.get('counselorComments') as string) || '',
         };
 
-        // TODO: Handle photo upload to Google Drive or cloud storage
-        // const photo = formData.get('formPhoto') as File;
-
-        await createInquiry({
-            ...inquiryData,
-            createdBy: session.user?.name ?? 'Admin Portal',
-            source: 'PaperForm',
-        });
+        await createInquiry(inquiryData);
 
         return NextResponse.json({
             success: true,
             message: 'Paper form inquiry added successfully',
         });
-    } catch (error) {
-        console.error('API Error:', error);
 
+    } catch (error) {
+        console.error('[upload-paper-form] Error:', error);
         return NextResponse.json(
             {
                 success: false,
-                error: error instanceof Error ? error.message : 'Failed to upload paper form',
+                error: error instanceof Error ? error.message : 'Failed to save inquiry',
             },
             { status: 500 }
         );
