@@ -12,6 +12,9 @@ interface PaperFormUploadProps {
 export function PaperFormUpload({ userName }: PaperFormUploadProps) {
     const [uploading, setUploading] = useState(false);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [dob, setDob] = useState('');
+    const [eligibilityMessage, setEligibilityMessage] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
+    const [calculatedClass, setCalculatedClass] = useState('');
     const router = useRouter();
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,15 +28,59 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
         }
     };
 
+    const checkEligibility = () => {
+        if (!dob) {
+            setEligibilityMessage({ text: 'Please enter a Date of Birth first.', type: 'error' });
+            return;
+        }
+
+        const birthDate = new Date(dob);
+        const cutoffDate = new Date('2026-04-01');
+
+        let ageInMilliseconds = cutoffDate.getTime() - birthDate.getTime();
+        let ageInYears = ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25);
+
+        if (ageInYears < 3) {
+            setEligibilityMessage({ text: `Age ${ageInYears.toFixed(1)} yrs as of Apr 1, 2026. Too young for Nursery (Requires 3+).`, type: 'error' });
+            setCalculatedClass('');
+            return;
+        }
+
+        let eligibleGrade = '';
+        if (ageInYears >= 3 && ageInYears < 4) eligibleGrade = 'Nursery';
+        else if (ageInYears >= 4 && ageInYears < 5) eligibleGrade = 'LKG';
+        else if (ageInYears >= 5 && ageInYears < 6) eligibleGrade = 'UKG';
+        else if (ageInYears >= 6 && ageInYears < 7) eligibleGrade = 'Class 1';
+        else if (ageInYears >= 7 && ageInYears < 8) eligibleGrade = 'Class 2';
+        else if (ageInYears >= 8 && ageInYears < 9) eligibleGrade = 'Class 3';
+        else if (ageInYears >= 9 && ageInYears < 10) eligibleGrade = 'Class 4';
+        else if (ageInYears >= 10 && ageInYears < 11) eligibleGrade = 'Class 5';
+        else if (ageInYears >= 11 && ageInYears < 12) eligibleGrade = 'Class 6';
+        else if (ageInYears >= 12 && ageInYears < 13) eligibleGrade = 'Class 7';
+        else if (ageInYears >= 13 && ageInYears < 14) eligibleGrade = 'Class 8';
+        else if (ageInYears >= 14 && ageInYears < 15) eligibleGrade = 'Class 9';
+        else if (ageInYears >= 15 && ageInYears < 16) eligibleGrade = 'Class 10';
+        else return setEligibilityMessage({ text: `Age ${ageInYears.toFixed(1)} yrs as of Apr 1, 2026. Please verify higher classes manually.`, type: 'info' });
+
+        setCalculatedClass(eligibleGrade);
+        setEligibilityMessage({
+            text: `✅ Eligible for ${eligibleGrade} (Age: ${ageInYears.toFixed(1)} yrs as of April 1, 2026).`,
+            type: 'success'
+        });
+    };
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setUploading(true);
 
         const formData = new FormData(e.currentTarget);
 
+        // Ensure calculated class is included if they didn't manually type it
+        if (!formData.get('currentClass') && calculatedClass) {
+            formData.set('currentClass', calculatedClass);
+        }
+
         try {
-            // For now, just submit the form data without OCR
-            // OCR can be added later as an enhancement
             const response = await fetch('/api/counselor/upload-paper-form', {
                 method: 'POST',
                 body: formData,
@@ -56,7 +103,6 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
 
     return (
         <div className="min-h-screen bg-admin-bg">
-            {/* Header */}
             <header className="bg-white border-b border-admin-border">
                 <div className="max-w-4xl mx-auto px-4 py-4">
                     <div className="flex items-center gap-4">
@@ -153,12 +199,44 @@ export function PaperFormUpload({ userName }: PaperFormUploadProps) {
 
                             <div>
                                 <label className="block text-sm font-medium text-admin-text mb-2">
+                                    Date of Birth & CBSE Eligibility
+                                </label>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="date"
+                                        value={dob}
+                                        onChange={(e) => setDob(e.target.value)}
+                                        className="w-full px-4 py-2 border border-admin-border rounded-lg focus:ring-2 focus:ring-admin-emerald focus:border-transparent outline-none transition-all"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={checkEligibility}
+                                        className="whitespace-nowrap px-4 py-2 bg-blue-50 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-100 font-medium transition-colors text-sm"
+                                    >
+                                        Check Age
+                                    </button>
+                                </div>
+                                {eligibilityMessage && (
+                                    <p className={`text-xs mt-2 font-medium ${eligibilityMessage.type === 'success' ? 'text-green-700' :
+                                            eligibilityMessage.type === 'error' ? 'text-red-600' :
+                                                'text-blue-700'
+                                        }`}>
+                                        {eligibilityMessage.text}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-admin-text mb-2">
                                     Current Class *
                                 </label>
                                 <input
                                     type="text"
                                     name="currentClass"
                                     required
+                                    value={calculatedClass}
+                                    onChange={(e) => setCalculatedClass(e.target.value)}
+                                    placeholder="e.g. Nursery, Class 1"
                                     className="w-full px-4 py-2 border border-admin-border rounded-lg focus:ring-2 focus:ring-admin-emerald focus:border-transparent outline-none transition-all"
                                 />
                             </div>
