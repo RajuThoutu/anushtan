@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { InquiryTypeToggle } from '@/components/dashboard/InquiryTypeToggle'
+import { AutocompleteInput } from '@/components/ui/AutocompleteInput'
 
 // Translation object
 const translations = {
@@ -724,21 +725,15 @@ export default function AddStudentPage() {
                                     <label className="block text-sm font-medium text-admin-text mb-2" htmlFor="currentSchool">
                                         {t.currentSchool}
                                     </label>
-                                    <input
-                                        type="text"
+                                    <AutocompleteInput
                                         id="currentSchool"
                                         name="currentSchool"
-                                        list="school-suggestions-admin"
                                         value={formData.currentSchool}
-                                        onChange={handleChange}
-                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
+                                        onChange={(value) => setFormData({ ...formData, currentSchool: value })}
+                                        suggestions={schoolsList}
                                         placeholder={t.currentSchoolPlaceholder}
+                                        className="w-full px-4 py-3 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-blue"
                                     />
-                                    <datalist id="school-suggestions-admin">
-                                        {schoolsList.map(school => (
-                                            <option key={school} value={school} />
-                                        ))}
-                                    </datalist>
                                 </div>
 
                                 <div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { submitQRInquiry } from './action';
+import { AutocompleteInput } from '@/components/ui/AutocompleteInput';
 
 const GRADES = [
     'Pre-KG', 'LKG', 'UKG',
@@ -358,23 +359,17 @@ export function MobileInquiryForm() {
             </div>
 
             <div>
-                <label htmlFor="currentSchool" className="block text-sm font-semibold text-gray-700 mb-1.5" id="currentSchoolLabel">
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5" id="currentSchoolLabel">
                     Current School
                 </label>
-                <input
-                    type="text"
+                <AutocompleteInput
                     id="currentSchool"
-                    list="school-suggestions"
                     value={form.currentSchool}
-                    onChange={e => set('currentSchool', e.target.value)}
+                    onChange={(value) => set('currentSchool', value)}
+                    suggestions={schoolsList}
                     placeholder="Enter current school name"
                     className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-gray-900 text-base focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
                 />
-                <datalist id="school-suggestions">
-                    {schoolsList.map(school => (
-                        <option key={school} value={school} />
-                    ))}
-                </datalist>
             </div>
 
             <div>
