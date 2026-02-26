@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { CalendarClock, Phone, AlertCircle, CheckCircle2, Clock, RefreshCw } from 'lucide-react';
+import {
+    CalendarClock, Phone, AlertCircle, CheckCircle2, Clock, RefreshCw,
+    Search, Filter, Calendar, X,
+} from 'lucide-react';
 
 interface Inquiry {
     id: string;
@@ -19,11 +22,14 @@ interface Inquiry {
     inquiryDate: string;
 }
 
-/** Today's date string in IST (YYYY-MM-DD) */
+/** YYYY-MM-DD in IST */
 function todayIST(): string {
-    const now = new Date();
-    const ist = new Date(now.getTime() + 5.5 * 60 * 60 * 1000);
-    return ist.toISOString().split('T')[0];
+    return new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+}
+
+/** YYYY-MM-DD in IST for any Date object */
+function toISTDate(d: Date): string {
+    return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
 }
 
 const STATUS_STYLE: Record<string, string> = {
@@ -40,7 +46,12 @@ export function FollowUpsClient() {
     const [loading, setLoading] = useState(true);
     const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
 
-    const today = todayIST();
+    // Filters — default to today
+    const [searchTerm, setSearchTerm] = useState('');
+    const [statusFilter, setStatusFilter] = useState('All');
+    const [dateStart, setDateStart] = useState(todayIST());
+    const [dateEnd, setDateEnd] = useState(todayIST());
+    const [quickSelect, setQuickSelect] = useState('today');
 
     const fetchData = async () => {
         setLoading(true);
@@ -58,20 +69,87 @@ export function FollowUpsClient() {
 
     useEffect(() => { fetchData(); }, []);
 
-    // ── Filter: updated today ──────────────────────────────────────────────
-    const todayItems = inquiries.filter(i => {
+    // ── Quick-select handler ───────────────────────────────────────────────
+    const handleQuickSelect = (val: string) => {
+        setQuickSelect(val);
+        const now = new Date();
+        let start = '';
+        let end = '';
+
+        if (val === 'today') {
+            start = end = toISTDate(now);
+        } else if (val === 'yesterday') {
+            const d = new Date(now);
+            d.setDate(now.getDate() - 1);
+            start = end = toISTDate(d);
+        } else if (val === 'thisWeek') {
+            const d = new Date(now);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            const monday = new Date(d.setDate(diff));
+            const sunday = new Date(new Date(monday).setDate(monday.getDate() + 6));
+            start = toISTDate(monday);
+            end = toISTDate(sunday);
+        } else if (val === 'lastWeek') {
+            const d = new Date(now);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1) - 7;
+            const monday = new Date(d.setDate(diff));
+            const sunday = new Date(new Date(monday).setDate(monday.getDate() + 6));
+            start = toISTDate(monday);
+            end = toISTDate(sunday);
+        } else if (val === 'thisMonth') {
+            start = toISTDate(new Date(now.getFullYear(), now.getMonth(), 1));
+            end = toISTDate(new Date(now.getFullYear(), now.getMonth() + 1, 0));
+        } else if (val === 'lastMonth') {
+            start = toISTDate(new Date(now.getFullYear(), now.getMonth() - 1, 1));
+            end = toISTDate(new Date(now.getFullYear(), now.getMonth(), 0));
+        }
+
+        if (val !== 'custom') {
+            setDateStart(start);
+            setDateEnd(end);
+        }
+    };
+
+    const resetToToday = () => {
+        setSearchTerm('');
+        setStatusFilter('All');
+        setDateStart(todayIST());
+        setDateEnd(todayIST());
+        setQuickSelect('today');
+    };
+
+    const isFiltered = searchTerm !== '' || statusFilter !== 'All' || quickSelect !== 'today';
+
+    // ── Filter ─────────────────────────────────────────────────────────────
+    const today = todayIST();
+
+    const filteredItems = inquiries.filter(i => {
         const updated = i.updatedAt ?? i.inquiryDate;
-        return updated?.split('T')[0] === today;
+        const updatedStr = new Date(updated).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+        const matchesDate = updatedStr >= dateStart && updatedStr <= dateEnd;
+
+        const q = searchTerm.toLowerCase();
+        const matchesSearch = !searchTerm ||
+            i.studentName.toLowerCase().includes(q) ||
+            i.inquiryId.toLowerCase().includes(q) ||
+            (i.phone || '').includes(searchTerm) ||
+            (i.parentName || '').toLowerCase().includes(q);
+
+        const matchesStatus = statusFilter === 'All' || i.status === statusFilter;
+
+        return matchesDate && matchesSearch && matchesStatus;
     });
 
     // ── Breakdown counts ───────────────────────────────────────────────────
     const counts = {
-        total:     todayItems.length,
-        active:    todayItems.filter(i => ['New', 'Open', 'Follow-up'].includes(i.status)).length,
-        converted: todayItems.filter(i => i.status === 'Converted').length,
-        overdue:   todayItems.filter(i => {
+        total:     filteredItems.length,
+        active:    filteredItems.filter(i => ['New', 'Open', 'Follow-up'].includes(i.status)).length,
+        converted: filteredItems.filter(i => i.status === 'Converted').length,
+        overdue:   filteredItems.filter(i => {
             if (!i.followUpDate || !['New', 'Open', 'Follow-up'].includes(i.status)) return false;
-            return new Date(i.followUpDate).toISOString().split('T')[0] < today;
+            return new Date(i.followUpDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }) < today;
         }).length,
     };
 
@@ -111,7 +189,7 @@ export function FollowUpsClient() {
                     <div className="flex items-center gap-2 mb-1">
                         <CalendarClock className="text-admin-purple" size={24} />
                         <h1 className="font-heading text-2xl font-bold text-admin-charcoal">
-                            Today's Follow-ups
+                            Follow-ups
                         </h1>
                     </div>
                     <p className="text-sm text-admin-text-secondary">{todayFmt}</p>
@@ -125,11 +203,87 @@ export function FollowUpsClient() {
                 </button>
             </div>
 
+            {/* ── Filter bar ──────────────────────────────────────────────── */}
+            <div className="bg-white rounded-xl border border-admin-border shadow-sm p-4 mb-6 flex flex-col md:flex-row gap-3 items-start md:items-center flex-wrap">
+                {/* Search */}
+                <div className="relative flex-1 min-w-[200px]">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                    <input
+                        type="text"
+                        placeholder="Search name, ID, phone…"
+                        className="w-full pl-9 pr-4 py-2 text-sm border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-purple/30"
+                        value={searchTerm}
+                        onChange={e => { setSearchTerm(e.target.value); setQuickSelect('custom'); }}
+                    />
+                </div>
+
+                {/* Status */}
+                <div className="flex items-center gap-2">
+                    <Filter size={15} className="text-gray-400 shrink-0" />
+                    <select
+                        value={statusFilter}
+                        onChange={e => setStatusFilter(e.target.value)}
+                        className="text-sm border border-admin-border rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-admin-purple/30"
+                    >
+                        <option value="All">All Statuses</option>
+                        <option value="New">New</option>
+                        <option value="Open">Open</option>
+                        <option value="Follow-up">Follow-up</option>
+                        <option value="Converted">Converted</option>
+                        <option value="Closed">Closed</option>
+                    </select>
+                </div>
+
+                {/* Quick date select + manual range */}
+                <div className="flex items-center gap-2 flex-wrap">
+                    <select
+                        value={quickSelect}
+                        onChange={e => handleQuickSelect(e.target.value)}
+                        className="text-sm border border-admin-border rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-admin-purple/30"
+                    >
+                        <option value="today">Today</option>
+                        <option value="yesterday">Yesterday</option>
+                        <option value="thisWeek">This Week</option>
+                        <option value="lastWeek">Last Week</option>
+                        <option value="thisMonth">This Month</option>
+                        <option value="lastMonth">Last Month</option>
+                        <option value="custom">Custom…</option>
+                    </select>
+
+                    <Calendar size={15} className="text-gray-400 shrink-0" />
+
+                    <input
+                        type="date"
+                        className="text-sm border border-admin-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-admin-purple/30"
+                        value={dateStart}
+                        onChange={e => { setDateStart(e.target.value); setQuickSelect('custom'); }}
+                    />
+                    <span className="text-gray-400 text-sm">–</span>
+                    <input
+                        type="date"
+                        className="text-sm border border-admin-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-admin-purple/30"
+                        value={dateEnd}
+                        onChange={e => { setDateEnd(e.target.value); setQuickSelect('custom'); }}
+                    />
+                </div>
+
+                {/* Reset to today */}
+                {isFiltered && (
+                    <button
+                        onClick={resetToToday}
+                        className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-admin-purple bg-purple-50 border border-purple-200 rounded-lg hover:bg-purple-100 transition shrink-0"
+                    >
+                        <X size={12} />
+                        Reset to Today
+                    </button>
+                )}
+            </div>
+
             {/* ── Stat chips ──────────────────────────────────────────────── */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
                 <div className="bg-white rounded-xl border border-admin-border p-4 text-center shadow-sm">
                     <p className="text-2xl font-bold text-admin-charcoal">{counts.total}</p>
-                    <p className="text-xs text-admin-text-secondary mt-0.5">Updated Today</p>
+                    <p className="text-xs text-admin-text-secondary mt-0.5">Matching</p>
                 </div>
                 <div className="bg-white rounded-xl border border-admin-border p-4 text-center shadow-sm">
                     <p className="text-2xl font-bold text-amber-600">{counts.active}</p>
@@ -146,12 +300,12 @@ export function FollowUpsClient() {
             </div>
 
             {/* ── Table ───────────────────────────────────────────────────── */}
-            {todayItems.length === 0 ? (
+            {filteredItems.length === 0 ? (
                 <div className="bg-white rounded-2xl border border-admin-border p-16 text-center">
                     <CalendarClock size={40} className="mx-auto text-gray-300 mb-3" />
-                    <p className="text-admin-text font-medium">No inquiries updated today</p>
+                    <p className="text-admin-text font-medium">No inquiries found</p>
                     <p className="text-sm text-admin-text-secondary mt-1">
-                        Inquiries that counselors act on today will appear here.
+                        Try adjusting your filters or date range.
                     </p>
                 </div>
             ) : (
@@ -171,10 +325,10 @@ export function FollowUpsClient() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-50">
-                                {todayItems.map((item, idx) => {
+                                {filteredItems.map((item) => {
                                     const isOverdue = item.followUpDate &&
                                         ['New', 'Open', 'Follow-up'].includes(item.status) &&
-                                        new Date(item.followUpDate).toISOString().split('T')[0] < today;
+                                        new Date(item.followUpDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }) < today;
 
                                     return (
                                         <tr
@@ -244,7 +398,7 @@ export function FollowUpsClient() {
                     </div>
 
                     <div className="px-4 py-3 border-t border-admin-border bg-gray-50 text-xs text-admin-text-secondary">
-                        {todayItems.length} {todayItems.length === 1 ? 'inquiry' : 'inquiries'} updated today
+                        {filteredItems.length} {filteredItems.length === 1 ? 'inquiry' : 'inquiries'} found
                         · Last refreshed {lastRefreshed.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', hour12: true })}
                     </div>
                 </div>
