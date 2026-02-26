@@ -12,12 +12,12 @@ export function InquiryCard({ inquiry, showAssignButton = false, onAssign }: Inq
         switch (status) {
             case 'New':
                 return 'bg-orange-100 text-orange-700 border-orange-200';
-            case 'Interested':
-                return 'bg-green-100 text-green-700 border-green-200';
             case 'Follow-up':
                 return 'bg-blue-100 text-blue-700 border-blue-200';
-            case 'Enrolled':
-                return 'bg-purple-100 text-purple-700 border-purple-200';
+            case 'Converted':
+                return 'bg-green-100 text-green-700 border-green-200';
+            case 'Casual Inquiry':
+                return 'bg-gray-100 text-gray-600 border-gray-200';
             default:
                 return 'bg-gray-100 text-gray-700 border-gray-200';
         }
@@ -38,7 +38,7 @@ export function InquiryCard({ inquiry, showAssignButton = false, onAssign }: Inq
 
     return (
         <div className="bg-white border border-anushtan-border rounded-lg p-4 hover:shadow-md transition-shadow">
-            <Link href={`/inquiry/${inquiry.id}`} className="block">
+            <Link href={`/inquiry/${inquiry.inquiryId || inquiry.id}`} className="block">
                 <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
                         <h3 className="font-semibold text-anushtan-charcoal text-lg mb-1">

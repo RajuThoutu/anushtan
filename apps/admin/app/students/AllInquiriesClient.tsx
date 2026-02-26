@@ -299,7 +299,7 @@ export default function AllInquiriesClient() {
                                             ID: {inq.inquiryId || inq.id} • {new Date(inq.inquiryDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })}
                                         </div>
                                         <button
-                                            onClick={() => router.push(`/inquiry/${inq.id}`)}
+                                            onClick={() => router.push(`/inquiry/${inq.inquiryId || inq.id}`)}
                                             className="text-admin-emerald text-sm font-medium hover:underline"
                                         >
                                             View Details →
@@ -366,7 +366,7 @@ export default function AllInquiriesClient() {
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 <button
-                                                    onClick={() => router.push(`/inquiry/${inq.id}`)}
+                                                    onClick={() => router.push(`/inquiry/${inq.inquiryId || inq.id}`)}
                                                     className="p-2 text-gray-400 hover:text-admin-emerald hover:bg-admin-emerald/10 rounded-full transition-all"
                                                     title="View Details"
                                                 >
