@@ -136,7 +136,7 @@ export default function ReportsClient() {
             const dayStr = date.toISOString().split('T')[0];
             return {
                 day: dayStr,
-                label: date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' }),
+                label: date.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: 'numeric' }),
                 count: data.filter(i => new Date(i.inquiryDate).toISOString().split('T')[0] === dayStr).length,
             };
         });

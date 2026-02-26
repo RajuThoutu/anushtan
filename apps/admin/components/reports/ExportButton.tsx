@@ -38,7 +38,7 @@ interface ExportButtonProps {
 function flattenInquiry(row: ExportRow) {
     return {
         'Inquiry ID': row.inquiryId ?? '',
-        'Date': row.inquiryDate ? new Date(row.inquiryDate).toLocaleDateString() : '',
+        'Date': row.inquiryDate ? new Date(row.inquiryDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }) : '',
         'Student Name': row.studentName ?? '',
         'Current Class': row.currentClass ?? '',
         'Current School': row.currentSchool ?? '',
@@ -54,7 +54,7 @@ function flattenInquiry(row: ExportRow) {
         'Status': row.status ?? '',
         'Assigned To': row.assignedTo ?? '',
         'Priority': row.priority ?? '',
-        'Follow-up Date': row.followUpDate ? new Date(row.followUpDate).toLocaleDateString() : '',
+        'Follow-up Date': row.followUpDate ? new Date(row.followUpDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }) : '',
         'Notes': row.notes ?? '',
         'Q1 - Education Guide': row.educationGuide ?? '',
         'Q2 - Learning Method': row.learningMethod ?? '',

@@ -110,33 +110,33 @@ export function InquiryFilters({ filters, onFilterChange }: InquiryFiltersProps)
                         let end = '';
 
                         if (val === 'today') {
-                            start = end = today.toLocaleDateString('en-CA');
+                            start = end = today.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                         } else if (val === 'yesterday') {
                             const y = new Date(today);
                             y.setDate(today.getDate() - 1);
-                            start = end = y.toLocaleDateString('en-CA');
+                            start = end = y.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                         } else if (val === 'thisWeek') {
                             const d = new Date(today);
                             const day = d.getDay();
                             const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
                             const monday = new Date(d.setDate(diff));
                             const sunday = new Date(d.setDate(monday.getDate() + 6));
-                            start = monday.toLocaleDateString('en-CA');
-                            end = sunday.toLocaleDateString('en-CA');
+                            start = monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            end = sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                         } else if (val === 'lastWeek') {
                             const d = new Date(today);
                             const day = d.getDay();
                             const diff = d.getDate() - day + (day === 0 ? -6 : 1) - 7;
                             const monday = new Date(d.setDate(diff));
                             const sunday = new Date(d.setDate(monday.getDate() + 6));
-                            start = monday.toLocaleDateString('en-CA');
-                            end = sunday.toLocaleDateString('en-CA');
+                            start = monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            end = sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                         } else if (val === 'thisMonth') {
-                            start = new Date(today.getFullYear(), today.getMonth(), 1).toLocaleDateString('en-CA');
-                            end = new Date(today.getFullYear(), today.getMonth() + 1, 0).toLocaleDateString('en-CA');
+                            start = new Date(today.getFullYear(), today.getMonth(), 1).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            end = new Date(today.getFullYear(), today.getMonth() + 1, 0).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                         } else if (val === 'lastMonth') {
-                            start = new Date(today.getFullYear(), today.getMonth() - 1, 1).toLocaleDateString('en-CA');
-                            end = new Date(today.getFullYear(), today.getMonth(), 0).toLocaleDateString('en-CA');
+                            start = new Date(today.getFullYear(), today.getMonth() - 1, 1).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            end = new Date(today.getFullYear(), today.getMonth(), 0).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                         }
 
                         if (val !== 'custom') {
