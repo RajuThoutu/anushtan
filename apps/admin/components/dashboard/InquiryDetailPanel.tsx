@@ -14,6 +14,7 @@ export interface CounselorUpdates {
     status: string;
     counselorComments: string;
     followUpDate: string;
+    unassign?: boolean;
 }
 
 const statusOptions = [
@@ -65,6 +66,11 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
     }
 
     const handleSave = async () => {
+        if (formData.status === 'New') {
+            alert('Please check "Mark as Open" to assign yourself this inquiry before saving updates.');
+            return;
+        }
+
         setSaving(true);
         setSaveSuccess(false);
         try {
@@ -173,26 +179,39 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                     </h3>
                     <div className="space-y-4">
                         {/* Open Inquiry Checkbox */}
-                        {inquiry?.status === 'New' && (
+                        {(inquiry?.status === 'New' || inquiry?.status === 'Open') && (
                             <div
-                                className="mb-4 p-3 bg-blue-50 border border-blue-100 rounded-lg flex items-start gap-3 cursor-pointer hover:bg-blue-100/70 transition-colors"
+                                className={`mb-4 p-3 border rounded-lg flex items-start gap-3 cursor-pointer transition-colors ${formData.status !== 'New'
+                                        ? 'bg-blue-50 border-blue-200'
+                                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                                    }`}
                                 onClick={async () => {
-                                    const updatedData = { ...formData, status: 'Open' };
+                                    const isCurrentlyOpen = formData.status !== 'New';
+                                    const newStatus = isCurrentlyOpen ? 'New' : 'Open';
+                                    const updatedData = { ...formData, status: newStatus };
                                     setFormData(updatedData);
-                                    await onSave(inquiry.id, updatedData);
+
+                                    // Make API call instantly when wrapping this action
+                                    await onSave(inquiry.id, isCurrentlyOpen ? { ...updatedData, unassign: true } : updatedData);
                                 }}
                             >
                                 <div className="pt-0.5">
                                     <input
                                         type="checkbox"
-                                        checked={formData.status === 'Open'}
+                                        checked={formData.status !== 'New'}
                                         readOnly
-                                        className="w-5 h-5 text-blue-600 border-blue-300 rounded focus:ring-blue-500 cursor-pointer pointer-events-none"
+                                        className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer pointer-events-none"
                                     />
                                 </div>
-                                <div>
-                                    <h4 className="text-sm font-semibold text-blue-900">Mark as Open</h4>
-                                    <p className="text-xs text-blue-700 mt-0.5">Assign this inquiry to yourself and update the dashboard status so others know you are working on it.</p>
+                                <div className="pointer-events-none select-none">
+                                    <h4 className={`text-sm font-semibold ${formData.status !== 'New' ? 'text-blue-900' : 'text-gray-700'}`}>
+                                        {formData.status !== 'New' ? 'Assigned to You (Open)' : 'Mark as Open'}
+                                    </h4>
+                                    <p className={`text-xs mt-0.5 ${formData.status !== 'New' ? 'text-blue-800' : 'text-gray-500'}`}>
+                                        {formData.status !== 'New'
+                                            ? 'You are currently working on this inquiry. Uncheck to return it to the queue.'
+                                            : 'Assign this inquiry to yourself and update the dashboard status so others know you are working on it.'}
+                                    </p>
                                 </div>
                             </div>
                         )}

@@ -415,11 +415,12 @@ export async function updateCounselorActions(
         followUpDate?: string;
         counselorComments?: string;
         priority?: string;
+        unassign?: boolean;
     }
 ) {
     console.log(`[DB] updateCounselorActions: ${idOrInquiryId}`, data);
 
-    const counselorName = data.assignedTo ?? data.updatedBy ?? 'Unknown';
+    const actorName = data.updatedBy ?? data.assignedTo ?? 'Unknown';
 
     // Flexible fetch to allow UI to pass either the UUID (id) or the sequence (S-XXX)
     const isUuid = idOrInquiryId.length > 20 && !idOrInquiryId.startsWith('S-');
@@ -440,10 +441,19 @@ export async function updateCounselorActions(
         newCaseStatus = 'Active';
     }
 
+    let newAssignedTo: string | null = current.assignedTo;
+    if (data.unassign) {
+        newAssignedTo = null;
+    } else if (data.assignedTo) {
+        newAssignedTo = data.assignedTo;
+    } else if (!current.assignedTo && data.status && data.status !== 'New') {
+        newAssignedTo = actorName;
+    }
+
     // Build update payload
     const updateData: Prisma.InquiryUpdateInput = {
         caseStatus: newCaseStatus,
-        assignedTo: counselorName,
+        assignedTo: newAssignedTo,
     };
     if (data.status) updateData.status = data.status as InquiryStatus;
     if (data.followUpDate) updateData.followUpDate = new Date(data.followUpDate);
@@ -456,8 +466,8 @@ export async function updateCounselorActions(
     await prisma.counselorActivityLog.create({
         data: {
             inquiryId: trueInquiryId,
-            counselorName,
-            action: data.status ? 'status_change' : data.counselorComments ? 'note_added' : 'assigned',
+            counselorName: actorName,
+            action: data.unassign ? 'unassigned' : (data.status ? 'status_change' : data.counselorComments ? 'note_added' : 'assigned'),
             oldValue: current.status,
             newValue: data.status ?? current.status,
             comments: data.counselorComments ?? null,
@@ -466,7 +476,7 @@ export async function updateCounselorActions(
 
     // 3. Async Sheets sync (fire-and-forget)
     syncUpdateToSheets(trueInquiryId, {
-        counselorName,
+        counselorName: newAssignedTo ?? '',
         status: data.status ?? current.status,
         caseStatus: newCaseStatus,
         followUpDate: data.followUpDate,
