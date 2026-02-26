@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth-config';
-import { createInquiry } from '@repo/database';
+import { createInquiry, InquiryStatus } from '@repo/database';
 
 export async function POST(request: Request) {
     try {
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
             howHeard: (formData.get('howHeard') as string) || 'Paper Form',
             dayScholarHostel: (formData.get('dayScholarHostel') as string) || '',
             assignedTo: (formData.get('counselorName') as string) || session.user?.name || '',
-            status: (formData.get('status') as string) || 'New',
+            status: ((formData.get('status') as string) || 'New') as InquiryStatus,
             followUpDate: (formData.get('followUpDate') as string) || '',
             notes: (formData.get('counselorComments') as string) || 'Added via paper form upload',
             source: 'PaperForm' as const,

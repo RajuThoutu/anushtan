@@ -45,7 +45,7 @@ export async function POST(request: Request) {
             message: 'Counselor actions updated successfully',
         });
     } catch (error) {
-        console.error('[API] Error details:', error?.stack || error);
+        console.error('[API] Error details:', (error as Error)?.stack || error);
 
         return NextResponse.json(
             {
