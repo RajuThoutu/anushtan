@@ -222,6 +222,15 @@ model SheetsSyncLog {
   @@index([syncedAt])
 }
 
+// app_config — Key-value store for runtime-mutable application settings
+model AppConfig {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("app_config")
+}
+
 // notifications — Bell icon alerts for counselors when new inquiries arrive
 model Notification {
   id        Int      @id @default(autoincrement())

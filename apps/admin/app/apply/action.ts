@@ -1,6 +1,7 @@
 'use server';
 
 import { createInquiry, InquirySource } from '@repo/database';
+import { sendInquiryAck } from '@repo/utils/src/whatsapp';
 
 interface QRInquiryData {
     studentName: string;
@@ -30,6 +31,11 @@ export async function submitQRInquiry(data: QRInquiryData): Promise<{ success: b
             createdBy: 'QR Form',
             status: 'New',
         });
+
+        // Send WhatsApp acknowledgement — fire-and-forget, never block the form submission
+        sendInquiryAck(data.phone, data.studentName).catch(err =>
+            console.error('[QR Inquiry] WhatsApp ack failed:', err)
+        );
 
         return { success: true };
     } catch (error) {

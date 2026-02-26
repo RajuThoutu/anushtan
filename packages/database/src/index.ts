@@ -23,3 +23,22 @@ if (process.env.NODE_ӕNV !== 'production') globalThis.prisma = prisma;
 
 export * from '@prisma/client';
 export * from './client/client'; // Export existing Google Sheets client
+
+// ─── AppConfig helpers ────────────────────────────────────────────────────────
+
+export async function getAppConfigValue(key: string): Promise<string | null> {
+    try {
+        const row = await prisma.appConfig.findUnique({ where: { key } });
+        return row?.value ?? null;
+    } catch {
+        return null;
+    }
+}
+
+export async function setAppConfigValue(key: string, value: string): Promise<void> {
+    await prisma.appConfig.upsert({
+        where:  { key },
+        update: { value },
+        create: { key, value },
+    });
+}

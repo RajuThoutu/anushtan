@@ -307,6 +307,9 @@ importers:
 
   packages/utils:
     dependencies:
+      '@repo/database':
+        specifier: '*'
+        version: link:../database
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -317,6 +320,9 @@ importers:
         specifier: ^5.12.1
         version: 5.12.1
     devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.19.32
       typescript:
         specifier: ^5.3.3
         version: 5.9.3

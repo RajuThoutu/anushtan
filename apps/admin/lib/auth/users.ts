@@ -1,11 +1,11 @@
 /**
  * Hardcoded user credentials
- * 
+ *
  * To add a new user:
  * 1. Generate password hash: https://bcrypt-generator.com/ (use rounds: 10)
  * 2. Add user object below
  * 3. Commit and deploy
- * 
+ *
  * Roles: super_admin, admin, hr, career_councillor
  */
 
@@ -22,8 +22,8 @@ export const users: User[] = [
     {
         id: '1',
         email: 'raju',
-        // Password: Raju@2026
-        password_hash: '$2b$10$1PRiOmIlh2.aXXiW8DiTLOStNeWOzp3RVyvVYC8OrT67NabzxsCG2',
+        // Password: Vedansh@2026
+        password_hash: '$2b$10$J65a/FZrmE2gXRPfBF0hIuEK6o2GhDZfjvPUQNx3lGqB5QKHZEag2',
         name: 'Raju Thoutu',
         role: 'super_admin',
         is_active: true
@@ -31,8 +31,8 @@ export const users: User[] = [
     {
         id: '2',
         email: 'naren',
-        // Password: Naren@2026
-        password_hash: '$2b$10$gCD1CUCEbIgcMMNdWPcjReMpVh9TkNe6lkz5p8OX.AqzL.S71Zoom',
+        // Password: naren@2026
+        password_hash: '$2b$10$dkT9CXpxalncbM8oy1A1n.cuKzRMzGSBV9MSsA627SV.X7LNqEj1y',
         name: 'Naren',
         role: 'admin',
         is_active: true
@@ -40,8 +40,8 @@ export const users: User[] = [
     {
         id: '3',
         email: 'karthik',
-        // Password: Karthik@2026
-        password_hash: '$2b$10$QzP6NT8KdZ7nKuQuTFPKseLOt428ltk7kWGsG0uje1.LAb/3GPElq',
+        // Password: karthik@2026
+        password_hash: '$2b$10$YhvzIeWZ6kaoqOATEay3kO/XQnxmVAKXTt/2bEHcEwBtJzWn/Ci3u',
         name: 'Karthik',
         role: 'admin',
         is_active: true
@@ -49,8 +49,8 @@ export const users: User[] = [
     {
         id: '4',
         email: 'bhaskar',
-        // Password: Bhaskar@2026
-        password_hash: '$2b$10$qzLve/LP7CNBrUVmkIhGI.U6rQf8X7Uluw0VjHtgZZI22UzjPXm72',
+        // Password: bhaskar@2026
+        password_hash: '$2b$10$qto7m.GtBGGlbHCGCf86GueTueNA6YAUkH4EFxGLy6.G38wpOUzuS',
         name: 'Bhaskar',
         role: 'admin',
         is_active: true
@@ -58,8 +58,8 @@ export const users: User[] = [
     {
         id: '5',
         email: 'jyothi',
-        // Password: Jyothi@2026
-        password_hash: '$2b$10$avuyoZO4/bIoxptuTyZ.KeQBg.4f7lNjeC.FjNGYEsskMH2g.uh8m',
+        // Password: jyothi@2026
+        password_hash: '$2b$10$/Fv8.NDOGLVZfgeqfDRsIesHwECghkRKYcCZoBkMki2mdNrSwWCdC',
         name: 'Jyothi',
         role: 'admin',
         is_active: true
@@ -67,8 +67,8 @@ export const users: User[] = [
     {
         id: '6',
         email: 'bhargavi',
-        // Password: Bhargavi@2026
-        password_hash: '$2b$10$hRp.tLndRdG5L19olFEbg.gQej9Y0/7SJxHxVPK4hvFgh9D6zjOgO',
+        // Password: Aum@2026
+        password_hash: '$2b$10$iMuwDZPu7pBTX8lQL/XvRulJ11awWXYk19It.kdBgv1qf4cijaa/C',
         name: 'Bhargavi',
         role: 'hr', // HR & Counsellor
         is_active: true
@@ -76,8 +76,8 @@ export const users: User[] = [
     {
         id: '7',
         email: 'sravani',
-        // Password: Sravani@2026
-        password_hash: '$2b$10$1N7LVFw0Px.m5egLSewGV.Av/mhougBu6CzNOUzJcGPV1Eb9w2sXu',
+        // Password: sravani@2026
+        password_hash: '$2b$10$S7iahxA2clCgoF7IYyWvy.oic5F745p2Eh2Tb5OLo2EsAi60wpGN2',
         name: 'Sravani',
         role: 'career_councillor',
         is_active: true
@@ -85,8 +85,8 @@ export const users: User[] = [
     {
         id: '8',
         email: 'bhavani',
-        // Password: Bhavani@2026
-        password_hash: '$2b$10$ZHcXr860IePr4lJHMaHil.atF6q908BCaxwveUdRKHsj410wjoj2S',
+        // Password: bhavani@2026
+        password_hash: '$2b$10$bS7q1TI85llXPwDXq/VNReBsYhjv4ZrWq5BVTojIoG.ipH5APyWX2',
         name: 'Bhavani',
         role: 'career_councillor',
         is_active: true
@@ -94,8 +94,8 @@ export const users: User[] = [
     {
         id: '9',
         email: 'kavitha',
-        // Password: Kavitha@2026
-        password_hash: '$2b$10$7mTX.DFPMrsih9YTPcVYfe8uLtWd99xfy7QW2esUIARZNrpPli6Qi',
+        // Password: kavitha@2026
+        password_hash: '$2b$10$VKPL66i0iHus.tVjkmO0z.1QEmaY0Yx1VoIJBGA6bjFjP4Q272jPS',
         name: 'Kavitha',
         role: 'career_councillor',
         is_active: true
@@ -103,8 +103,8 @@ export const users: User[] = [
     {
         id: '10',
         email: 'cc1',
-        // Password: CC1@2026
-        password_hash: '$2b$10$zeJr8XLxbwZVzX96nnveROzL/EahQtRR6wUF9cqR4iNQuZCZZWBG6',
+        // Password: cc1@2026
+        password_hash: '$2b$10$wW/6cmIuF/1libostp0n4uJdwqeOPKC3hOLUaPJ8scE.kSVNunWrS',
         name: 'CC1',
         role: 'career_councillor',
         is_active: true
@@ -112,8 +112,8 @@ export const users: User[] = [
     {
         id: '11',
         email: 'cc2',
-        // Password: CC2@2026
-        password_hash: '$2b$10$L1Ssxn2H7gsVdupQGIkX6Oh1Ap4pZWe8oYR4WToR6e4705jdK8/Iq',
+        // Password: cc2@2026
+        password_hash: '$2b$10$ze4JrHFv/jregP6Y1YiN7eCSsVYubu.nEHfe003FEIwbN86KpmY2W',
         name: 'CC2',
         role: 'career_councillor',
         is_active: true
@@ -121,8 +121,8 @@ export const users: User[] = [
     {
         id: '12',
         email: 'cc3',
-        // Password: CC3@2026
-        password_hash: '$2b$10$iDyS8T3qGmltVif.xR5u1OvZEIQGhQjRbz4Oo5FYjdttktsVhdiTW',
+        // Password: cc3@2026
+        password_hash: '$2b$10$Aoeogzg7FmVirEiVrD6vO.bX0PbuxzuYcZz6Ow4El.tbrYm59GDY.',
         name: 'CC3',
         role: 'career_councillor',
         is_active: true

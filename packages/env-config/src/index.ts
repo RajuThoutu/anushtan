@@ -64,10 +64,20 @@ const envSchema = z.object({
     NEXTAUTH_URL: z.string().default('http://localhost:3000'),
     NEXTAUTH_SECRET: z.string().default(''),
 
-    // ── Twilio / WhatsApp ─────────────────────────────────────────────────
-    TWILIO_ACCOUNT_SID: z.string().default(''),
-    TWILIO_AUTH_TOKEN: z.string().default(''),
-    TWILIO_FROM_NUMBER: z.string().default(''),
+    // ── Meta WhatsApp Cloud API ───────────────────────────────────────────
+    WHATSAPP_PHONE_NUMBER_ID: z.string().default(''),
+    WHATSAPP_ACCESS_TOKEN: z.string().default(''),
+    WHATSAPP_WEBHOOK_VERIFY_TOKEN: z.string().default(''),
+    WHATSAPP_TEST_RECIPIENT: z.string().default(''),
+    // Feature flags
+    WHATSAPP_ENABLED: z
+        .enum(['true', 'false'])
+        .default('false')
+        .transform(v => v === 'true'),
+    WHATSAPP_TEST_MODE: z
+        .enum(['true', 'false'])
+        .default('false')
+        .transform(v => v === 'true'),
 });
 
 // ─── Validate ────────────────────────────────────────────────────────────────
@@ -131,9 +141,12 @@ export const formsWebhookConfig = {
     secret: env.FORMS_WEBHOOK_SECRET,
 } as const;
 
-/** Twilio / WhatsApp config */
-export const twilioConfig = {
-    accountSid: env.TWILIO_ACCOUNT_SID,
-    authToken: env.TWILIO_AUTH_TOKEN,
-    fromNumber: env.TWILIO_FROM_NUMBER,
+/** Meta WhatsApp Cloud API config */
+export const whatsappConfig = {
+    phoneNumberId: env.WHATSAPP_PHONE_NUMBER_ID,
+    accessToken: env.WHATSAPP_ACCESS_TOKEN,
+    webhookVerifyToken: env.WHATSAPP_WEBHOOK_VERIFY_TOKEN,
+    testRecipient: env.WHATSAPP_TEST_RECIPIENT,
+    enabled: env.WHATSAPP_ENABLED,
+    testMode: env.WHATSAPP_TEST_MODE,
 } as const;

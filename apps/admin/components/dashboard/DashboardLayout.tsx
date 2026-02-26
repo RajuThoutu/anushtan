@@ -13,6 +13,7 @@ import {
     X,
     QrCode,
     CalendarClock,
+    MessageSquare,
 } from 'lucide-react';
 import { useState } from 'react';
 import { AddInquiryButton } from './AddInquiryButton';
@@ -23,41 +24,56 @@ interface NavItem {
     href: string;
     icon: React.ReactNode;
     roles?: string[];
+    group?: 'main' | 'admin';
 }
 
 const navItems: NavItem[] = [
+    // ── Main ─────────────────────────────────────────────────────────────────
     {
         label: 'Dashboard',
         href: '/dashboard',
         icon: <LayoutDashboard size={20} />,
+        group: 'main',
     },
-
     {
         label: 'All Inquiries',
         href: '/students',
         icon: <ClipboardList size={20} />,
+        group: 'main',
     },
     {
         label: 'Reports',
         href: '/reports',
         icon: <BarChart3 size={20} />,
         roles: ['super_admin', 'admin', 'hr'],
+        group: 'main',
     },
     {
         label: 'User Management',
         href: '/users',
         icon: <Users size={20} />,
         roles: ['super_admin'],
+        group: 'main',
     },
     {
         label: 'Follow-ups',
         href: '/followups',
         icon: <CalendarClock size={20} />,
+        group: 'main',
     },
     {
         label: 'QR Code',
         href: '/qr',
         icon: <QrCode size={20} />,
+        group: 'main',
+    },
+    // ── Admin Tools (super_admin only) ────────────────────────────────────────
+    {
+        label: 'WhatsApp',
+        href: '/admin/whatsapp',
+        icon: <MessageSquare size={20} />,
+        roles: ['super_admin'],
+        group: 'admin',
     },
 ];
 
@@ -147,7 +163,6 @@ export function DashboardSidebar() {
                     <ul className="space-y-2">
                         {filteredNavItems.map((item, index) => {
                             const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-                            // Assign different colors to each nav item
                             const colors = [
                                 'from-admin-blue to-admin-blue-light',
                                 'from-admin-emerald to-admin-emerald-light',
@@ -157,8 +172,21 @@ export function DashboardSidebar() {
                             ];
                             const colorClass = colors[index % colors.length];
 
+                            // Show "Admin Tools" divider before first admin-group item
+                            const isFirstAdmin = item.group === 'admin' &&
+                                (index === 0 || filteredNavItems[index - 1].group !== 'admin');
+
                             return (
                                 <li key={item.href}>
+                                    {isFirstAdmin && (
+                                        <div className="flex items-center gap-2 px-2 pt-3 pb-1">
+                                            <div className="h-px flex-1 bg-white/20" />
+                                            <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">
+                                                Admin Tools
+                                            </span>
+                                            <div className="h-px flex-1 bg-white/20" />
+                                        </div>
+                                    )}
                                     <Link
                                         href={item.href}
                                         onClick={() => setIsMobileMenuOpen(false)}
