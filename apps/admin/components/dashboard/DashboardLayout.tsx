@@ -11,7 +11,8 @@ import {
     LogOut,
     Menu,
     X,
-    QrCode
+    QrCode,
+    CalendarClock,
 } from 'lucide-react';
 import { useState } from 'react';
 import { AddInquiryButton } from './AddInquiryButton';
@@ -47,6 +48,11 @@ const navItems: NavItem[] = [
         href: '/users',
         icon: <Users size={20} />,
         roles: ['super_admin'],
+    },
+    {
+        label: 'Follow-ups',
+        href: '/followups',
+        icon: <CalendarClock size={20} />,
     },
     {
         label: 'QR Code',
