@@ -153,15 +153,18 @@ function parseDate(raw) {
     if (!raw || !raw.trim()) return null;
     const r = raw.trim();
 
-    // Try ISO (2026-02-10)
-    const iso = new Date(r);
-    if (!isNaN(iso.getTime()) && r.includes('-')) return iso;
-
-    // Try DD-MM-YYYY or D/M/YYYY
+    // Try DD-MM-YYYY or D/M/YYYY first
     const m = r.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/);
     if (m) {
-        const d = new Date(`${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`);
+        // m[1] = DD, m[2] = MM, m[3] = YYYY
+        const d = new Date(`${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}T00:00:00.000+05:30`);
         if (!isNaN(d.getTime())) return d;
+    }
+
+    // Try ISO (2026-02-10)
+    if (/^\d{4}-\d{2}-\d{2}/.test(r)) {
+        const iso = new Date(r);
+        if (!isNaN(iso.getTime())) return iso;
     }
 
     return null;
@@ -226,6 +229,7 @@ async function main() {
             priority: true,
             assignedTo: true,
             followUpDate: true,
+            inquiryDate: true,
         },
     });
 
@@ -435,6 +439,22 @@ async function main() {
                     action: 'follow_up_set',
                     newValue: followUpDate.toISOString().split('T')[0],
                     comments: `SOR sync: follow-up date set to ${followUpDate.toDateString()}`,
+                });
+            }
+        }
+
+        // Date (inquiryDate)
+        const dateRaw = cell(row, C.date);
+        const parsedInqDate = parseDate(dateRaw);
+        if (parsedInqDate) {
+            const existingInq = matched.inquiryDate ? new Date(matched.inquiryDate).toDateString() : null;
+            if (existingInq !== parsedInqDate.toDateString()) {
+                updateData.inquiryDate = parsedInqDate;
+                logEntries.push({
+                    inquiryId: matched.inquiryId,
+                    counselorName: counsellor,
+                    action: 'note_added',
+                    comments: `SOR sync: inquiry date corrected to ${parsedInqDate.toDateString()}`,
                 });
             }
         }
