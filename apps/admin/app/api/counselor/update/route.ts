@@ -19,7 +19,7 @@ export async function POST(request: Request) {
         }
 
         const body = await request.json();
-        const { id, status, followUpDate, counselorComments } = body;
+        const { id, status, followUpDate, counselorComments, unassign } = body;
         console.log('[API] Request body:', JSON.stringify(body));
 
         if (!id) {
@@ -34,6 +34,7 @@ export async function POST(request: Request) {
             status,
             followUpDate,
             counselorComments,
+            unassign,
             updatedBy: session.user.name, // Pass counselor name for audit trail
         });
 
@@ -44,7 +45,7 @@ export async function POST(request: Request) {
             message: 'Counselor actions updated successfully',
         });
     } catch (error) {
-        console.error('[API] Error:', error);
+        console.error('[API] Error details:', error?.stack || error);
 
         return NextResponse.json(
             {

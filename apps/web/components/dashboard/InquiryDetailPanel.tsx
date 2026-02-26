@@ -35,7 +35,7 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
     const [formData, setFormData] = useState<CounselorUpdates>({
         status: inquiry?.status || 'New',
         counselorComments: inquiry?.notes || '',
-        followUpDate: inquiry?.followUpDate || t2IST(),
+        followUpDate: inquiry?.followUpDate ? new Date(inquiry.followUpDate).toISOString().split('T')[0] : t2IST(),
     });
     const [saving, setSaving] = useState(false);
     const [saveSuccess, setSaveSuccess] = useState(false);
@@ -46,7 +46,7 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
             setFormData({
                 status: inquiry.status || 'New',
                 counselorComments: inquiry.notes || '',
-                followUpDate: inquiry.followUpDate || t2IST(),
+                followUpDate: inquiry.followUpDate ? new Date(inquiry.followUpDate).toISOString().split('T')[0] : t2IST(),
             });
         }
     });

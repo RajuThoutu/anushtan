@@ -455,7 +455,14 @@ export async function updateCounselorActions(
         caseStatus: newCaseStatus,
         assignedTo: newAssignedTo,
     };
-    if (data.status) updateData.status = data.status as InquiryStatus;
+
+    if (data.status) {
+        let prismaStatus = data.status;
+        if (prismaStatus === 'Follow-up') prismaStatus = 'FollowUp';
+        if (prismaStatus === 'Casual Inquiry') prismaStatus = 'CasualInquiry';
+        updateData.status = prismaStatus as InquiryStatus;
+    }
+
     if (data.followUpDate) updateData.followUpDate = new Date(data.followUpDate);
     if (data.priority) updateData.priority = data.priority;
 

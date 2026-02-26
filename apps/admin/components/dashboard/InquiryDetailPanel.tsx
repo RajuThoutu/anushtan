@@ -78,9 +78,9 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
             setSaveSuccess(true);
             setFormData(prev => ({ ...prev, counselorComments: '' })); // Clear comment box
             setTimeout(() => setSaveSuccess(false), 3000);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to save:', error);
-            alert('Failed to save changes. Please try again.');
+            alert(`Failed to save changes: ${error.message || 'Please try again.'}`);
         } finally {
             setSaving(false);
         }
@@ -182,8 +182,8 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                         {(inquiry?.status === 'New' || inquiry?.status === 'Open') && (
                             <div
                                 className={`mb-4 p-3 border rounded-lg flex items-start gap-3 cursor-pointer transition-colors ${formData.status !== 'New'
-                                        ? 'bg-blue-50 border-blue-200'
-                                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                                    ? 'bg-blue-50 border-blue-200'
+                                    : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
                                     }`}
                                 onClick={async () => {
                                     const isCurrentlyOpen = formData.status !== 'New';
