@@ -33,10 +33,10 @@ function toISTDate(d: Date): string {
 }
 
 const STATUS_STYLE: Record<string, string> = {
-    'New':             'bg-blue-100 text-blue-700',
-    'Follow-up':       'bg-purple-100 text-purple-700',
-    'Converted':       'bg-emerald-100 text-emerald-700',
-    'Casual Inquiry':  'bg-gray-100 text-gray-600',
+    'New': 'bg-blue-100 text-blue-700',
+    'Follow-up': 'bg-purple-100 text-purple-700',
+    'Converted': 'bg-emerald-100 text-emerald-700',
+    'Casual Inquiry': 'bg-gray-100 text-gray-600',
 };
 
 export function FollowUpsClient() {
@@ -55,7 +55,7 @@ export function FollowUpsClient() {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const res = await fetch('/api/counselor/inquiries');
+            const res = await fetch('/api/counselor/inquiries', { cache: 'no-store' });
             const data = await res.json();
             if (data.success) setInquiries(data.data ?? []);
         } catch (e) {
@@ -143,10 +143,10 @@ export function FollowUpsClient() {
 
     // ── Breakdown counts ───────────────────────────────────────────────────
     const counts = {
-        total:     filteredItems.length,
-        active:    filteredItems.filter(i => ['New', 'Follow-up'].includes(i.status)).length,
+        total: filteredItems.length,
+        active: filteredItems.filter(i => ['New', 'Follow-up'].includes(i.status)).length,
         converted: filteredItems.filter(i => i.status === 'Converted').length,
-        overdue:   filteredItems.filter(i => {
+        overdue: filteredItems.filter(i => {
             if (!i.followUpDate || !['New', 'Follow-up'].includes(i.status)) return false;
             return new Date(i.followUpDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }) < today;
         }).length,
@@ -370,9 +370,8 @@ export function FollowUpsClient() {
                                             </td>
                                             <td className="px-4 py-3">
                                                 {item.followUpDate ? (
-                                                    <span className={`flex items-center gap-1 text-xs font-medium ${
-                                                        isOverdue ? 'text-red-600' : 'text-admin-text'
-                                                    }`}>
+                                                    <span className={`flex items-center gap-1 text-xs font-medium ${isOverdue ? 'text-red-600' : 'text-admin-text'
+                                                        }`}>
                                                         {isOverdue
                                                             ? <AlertCircle size={13} />
                                                             : item.status === 'Converted'

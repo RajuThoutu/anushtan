@@ -22,7 +22,7 @@ export function InquirySection({ userName }: InquirySectionProps) {
 
     const fetchInquiries = async () => {
         try {
-            const response = await fetch('/api/counselor/inquiries');
+            const response = await fetch('/api/counselor/inquiries', { cache: 'no-store' });
             const data = await response.json();
 
             if (data.success) {

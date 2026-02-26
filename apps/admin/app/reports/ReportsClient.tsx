@@ -75,7 +75,7 @@ export default function ReportsClient() {
     const [boardingData, setBoardingData] = useState<{ name: string; value: number }[]>([]);
 
     useEffect(() => {
-        fetch('/api/counselor/inquiries')
+        fetch('/api/counselor/inquiries', { cache: 'no-store' })
             .then(r => r.json())
             .then(d => { if (d.success) processData(d.data); })
             .catch(e => console.error('Reports fetch failed', e))
@@ -87,11 +87,11 @@ export default function ReportsClient() {
 
         const today = todayIST();
         const tomorrow = new Date(today); tomorrow.setUTCDate(today.getUTCDate() + 1);
-        const in7Days  = new Date(today); in7Days.setUTCDate(today.getUTCDate() + 7);
+        const in7Days = new Date(today); in7Days.setUTCDate(today.getUTCDate() + 7);
 
         const thisMonthStart = new Date(today); thisMonthStart.setUTCDate(1);
         const lastMonthStart = new Date(thisMonthStart); lastMonthStart.setUTCMonth(lastMonthStart.getUTCMonth() - 1);
-        const lastMonthEnd   = new Date(thisMonthStart); lastMonthEnd.setUTCMilliseconds(-1);
+        const lastMonthEnd = new Date(thisMonthStart); lastMonthEnd.setUTCMilliseconds(-1);
 
         const ACTIVE = ['New', 'Follow-up'];
 
@@ -109,8 +109,8 @@ export default function ReportsClient() {
         }).length;
 
         setDirectorKpis({
-            thisMonthTotal:     thisMonth.length,
-            lastMonthTotal:     lastMonth.length,
+            thisMonthTotal: thisMonth.length,
+            lastMonthTotal: lastMonth.length,
             thisMonthConverted: thisMonth.filter(i => i.status === 'Converted').length,
             lastMonthConverted: lastMonth.filter(i => i.status === 'Converted').length,
             overdueFollowUps,
@@ -122,10 +122,10 @@ export default function ReportsClient() {
         data.filter(i => ACTIVE.includes(i.status)).forEach(i => {
             if (!i.followUpDate) { noDate++; return; }
             const fd = new Date(i.followUpDate); fd.setUTCHours(0, 0, 0, 0);
-            if (fd < today)                                     overdue++;
-            else if (fd.getTime() === today.getTime())          dueToday++;
-            else if (fd < in7Days)                              upcoming++;
-            else                                                noDate++;
+            if (fd < today) overdue++;
+            else if (fd.getTime() === today.getTime()) dueToday++;
+            else if (fd < in7Days) upcoming++;
+            else noDate++;
         });
         setFollowUpHealth({ overdue, dueToday, upcoming, noDate });
 
