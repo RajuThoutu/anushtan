@@ -3,6 +3,7 @@
 import { createInquiry } from '@repo/database';
 import type { InquirySource } from '@repo/database';
 import { sendInquiryAck } from '@repo/utils/src/whatsapp';
+import { sendInquiryBrochureEmail } from '@repo/utils/src/email';
 
 interface QRInquiryData {
     studentName: string;
@@ -28,10 +29,17 @@ export async function submitQRInquiry(data: QRInquiryData): Promise<{ success: b
             status: 'New',
         });
 
-        // Send WhatsApp acknowledgement — fire-and-forget, never block the form submission
+        // Send WhatsApp acknowledgement — fire-and-forget
         sendInquiryAck(data.phone, data.studentName).catch(err =>
             console.error('[QR Inquiry] WhatsApp ack failed:', err)
         );
+
+        // Send brochure email — fire-and-forget, only if email provided
+        if (data.email) {
+            sendInquiryBrochureEmail(data.email, data.parentName, data.studentName, data.grade).catch(err =>
+                console.error('[QR Inquiry] Brochure email failed:', err)
+            );
+        }
 
         return { success: true };
     } catch (error) {

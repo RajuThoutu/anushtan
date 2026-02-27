@@ -64,6 +64,10 @@ const envSchema = z.object({
     NEXTAUTH_URL: z.string().default('http://localhost:3000'),
     NEXTAUTH_SECRET: z.string().default(''),
 
+    // ── Resend (Email) ────────────────────────────────────────────────────
+    RESEND_API_KEY: z.string().default(''),
+    RESEND_FROM_EMAIL: z.string().default('Anushtan School <admissions@anushtanschool.in>'),
+
     // ── Meta WhatsApp Cloud API ───────────────────────────────────────────
     WHATSAPP_PHONE_NUMBER_ID: z.string().default(''),
     WHATSAPP_ACCESS_TOKEN: z.string().default(''),
@@ -139,6 +143,12 @@ export const n8nConfig = {
 /** Google Forms Webhook config */
 export const formsWebhookConfig = {
     secret: env.FORMS_WEBHOOK_SECRET,
+} as const;
+
+/** Resend email config */
+export const resendConfig = {
+    apiKey:    env.RESEND_API_KEY,
+    fromEmail: env.RESEND_FROM_EMAIL,
 } as const;
 
 /** Meta WhatsApp Cloud API config */
