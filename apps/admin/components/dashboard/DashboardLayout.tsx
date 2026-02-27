@@ -14,8 +14,9 @@ import {
     QrCode,
     CalendarClock,
     MessageSquare,
+    Power,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { AddInquiryButton } from './AddInquiryButton';
 import { NotificationBell } from '@/components/inquiry/NotificationBell';
 
@@ -76,6 +77,61 @@ const navItems: NavItem[] = [
         group: 'admin',
     },
 ];
+
+function LogoutButton() {
+    const [open, setOpen] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+
+    // Close on outside click
+    useEffect(() => {
+        if (!open) return;
+        const handler = (e: MouseEvent) => {
+            if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+        };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+    }, [open]);
+
+    return (
+        <div ref={ref} className="relative">
+            <button
+                onClick={() => setOpen(o => !o)}
+                aria-label="Sign out"
+                className={`flex items-center justify-center w-9 h-9 rounded-full border-2 transition-all duration-200 ${
+                    open
+                        ? 'bg-red-500 border-red-400 text-white shadow-lg shadow-red-500/30'
+                        : 'bg-white/10 border-white/20 text-white/80 hover:bg-red-500/20 hover:border-red-400/60 hover:text-white'
+                }`}
+            >
+                <Power size={16} />
+            </button>
+
+            {open && (
+                <div className="absolute right-0 top-11 w-44 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                    <div className="px-4 pt-3 pb-2">
+                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Sign out?</p>
+                        <p className="text-xs text-gray-400 mt-0.5">You will be logged out.</p>
+                    </div>
+                    <div className="flex border-t border-gray-100">
+                        <button
+                            onClick={() => setOpen(false)}
+                            className="flex-1 py-2 text-xs font-medium text-gray-500 hover:bg-gray-50 transition-colors"
+                        >
+                            Cancel
+                        </button>
+                        <div className="w-px bg-gray-100" />
+                        <button
+                            onClick={() => signOut({ callbackUrl: '/' })}
+                            className="flex-1 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors flex items-center justify-center gap-1"
+                        >
+                            <LogOut size={12} /> Sign out
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
 
 export function DashboardSidebar() {
     const pathname = usePathname();
@@ -258,6 +314,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                     <div className="flex items-center gap-3">
                         <NotificationBell />
                         <AddInquiryButton />
+                        <LogoutButton />
                     </div>
                 </header>
 
