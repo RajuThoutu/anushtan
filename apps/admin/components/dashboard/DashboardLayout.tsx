@@ -171,10 +171,11 @@ export function DashboardSidebar() {
                     </h1>
                 </div>
 
-                {/* Mobile: Bell + Add */}
+                {/* Mobile: Bell + Add + Logout */}
                 <div className="ml-auto flex items-center gap-1">
                     <NotificationBell />
                     <AddInquiryButton />
+                    <LogoutButton />
                 </div>
             </div>
 
