@@ -3,6 +3,7 @@
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Eye, EyeOff, User, Lock, ArrowRight, Loader2 } from 'lucide-react'
 
 export default function AuthPage() {
@@ -61,8 +62,8 @@ export default function AuthPage() {
                 {/* Content */}
                 <div className="relative z-10 flex flex-col items-center text-center px-12">
                     {/* Logo mark */}
-                    <div className="w-24 h-24 rounded-3xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center mb-8 shadow-2xl">
-                        <span className="text-white font-bold text-5xl" style={{ fontFamily: 'Georgia, serif' }}>A</span>
+                    <div className="w-28 h-28 rounded-3xl bg-white flex items-center justify-center mb-8 shadow-2xl p-2">
+                        <Image src="/logo.jpg" alt="Anushtan School" width={96} height={96} className="object-contain" />
                     </div>
 
                     <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">
@@ -102,8 +103,8 @@ export default function AuthPage() {
 
                     {/* Mobile logo */}
                     <div className="lg:hidden flex items-center gap-3 mb-10">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1a3a6e] to-[#2d1b69] flex items-center justify-center shadow-lg">
-                            <span className="text-white font-bold text-lg">A</span>
+                        <div className="w-12 h-12 rounded-xl bg-white border border-gray-100 shadow-md flex items-center justify-center p-1">
+                            <Image src="/logo.jpg" alt="Anushtan School" width={40} height={40} className="object-contain" />
                         </div>
                         <span className="font-bold text-gray-900 text-lg">Anushtan School</span>
                     </div>
