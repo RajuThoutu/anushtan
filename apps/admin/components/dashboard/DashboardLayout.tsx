@@ -306,9 +306,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="min-h-screen bg-admin-bg">
             <DashboardSidebar />
             {/* Add top padding on mobile to account for fixed header */}
-            <main className="lg:ml-64 min-h-screen pt-16 lg:pt-0 flex flex-col">
+            <main className="lg:ml-64 h-screen pt-16 lg:pt-0 flex flex-col overflow-hidden">
                 {/* Desktop Header */}
-                <header className="hidden lg:flex items-center justify-between px-8 py-4 bg-gradient-to-r from-admin-blue to-admin-purple border-b border-white/10 sticky top-0 z-30">
+                <header className="hidden lg:flex shrink-0 items-center justify-between px-8 py-4 bg-gradient-to-r from-admin-blue to-admin-purple border-b border-white/10 z-30">
                     <div className="font-heading text-xl font-bold text-white">
                         Management Console
                     </div>
@@ -319,7 +319,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                     </div>
                 </header>
 
-                <div className="flex-1">
+                <div className="flex-1 min-h-0 overflow-auto">
                     {children}
                 </div>
             </main>

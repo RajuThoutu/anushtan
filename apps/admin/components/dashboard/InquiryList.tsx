@@ -34,7 +34,7 @@ export function InquiryList({ inquiries, selectedId, onSelect, loading }: Inquir
     }
 
     return (
-        <div className="divide-y divide-anushtan-border overflow-y-auto max-h-[calc(100vh-280px)]">
+        <div className="divide-y divide-anushtan-border overflow-y-auto h-full">
             {inquiries.map((inquiry) => (
                 <InquiryListItem
                     key={inquiry.id}
