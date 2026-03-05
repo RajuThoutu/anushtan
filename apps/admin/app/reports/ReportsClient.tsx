@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Calendar } from 'lucide-react';
 
 import { AdmissionFunnelChart } from '@/components/dashboard/reports/AdmissionFunnelChart';
 import { CounselorPerformanceChart } from '@/components/dashboard/reports/CounselorPerformanceChart';
@@ -15,6 +16,8 @@ import { TrendChart } from '@/components/dashboard/reports/TrendChart';
 import { ExportButton } from '@/components/reports/ExportButton';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+
+type PeriodFilter = 'today' | 'thisWeek' | 'thisMonth' | 'lastMonth' | 'custom';
 
 interface Inquiry {
     id: string;
@@ -51,11 +54,75 @@ function todayIST(): Date {
     return ist;
 }
 
+const PERIOD_LABELS: Record<PeriodFilter, string> = {
+    today: 'Today',
+    thisWeek: 'This Week',
+    thisMonth: 'This Month',
+    lastMonth: 'Last Month',
+    custom: 'Custom Range',
+};
+
+function getPeriodLabel(filter: PeriodFilter, cStart: string, cEnd: string): string {
+    if (filter !== 'custom') return PERIOD_LABELS[filter];
+    if (cStart && cEnd) return `${cStart} – ${cEnd}`;
+    if (cStart) return `From ${cStart}`;
+    if (cEnd) return `Until ${cEnd}`;
+    return 'Custom Range';
+}
+
+function applyPeriodFilter(data: Inquiry[], filter: PeriodFilter, cStart: string, cEnd: string): Inquiry[] {
+    const today = todayIST();
+    switch (filter) {
+        case 'today': {
+            const todayStr = today.toISOString().split('T')[0];
+            return data.filter(i => new Date(i.inquiryDate).toISOString().split('T')[0] === todayStr);
+        }
+        case 'thisWeek': {
+            const dow = today.getUTCDay(); // 0=Sun
+            const diffToMon = dow === 0 ? 6 : dow - 1;
+            const weekStart = new Date(today);
+            weekStart.setUTCDate(today.getUTCDate() - diffToMon);
+            return data.filter(i => new Date(i.inquiryDate) >= weekStart);
+        }
+        case 'thisMonth': {
+            const monthStart = new Date(today);
+            monthStart.setUTCDate(1);
+            return data.filter(i => new Date(i.inquiryDate) >= monthStart);
+        }
+        case 'lastMonth': {
+            const thisMonthStart = new Date(today);
+            thisMonthStart.setUTCDate(1);
+            const lastStart = new Date(thisMonthStart);
+            lastStart.setUTCMonth(lastStart.getUTCMonth() - 1);
+            const lastEnd = new Date(thisMonthStart);
+            lastEnd.setUTCMilliseconds(-1);
+            return data.filter(i => {
+                const d = new Date(i.inquiryDate);
+                return d >= lastStart && d <= lastEnd;
+            });
+        }
+        case 'custom': {
+            return data.filter(i => {
+                const d = new Date(i.inquiryDate);
+                if (cStart && d < new Date(cStart + 'T00:00:00Z')) return false;
+                if (cEnd && d > new Date(cEnd + 'T23:59:59Z')) return false;
+                return true;
+            });
+        }
+    }
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function ReportsClient() {
     const [loading, setLoading] = useState(true);
-    const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+    const [allInquiries, setAllInquiries] = useState<Inquiry[]>([]);
+    const [inquiries, setInquiries] = useState<Inquiry[]>([]); // filtered — used for export
+
+    // ── Filter state ──
+    const [periodFilter, setPeriodFilter] = useState<PeriodFilter>('thisMonth');
+    const [customStart, setCustomStart] = useState('');
+    const [customEnd, setCustomEnd] = useState('');
 
     // ── Director Overview ──
     const [directorKpis, setDirectorKpis] = useState<DirectorKpis>({
@@ -74,52 +141,72 @@ export default function ReportsClient() {
     const [gradeData, setGradeData] = useState<{ grade: string; count: number; admissions: number }[]>([]);
     const [boardingData, setBoardingData] = useState<{ name: string; value: number }[]>([]);
 
+    // Fetch all data once
     useEffect(() => {
         fetch('/api/counselor/inquiries', { cache: 'no-store' })
             .then(r => r.json())
-            .then(d => { if (d.success) processData(d.data); })
+            .then(d => { if (d.success) setAllInquiries(d.data); })
             .catch(e => console.error('Reports fetch failed', e))
             .finally(() => setLoading(false));
     }, []);
 
-    const processData = (data: Inquiry[]) => {
+    // Re-process whenever data or filter changes
+    useEffect(() => {
+        const filtered = applyPeriodFilter(allInquiries, periodFilter, customStart, customEnd);
+        processData(filtered, allInquiries, periodFilter);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [allInquiries, periodFilter, customStart, customEnd]);
+
+    const processData = (data: Inquiry[], allData: Inquiry[], filter: PeriodFilter) => {
         setInquiries(data);
 
         const today = todayIST();
-        const tomorrow = new Date(today); tomorrow.setUTCDate(today.getUTCDate() + 1);
         const in7Days = new Date(today); in7Days.setUTCDate(today.getUTCDate() + 7);
-
-        const thisMonthStart = new Date(today); thisMonthStart.setUTCDate(1);
-        const lastMonthStart = new Date(thisMonthStart); lastMonthStart.setUTCMonth(lastMonthStart.getUTCMonth() - 1);
-        const lastMonthEnd = new Date(thisMonthStart); lastMonthEnd.setUTCMilliseconds(-1);
-
         const ACTIVE = ['New', 'Follow-up'];
 
-        // ── Director KPIs ──────────────────────────────────────────────────────
-        const thisMonth = data.filter(i => new Date(i.inquiryDate) >= thisMonthStart);
-        const lastMonth = data.filter(i => {
-            const d = new Date(i.inquiryDate);
-            return d >= lastMonthStart && d <= lastMonthEnd;
-        });
-        const unassigned = data.filter(i => !i.assignedTo && ACTIVE.includes(i.status)).length;
-        const overdueFollowUps = data.filter(i => {
+        // ── Director KPIs (period totals) ──────────────────────────────────
+        const periodTotal = data.length;
+        const periodConverted = data.filter(i => i.status === 'Converted').length;
+        let prevTotal = 0, prevConverted = 0;
+
+        if (filter === 'thisMonth') {
+            const thisMonthStart = new Date(today); thisMonthStart.setUTCDate(1);
+            const lastMonthStart = new Date(thisMonthStart); lastMonthStart.setUTCMonth(lastMonthStart.getUTCMonth() - 1);
+            const lastMonthEnd = new Date(thisMonthStart); lastMonthEnd.setUTCMilliseconds(-1);
+            const lm = allData.filter(i => { const d = new Date(i.inquiryDate); return d >= lastMonthStart && d <= lastMonthEnd; });
+            prevTotal = lm.length;
+            prevConverted = lm.filter(i => i.status === 'Converted').length;
+        } else if (filter === 'lastMonth') {
+            const thisMonthStart = new Date(today); thisMonthStart.setUTCDate(1);
+            const lmStart = new Date(thisMonthStart); lmStart.setUTCMonth(lmStart.getUTCMonth() - 1);
+            const prev2Start = new Date(lmStart); prev2Start.setUTCMonth(prev2Start.getUTCMonth() - 1);
+            const prev2End = new Date(lmStart); prev2End.setUTCMilliseconds(-1);
+            const pm = allData.filter(i => { const d = new Date(i.inquiryDate); return d >= prev2Start && d <= prev2End; });
+            prevTotal = pm.length;
+            prevConverted = pm.filter(i => i.status === 'Converted').length;
+        }
+        // For today/thisWeek/custom: prevTotal stays 0 → TrendBadge shows "No prior data"
+
+        // Global: overdue + unassigned from ALL active inquiries (not period-filtered)
+        const unassigned = allData.filter(i => !i.assignedTo && ACTIVE.includes(i.status)).length;
+        const overdueFollowUps = allData.filter(i => {
             if (!i.followUpDate || !ACTIVE.includes(i.status)) return false;
             const fd = new Date(i.followUpDate); fd.setUTCHours(0, 0, 0, 0);
             return fd < today;
         }).length;
 
         setDirectorKpis({
-            thisMonthTotal: thisMonth.length,
-            lastMonthTotal: lastMonth.length,
-            thisMonthConverted: thisMonth.filter(i => i.status === 'Converted').length,
-            lastMonthConverted: lastMonth.filter(i => i.status === 'Converted').length,
+            thisMonthTotal: periodTotal,
+            lastMonthTotal: prevTotal,
+            thisMonthConverted: periodConverted,
+            lastMonthConverted: prevConverted,
             overdueFollowUps,
             unassigned,
         });
 
-        // ── Follow-up Health ───────────────────────────────────────────────────
+        // ── Follow-up Health (always global — live operational metric) ─────
         let overdue = 0, dueToday = 0, upcoming = 0, noDate = 0;
-        data.filter(i => ACTIVE.includes(i.status)).forEach(i => {
+        allData.filter(i => ACTIVE.includes(i.status)).forEach(i => {
             if (!i.followUpDate) { noDate++; return; }
             const fd = new Date(i.followUpDate); fd.setUTCHours(0, 0, 0, 0);
             if (fd < today) overdue++;
@@ -129,7 +216,7 @@ export default function ReportsClient() {
         });
         setFollowUpHealth({ overdue, dueToday, upcoming, noDate });
 
-        // ── 30-day Trend ───────────────────────────────────────────────────────
+        // ── 30-day Trend (always global rolling window for context) ────────
         const thirtyAgo = new Date(today); thirtyAgo.setUTCDate(today.getUTCDate() - 29);
         const days = Array.from({ length: 30 }, (_, d) => {
             const date = new Date(thirtyAgo); date.setUTCDate(thirtyAgo.getUTCDate() + d);
@@ -137,12 +224,12 @@ export default function ReportsClient() {
             return {
                 day: dayStr,
                 label: date.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: 'numeric' }),
-                count: data.filter(i => new Date(i.inquiryDate).toISOString().split('T')[0] === dayStr).length,
+                count: allData.filter(i => new Date(i.inquiryDate).toISOString().split('T')[0] === dayStr).length,
             };
         });
         setTrendData30(days);
 
-        // ── Source Conversion ──────────────────────────────────────────────────
+        // ── Source Conversion ──────────────────────────────────────────────
         const srcMap = new Map<string, { total: number; converted: number }>();
         data.forEach(i => {
             const src = i.source || 'Other';
@@ -162,7 +249,7 @@ export default function ReportsClient() {
                 .sort((a, b) => b.total - a.total)
         );
 
-        // ── Counselor Stats + Leaderboard ──────────────────────────────────────
+        // ── Counselor Stats + Leaderboard ──────────────────────────────────
         const cMap = new Map<string, any>();
         data.forEach(i => {
             const name = i.counselorName || i.assignedTo || 'Unassigned';
@@ -193,7 +280,7 @@ export default function ReportsClient() {
         setCounselorStats(statsArr);
         setLeaderboard(statsArr);
 
-        // ── Grade Distribution ─────────────────────────────────────────────────
+        // ── Grade Distribution ─────────────────────────────────────────────
         const gMap = new Map<string, { count: number; admissions: number }>();
         data.forEach(i => {
             const g = i.currentClass || 'Unknown';
@@ -209,13 +296,13 @@ export default function ReportsClient() {
                 .slice(0, 10)
         );
 
-        // ── Admission Funnel ───────────────────────────────────────────────────
+        // ── Admission Funnel ───────────────────────────────────────────────
         setFunnelData(['New', 'Follow-up', 'Converted', 'Casual Inquiry'].map(stage => ({
             stage,
             count: data.filter(i => i.status === stage).length,
         })));
 
-        // ── Boarding Type ──────────────────────────────────────────────────────
+        // ── Boarding Type ──────────────────────────────────────────────────
         const bMap = new Map<string, number>();
         data.forEach(i => {
             const t = i.dayScholarHostel || 'Not Specified';
@@ -243,11 +330,56 @@ export default function ReportsClient() {
         );
     }
 
+    const periodLabel = getPeriodLabel(periodFilter, customStart, customEnd);
+
     return (
-        <div className="space-y-10">
+        <div className="space-y-6">
             {/* Export */}
             <div className="flex justify-end">
                 <ExportButton data={inquiries} />
+            </div>
+
+            {/* ── Period Filter Bar ──────────────────────────────────────────── */}
+            <div className="flex flex-wrap items-center gap-2 p-4 bg-white rounded-xl border border-admin-border shadow-sm">
+                <span className="flex items-center gap-1.5 text-sm font-semibold text-admin-text-secondary mr-1">
+                    <Calendar size={14} />
+                    Period:
+                </span>
+                {(['today', 'thisWeek', 'thisMonth', 'lastMonth', 'custom'] as PeriodFilter[]).map(p => (
+                    <button
+                        key={p}
+                        onClick={() => setPeriodFilter(p)}
+                        className={`px-3.5 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                            periodFilter === p
+                                ? 'bg-admin-purple text-white shadow-sm'
+                                : 'bg-gray-100 text-admin-text hover:bg-gray-200'
+                        }`}
+                    >
+                        {PERIOD_LABELS[p]}
+                    </button>
+                ))}
+                {periodFilter === 'custom' && (
+                    <div className="flex items-center gap-2 ml-1">
+                        <input
+                            type="date"
+                            value={customStart}
+                            max={customEnd || undefined}
+                            onChange={e => setCustomStart(e.target.value)}
+                            className="px-2.5 py-1.5 text-sm border border-admin-border rounded-lg bg-gray-50 focus:outline-none focus:ring-1 focus:ring-admin-purple"
+                        />
+                        <span className="text-admin-text-secondary text-sm">—</span>
+                        <input
+                            type="date"
+                            value={customEnd}
+                            min={customStart || undefined}
+                            onChange={e => setCustomEnd(e.target.value)}
+                            className="px-2.5 py-1.5 text-sm border border-admin-border rounded-lg bg-gray-50 focus:outline-none focus:ring-1 focus:ring-admin-purple"
+                        />
+                    </div>
+                )}
+                <span className="ml-auto text-xs text-admin-text-secondary">
+                    {inquiries.length} inquir{inquiries.length === 1 ? 'y' : 'ies'} in period
+                </span>
             </div>
 
             {/* ═══════════════════════════════════════════════════════════════════
@@ -258,10 +390,10 @@ export default function ReportsClient() {
                     <div className="h-5 w-1 rounded-full bg-gradient-to-b from-admin-purple to-admin-rose" />
                     <h2 className="text-xl font-bold text-admin-charcoal">Director Overview</h2>
                     <span className="text-xs font-medium text-admin-text-secondary bg-gray-100 px-2 py-0.5 rounded-full">
-                        Month-to-date
+                        {periodLabel}
                     </span>
                 </div>
-                <DirectorKpiCards {...directorKpis} />
+                <DirectorKpiCards {...directorKpis} periodLabel={periodLabel} />
             </section>
 
             {/* ═══════════════════════════════════════════════════════════════════

@@ -9,6 +9,7 @@ interface DirectorKpiCardsProps {
     lastMonthConverted: number;
     overdueFollowUps: number;
     unassigned: number;
+    periodLabel?: string;
 }
 
 function TrendBadge({ current, previous }: { current: number; previous: number }) {
@@ -29,17 +30,18 @@ export function DirectorKpiCards({
     thisMonthConverted,
     lastMonthConverted,
     overdueFollowUps,
-    unassigned
+    unassigned,
+    periodLabel = 'This Month',
 }: DirectorKpiCardsProps) {
     const convRate = thisMonthTotal > 0 ? ((thisMonthConverted / thisMonthTotal) * 100).toFixed(1) : '0';
     const prevConvRate = lastMonthTotal > 0 ? (lastMonthConverted / lastMonthTotal) * 100 : 0;
 
     return (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* This Month Inquiries */}
+            {/* Period Inquiries */}
             <div className="bg-white rounded-xl border border-admin-border shadow-sm p-5">
                 <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-semibold text-admin-text-secondary uppercase tracking-wide">This Month</span>
+                    <span className="text-xs font-semibold text-admin-text-secondary uppercase tracking-wide">{periodLabel}</span>
                     <div className="p-2 bg-blue-50 rounded-lg">
                         <Users size={15} className="text-blue-600" />
                     </div>
@@ -49,10 +51,10 @@ export function DirectorKpiCards({
                 <TrendBadge current={thisMonthTotal} previous={lastMonthTotal} />
             </div>
 
-            {/* This Month Conversions */}
+            {/* Period Conversions */}
             <div className="bg-white rounded-xl border border-admin-border shadow-sm p-5">
                 <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-semibold text-admin-text-secondary uppercase tracking-wide">This Month</span>
+                    <span className="text-xs font-semibold text-admin-text-secondary uppercase tracking-wide">{periodLabel}</span>
                     <div className="p-2 bg-emerald-50 rounded-lg">
                         <CheckCircle2 size={15} className="text-emerald-600" />
                     </div>
