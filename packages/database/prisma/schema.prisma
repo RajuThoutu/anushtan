@@ -222,6 +222,19 @@ model SheetsSyncLog {
   @@index([syncedAt])
 }
 
+// deleted_inquiries — Archive table; snapshots of hard-deleted inquiries for restore purposes
+model DeletedInquiry {
+  id         String   @id @default(uuid())
+  inquiryId  String   @map("inquiry_id")        // Original S-XXX ID
+  deletedBy  String   @map("deleted_by")         // Name/email of who deleted
+  deletedAt  DateTime @default(now()) @map("deleted_at") @db.Timestamptz(6)
+  snapshot   Json                                 // Full inquiry row at time of deletion
+
+  @@map("deleted_inquiries")
+  @@index([deletedAt])
+  @@index([inquiryId])
+}
+
 // app_config — Key-value store for runtime-mutable application settings
 model AppConfig {
   key       String   @id

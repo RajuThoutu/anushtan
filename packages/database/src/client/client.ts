@@ -427,6 +427,103 @@ export async function deleteInquiries(ids: string[]) {
 }
 
 /**
+ * Archive inquiries to deleted_inquiries table, then hard-delete them.
+ * Called by bulk-delete; preserves a JSON snapshot for restore purposes.
+ */
+export async function archiveAndDeleteInquiries(ids: string[], deletedBy: string) {
+    if (!ids || ids.length === 0) return { success: true, count: 0 };
+
+    const uuids = ids.filter(id => id.length > 20 && !id.startsWith('S-'));
+    const sequenceIds = ids.filter(id => id.startsWith('S-'));
+
+    // Fetch full rows before deletion
+    const rows = await prisma.inquiry.findMany({
+        where: {
+            OR: [
+                { id: { in: uuids } },
+                { inquiryId: { in: sequenceIds } },
+            ],
+        },
+    });
+
+    if (rows.length === 0) return { success: true, count: 0 };
+
+    // Archive snapshots
+    await prisma.deletedInquiry.createMany({
+        data: rows.map(row => ({
+            inquiryId: row.inquiryId,
+            deletedBy,
+            snapshot: row as unknown as Prisma.InputJsonValue,
+        })),
+    });
+
+    // Hard delete (cascades to activityLog + syncLogs)
+    const result = await prisma.inquiry.deleteMany({
+        where: {
+            OR: [
+                { id: { in: uuids } },
+                { inquiryId: { in: sequenceIds } },
+            ],
+        },
+    });
+
+    console.log(`[DB] archiveAndDeleteInquiries: archived + deleted ${result.count} by ${deletedBy}`);
+    return { success: true, count: result.count };
+}
+
+/**
+ * Bulk-set followUpDate (and status → FollowUp) for multiple inquiries.
+ * Creates an activity log entry for each.
+ */
+export async function bulkSetFollowUpDate(ids: string[], followUpDate: string, updatedBy: string) {
+    if (!ids || ids.length === 0) return { success: true, count: 0 };
+
+    const uuids = ids.filter(id => id.length > 20 && !id.startsWith('S-'));
+    const sequenceIds = ids.filter(id => id.startsWith('S-'));
+
+    const rows = await prisma.inquiry.findMany({
+        where: {
+            OR: [
+                { id: { in: uuids } },
+                { inquiryId: { in: sequenceIds } },
+            ],
+        },
+        select: { inquiryId: true, status: true },
+    });
+
+    if (rows.length === 0) return { success: true, count: 0 };
+
+    const date = new Date(followUpDate);
+
+    // Update all matching inquiries
+    await prisma.inquiry.updateMany({
+        where: {
+            inquiryId: { in: rows.map(r => r.inquiryId) },
+        },
+        data: {
+            followUpDate: date,
+            status: 'FollowUp',
+            caseStatus: 'Active',
+        },
+    });
+
+    // Create activity log for each
+    await prisma.counselorActivityLog.createMany({
+        data: rows.map(row => ({
+            inquiryId: row.inquiryId,
+            counselorName: updatedBy,
+            action: 'follow_up_set',
+            oldValue: row.status,
+            newValue: 'Follow-up',
+            comments: `Bulk follow-up set to ${followUpDate}`,
+        })),
+    });
+
+    console.log(`[DB] bulkSetFollowUpDate: ${rows.length} inquiries set to ${followUpDate} by ${updatedBy}`);
+    return { success: true, count: rows.length };
+}
+
+/**
  * Update counselor fields on an inquiry.
  * 1. UPDATE PostgreSQL (source of truth)
  * 2. INSERT activity log row

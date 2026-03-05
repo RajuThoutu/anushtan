@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-config';
-import { archiveAndDeleteInquiries } from '@repo/database';
+import { bulkSetFollowUpDate } from '@repo/database';
 
 const ALLOWED_ROLES = ['super_admin', 'admin', 'hr'];
 
-export async function DELETE(request: Request) {
+export async function POST(request: Request) {
     try {
         const session = await getServerSession(authOptions);
 
@@ -19,7 +19,7 @@ export async function DELETE(request: Request) {
         }
 
         const body = await request.json();
-        const { inquiryIds } = body;
+        const { inquiryIds, followUpDate } = body;
 
         if (!Array.isArray(inquiryIds) || inquiryIds.length === 0) {
             return NextResponse.json(
@@ -28,19 +28,26 @@ export async function DELETE(request: Request) {
             );
         }
 
-        const deletedBy = session.user.name ?? session.user.email ?? 'Unknown';
-        const result = await archiveAndDeleteInquiries(inquiryIds, deletedBy);
+        if (!followUpDate || typeof followUpDate !== 'string') {
+            return NextResponse.json(
+                { success: false, error: 'Missing followUpDate (YYYY-MM-DD)' },
+                { status: 400 }
+            );
+        }
+
+        const updatedBy = session.user.name ?? session.user.email ?? 'Unknown';
+        const result = await bulkSetFollowUpDate(inquiryIds, followUpDate, updatedBy);
 
         return NextResponse.json({
             success: true,
-            message: `Successfully deleted ${result.count} inquiries`,
+            message: `Follow-up date set for ${result.count} inquiries`,
             count: result.count
         });
 
     } catch (error) {
-        console.error('Bulk Delete Error:', error);
+        console.error('Bulk Follow-up Error:', error);
         return NextResponse.json(
-            { success: false, error: error instanceof Error ? error.message : 'Failed to delete inquiries' },
+            { success: false, error: error instanceof Error ? error.message : 'Failed to set follow-up date' },
             { status: 500 }
         );
     }

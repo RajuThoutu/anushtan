@@ -56,6 +56,9 @@ export default function AllInquiriesClient() {
     const [error, setError] = useState('');
     const [selectedInquiries, setSelectedInquiries] = useState<Set<string>>(new Set());
     const [isDeleting, setIsDeleting] = useState(false);
+    const [showFollowUpModal, setShowFollowUpModal] = useState(false);
+    const [followUpDate, setFollowUpDate] = useState('');
+    const [isSettingFollowUp, setIsSettingFollowUp] = useState(false);
 
     // Filters
     const [searchTerm, setSearchTerm] = useState('');
@@ -145,7 +148,8 @@ export default function AllInquiriesClient() {
         );
     }
 
-    const isSuperAdmin = session?.user?.role === 'super_admin' || session?.user?.email?.toLowerCase() === 'raju';
+    // HR, admin, and super_admin can bulk-select, delete, and set follow-up
+    const canBulkAction = ['super_admin', 'admin', 'hr'].includes(session?.user?.role ?? '');
 
     const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.checked) {
@@ -166,7 +170,7 @@ export default function AllInquiriesClient() {
     };
 
     const handleBulkDelete = async () => {
-        if (!confirm(`Are you sure you want to permanently delete ${selectedInquiries.size} inquiries? This action cannot be undone.`)) {
+        if (!confirm(`Delete ${selectedInquiries.size} selected inquiries? They will be archived and can be restored by the super admin if needed.`)) {
             return;
         }
 
@@ -186,10 +190,38 @@ export default function AllInquiriesClient() {
             } else {
                 alert(data.error || 'Failed to delete inquiries');
             }
-        } catch (err) {
+        } catch {
             alert('An error occurred during deletion.');
         } finally {
             setIsDeleting(false);
+        }
+    };
+
+    const handleBulkFollowUp = async () => {
+        if (!followUpDate) return;
+
+        setIsSettingFollowUp(true);
+        try {
+            const res = await fetch('/api/counselor/inquiries/bulk-followup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ inquiryIds: Array.from(selectedInquiries), followUpDate })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                alert(`Follow-up date set for ${data.count} inquiries.`);
+                setSelectedInquiries(new Set());
+                setShowFollowUpModal(false);
+                setFollowUpDate('');
+                fetchInquiries();
+            } else {
+                alert(data.error || 'Failed to set follow-up date');
+            }
+        } catch {
+            alert('An error occurred.');
+        } finally {
+            setIsSettingFollowUp(false);
         }
     };
 
@@ -328,18 +360,61 @@ export default function AllInquiriesClient() {
             </div>
 
             {/* Bulk Actions */}
-            {isSuperAdmin && selectedInquiries.size > 0 && (
-                <div className="bg-red-50 p-4 rounded-xl border border-red-200 flex items-center justify-between">
-                    <span className="text-red-800 font-medium">
-                        {selectedInquiries.size} inquiries selected
+            {canBulkAction && selectedInquiries.size > 0 && (
+                <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 flex items-center justify-between gap-4 flex-wrap">
+                    <span className="text-amber-800 font-medium">
+                        {selectedInquiries.size} {selectedInquiries.size === 1 ? 'inquiry' : 'inquiries'} selected
                     </span>
-                    <button
-                        onClick={handleBulkDelete}
-                        disabled={isDeleting}
-                        className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 transition-colors"
-                    >
-                        {isDeleting ? 'Deleting...' : 'Delete Selected'}
-                    </button>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={() => setShowFollowUpModal(true)}
+                            className="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition-colors"
+                        >
+                            Send to Follow-up
+                        </button>
+                        <button
+                            onClick={handleBulkDelete}
+                            disabled={isDeleting}
+                            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 transition-colors"
+                        >
+                            {isDeleting ? 'Deleting...' : 'Delete'}
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Follow-up Date Modal */}
+            {showFollowUpModal && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4">
+                        <h3 className="text-lg font-bold text-gray-900 mb-1">Set Follow-up Date</h3>
+                        <p className="text-sm text-gray-500 mb-5">
+                            Choose a date for all {selectedInquiries.size} selected {selectedInquiries.size === 1 ? 'inquiry' : 'inquiries'}.
+                            Status will be updated to <span className="font-medium text-orange-600">Follow-up</span>.
+                        </p>
+                        <input
+                            type="date"
+                            value={followUpDate}
+                            onChange={e => setFollowUpDate(e.target.value)}
+                            min={new Date().toISOString().split('T')[0]}
+                            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-400 mb-5"
+                        />
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => { setShowFollowUpModal(false); setFollowUpDate(''); }}
+                                className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleBulkFollowUp}
+                                disabled={!followUpDate || isSettingFollowUp}
+                                className="flex-1 px-4 py-2.5 bg-orange-500 text-white rounded-xl text-sm font-medium hover:bg-orange-600 disabled:opacity-50 transition-colors"
+                            >
+                                {isSettingFollowUp ? 'Saving...' : 'Confirm'}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
 
@@ -353,7 +428,7 @@ export default function AllInquiriesClient() {
                                 <div key={inq.id} className="bg-white p-4 rounded-xl border border-admin-border shadow-sm flex flex-col gap-3">
                                     <div className="flex justify-between items-start">
                                         <div>
-                                            {isSuperAdmin && (
+                                            {canBulkAction && (
                                                 <input
                                                     type="checkbox"
                                                     checked={selectedInquiries.has(inq.inquiryId || inq.id)}
@@ -404,7 +479,7 @@ export default function AllInquiriesClient() {
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-admin-bg border-b border-admin-border">
-                                    {isSuperAdmin && (
+                                    {canBulkAction && (
                                         <th className="px-6 py-4 w-12 text-center">
                                             <input
                                                 type="checkbox"
@@ -427,7 +502,7 @@ export default function AllInquiriesClient() {
                                 {paginatedInquiries.length > 0 ? (
                                     paginatedInquiries.map((inq) => (
                                         <tr key={inq.id} className="hover:bg-gray-50 transition-colors">
-                                            {isSuperAdmin && (
+                                            {canBulkAction && (
                                                 <td className="px-6 py-4 text-center">
                                                     <input
                                                         type="checkbox"
@@ -482,7 +557,7 @@ export default function AllInquiriesClient() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={isSuperAdmin ? 8 : 7} className="px-6 py-12 text-center text-gray-500">
+                                        <td colSpan={canBulkAction ? 8 : 7} className="px-6 py-12 text-center text-gray-500">
                                             No inquiries found matching your filters.
                                         </td>
                                     </tr>
