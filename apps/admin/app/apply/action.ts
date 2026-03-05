@@ -38,11 +38,11 @@ export async function submitQRInquiry(data: QRInquiryData): Promise<{ success: b
             console.error('[QR Inquiry] WhatsApp ack failed:', err)
         );
 
-        // Send brochure email — fire-and-forget, only if email provided
+        // Send brochure email — awaited so it completes before response returns
         if (data.email) {
-            sendInquiryBrochureEmail(data.email, data.parentName, data.studentName, data.grade).catch(err =>
-                console.error('[QR Inquiry] Brochure email failed:', err)
-            );
+            console.log('[QR Inquiry] Sending brochure email to:', data.email);
+            const emailResult = await sendInquiryBrochureEmail(data.email, data.parentName, data.studentName, data.grade);
+            console.log('[QR Inquiry] Email result:', JSON.stringify(emailResult));
         }
 
         return { success: true };
