@@ -56,7 +56,12 @@ function buildHtml(parentName: string, studentName: string, grade: string) {
 
           <!-- ── Header banner ── -->
           <tr>
-            <td style="background:linear-gradient(120deg,#1e3a8a 0%,#4f46e5 60%,#7c3aed 100%);padding:44px 40px 36px;text-align:center;">
+            <td style="background:linear-gradient(120deg,#d97706 0%,#ea580c 100%);padding:44px 40px 36px;text-align:center;">
+              <!-- Logo -->
+              <div style="margin-bottom:16px;">
+                <img src="https://anushtan.in/logo.jpg" alt="Anushtan School" width="72" height="72"
+                     style="border-radius:16px;border:3px solid rgba(255,255,255,0.35);object-fit:cover;display:inline-block;" />
+              </div>
               <!-- School name badge -->
               <div style="display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.30);border-radius:50px;padding:6px 18px;margin-bottom:18px;">
                 <span style="color:rgba(255,255,255,0.90);font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;">Anushtan School · Siddipet</span>
@@ -98,7 +103,7 @@ function buildHtml(parentName: string, studentName: string, grade: string) {
           <!-- ── Next steps ── -->
           <tr>
             <td style="padding:28px 40px 0;">
-              <p style="margin:0 0 18px;font-size:13px;font-weight:700;color:#4f46e5;text-transform:uppercase;letter-spacing:1px;">
+              <p style="margin:0 0 18px;font-size:13px;font-weight:700;color:#d97706;text-transform:uppercase;letter-spacing:1px;">
                 What Happens Next
               </p>
 
@@ -106,7 +111,7 @@ function buildHtml(parentName: string, studentName: string, grade: string) {
               <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;">
                 <tr>
                   <td width="40" valign="top">
-                    <div style="width:32px;height:32px;border-radius:50%;background:#ede9fe;display:flex;align-items:center;justify-content:center;text-align:center;line-height:32px;">
+                    <div style="width:32px;height:32px;border-radius:50%;background:#fef3c7;display:flex;align-items:center;justify-content:center;text-align:center;line-height:32px;">
                       <span style="font-size:15px;">📞</span>
                     </div>
                   </td>
@@ -123,7 +128,7 @@ function buildHtml(parentName: string, studentName: string, grade: string) {
               <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;">
                 <tr>
                   <td width="40" valign="top">
-                    <div style="width:32px;height:32px;border-radius:50%;background:#dbeafe;text-align:center;line-height:32px;">
+                    <div style="width:32px;height:32px;border-radius:50%;background:#ffedd5;text-align:center;line-height:32px;">
                       <span style="font-size:15px;">🏫</span>
                     </div>
                   </td>
@@ -176,8 +181,8 @@ function buildHtml(parentName: string, studentName: string, grade: string) {
             <td style="padding:32px 40px 0;text-align:center;">
               <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
                 <tr>
-                  <td style="background:linear-gradient(120deg,#1e3a8a,#7c3aed);border-radius:10px;padding:0;">
-                    <a href="https://anushtanschool.in"
+                  <td style="background:linear-gradient(120deg,#d97706,#ea580c);border-radius:10px;padding:0;">
+                    <a href="https://anushtan.in"
                        style="display:inline-block;padding:14px 32px;color:#ffffff;text-decoration:none;font-size:15px;font-weight:600;letter-spacing:0.3px;">
                       Visit Our Website &rarr;
                     </a>
@@ -197,7 +202,7 @@ function buildHtml(parentName: string, studentName: string, grade: string) {
               <p style="margin:20px 0 0;font-size:15px;color:#1e293b;line-height:1.6;">
                 Warm regards,<br />
                 <strong>Admissions Team</strong><br />
-                <span style="color:#4f46e5;">Anushtan School, Siddipet</span>
+                <span style="color:#d97706;">Anushtan School, Siddipet</span>
               </p>
             </td>
           </tr>
@@ -209,7 +214,7 @@ function buildHtml(parentName: string, studentName: string, grade: string) {
               <p style="margin:0;font-size:12px;color:#94a3b8;line-height:1.7;text-align:center;">
                 This email was sent in response to a school inquiry submitted for <strong>${studentName}</strong>.<br />
                 Anushtan School &nbsp;·&nbsp; Siddipet, Telangana, India &nbsp;·&nbsp;
-                <a href="https://anushtanschool.in" style="color:#6366f1;text-decoration:none;">anushtanschool.in</a>
+                <a href="https://anushtan.in" style="color:#d97706;text-decoration:none;">anushtan.in</a>
               </p>
             </td>
           </tr>
