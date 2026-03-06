@@ -248,29 +248,33 @@ export default function AllInquiriesClient() {
             </div>
 
             {/* Filters Bar */}
-            <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
-
-                {/* Search */}
-                <div className="relative flex-1 w-full md:w-auto">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                    <input
-                        type="text"
-                        placeholder="Search by Name, ID, Phone..."
-                        className="w-full pl-10 pr-4 py-2 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-emerald"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+            <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm space-y-3">
+                {/* Row 1: Search + Export */}
+                <div className="flex gap-3 items-center">
+                    <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                        <input
+                            type="text"
+                            placeholder="Search by Name, ID, Phone..."
+                            className="w-full pl-10 pr-4 py-2 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-emerald text-sm"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex-shrink-0">
+                        <ExportButton data={filteredInquiries} filename="All_Inquiries" />
+                    </div>
                 </div>
 
-                {/* Filters Group */}
-                <div className="flex flex-wrap gap-4 w-full md:w-auto">
+                {/* Row 2: Filters */}
+                <div className="flex flex-wrap gap-2 items-center">
                     {/* Status Filter */}
-                    <div className="flex items-center gap-2">
-                        <Filter size={18} className="text-gray-500" />
+                    <div className="flex items-center gap-1.5">
+                        <Filter size={15} className="text-gray-400 shrink-0" />
                         <select
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
-                            className="border border-admin-border rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
+                            className="border border-admin-border rounded-lg px-2.5 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
                         >
                             <option value="All">All Statuses</option>
                             <option value="New">New</option>
@@ -281,80 +285,76 @@ export default function AllInquiriesClient() {
                         </select>
                     </div>
 
-                    {/* Date Range */}
-                    <div className="flex items-center gap-2">
-                        <select
-                            className="border border-admin-border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
-                            onChange={(e) => {
-                                const val = e.target.value;
-                                const today = new Date();
-                                let start = '';
-                                let end = '';
+                    {/* Date Quick Select */}
+                    <select
+                        className="border border-admin-border rounded-lg px-2.5 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            const today = new Date();
+                            let start = '';
+                            let end = '';
 
-                                if (val === 'today') {
-                                    start = end = today.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                } else if (val === 'yesterday') {
-                                    const y = new Date(today);
-                                    y.setDate(today.getDate() - 1);
-                                    start = end = y.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                } else if (val === 'thisWeek') {
-                                    const d = new Date(today);
-                                    const day = d.getDay();
-                                    const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-                                    const monday = new Date(d.setDate(diff));
-                                    const sunday = new Date(d.setDate(monday.getDate() + 6));
-                                    start = monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                    end = sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                } else if (val === 'lastWeek') {
-                                    const d = new Date(today);
-                                    const day = d.getDay();
-                                    const diff = d.getDate() - day + (day === 0 ? -6 : 1) - 7;
-                                    const monday = new Date(d.setDate(diff));
-                                    const sunday = new Date(d.setDate(monday.getDate() + 6));
-                                    start = monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                    end = sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                } else if (val === 'thisMonth') {
-                                    start = new Date(today.getFullYear(), today.getMonth(), 1).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                    end = new Date(today.getFullYear(), today.getMonth() + 1, 0).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                } else if (val === 'lastMonth') {
-                                    start = new Date(today.getFullYear(), today.getMonth() - 1, 1).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                    end = new Date(today.getFullYear(), today.getMonth(), 0).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                }
+                            if (val === 'today') {
+                                start = end = today.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            } else if (val === 'yesterday') {
+                                const y = new Date(today);
+                                y.setDate(today.getDate() - 1);
+                                start = end = y.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            } else if (val === 'thisWeek') {
+                                const d = new Date(today);
+                                const day = d.getDay();
+                                const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+                                const monday = new Date(d.setDate(diff));
+                                const sunday = new Date(d.setDate(monday.getDate() + 6));
+                                start = monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                                end = sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            } else if (val === 'lastWeek') {
+                                const d = new Date(today);
+                                const day = d.getDay();
+                                const diff = d.getDate() - day + (day === 0 ? -6 : 1) - 7;
+                                const monday = new Date(d.setDate(diff));
+                                const sunday = new Date(d.setDate(monday.getDate() + 6));
+                                start = monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                                end = sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            } else if (val === 'thisMonth') {
+                                start = new Date(today.getFullYear(), today.getMonth(), 1).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                                end = new Date(today.getFullYear(), today.getMonth() + 1, 0).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            } else if (val === 'lastMonth') {
+                                start = new Date(today.getFullYear(), today.getMonth() - 1, 1).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                                end = new Date(today.getFullYear(), today.getMonth(), 0).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            }
 
-                                if (val !== 'custom') {
-                                    setDateStart(start);
-                                    setDateEnd(end);
-                                }
-                            }}
-                        >
-                            <option value="custom">Quick Select...</option>
-                            <option value="today">Today</option>
-                            <option value="yesterday">Yesterday</option>
-                            <option value="thisWeek">This Week</option>
-                            <option value="lastWeek">Last Week</option>
-                            <option value="thisMonth">This Month</option>
-                            <option value="lastMonth">Last Month</option>
-                        </select>
-                        <Calendar size={18} className="text-gray-500" />
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="date"
-                                className="border border-admin-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-admin-emerald"
-                                value={dateStart}
-                                onChange={(e) => setDateStart(e.target.value)}
-                            />
-                            <span className="text-gray-400">-</span>
-                            <input
-                                type="date"
-                                className="border border-admin-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-admin-emerald"
-                                value={dateEnd}
-                                onChange={(e) => setDateEnd(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    {/* Export Button */}
-                    <div className="flex-shrink-0 ml-auto">
-                        <ExportButton data={filteredInquiries} filename="All_Inquiries" />
+                            if (val !== 'custom') {
+                                setDateStart(start);
+                                setDateEnd(end);
+                            }
+                        }}
+                    >
+                        <option value="custom">Quick Date...</option>
+                        <option value="today">Today</option>
+                        <option value="yesterday">Yesterday</option>
+                        <option value="thisWeek">This Week</option>
+                        <option value="lastWeek">Last Week</option>
+                        <option value="thisMonth">This Month</option>
+                        <option value="lastMonth">Last Month</option>
+                    </select>
+
+                    {/* Custom Date Range */}
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                        <Calendar size={15} className="text-gray-400 shrink-0" />
+                        <input
+                            type="date"
+                            className="border border-admin-border rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-admin-emerald w-[130px]"
+                            value={dateStart}
+                            onChange={(e) => setDateStart(e.target.value)}
+                        />
+                        <span className="text-gray-400 text-sm">–</span>
+                        <input
+                            type="date"
+                            className="border border-admin-border rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-admin-emerald w-[130px]"
+                            value={dateEnd}
+                            onChange={(e) => setDateEnd(e.target.value)}
+                        />
                     </div>
                 </div>
             </div>
@@ -474,7 +474,7 @@ export default function AllInquiriesClient() {
                         )}
                     </div>
 
-                    {/* Desktop Table View */}
+                    {/* Desktop Table */}
                     <div className="hidden md:block overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
@@ -566,31 +566,40 @@ export default function AllInquiriesClient() {
                         </table>
                     </div>
 
-                    {/* Pagination */}
-                    {filteredInquiries.length > itemsPerPage && (
-                        <div className="px-6 py-4 border-t border-admin-border flex items-center justify-between bg-gray-50">
-                            <div className="text-sm text-gray-500">
-                                Showing <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-medium">{Math.min(currentPage * itemsPerPage, filteredInquiries.length)}</span> of <span className="font-medium">{filteredInquiries.length}</span> results
-                            </div>
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                                    disabled={currentPage === 1}
-                                    className="p-2 border border-admin-border rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed bg-white"
-                                >
-                                    <ChevronLeft size={16} />
-                                </button>
-                                <button
-                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                                    disabled={currentPage === totalPages}
-                                    className="p-2 border border-admin-border rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed bg-white"
-                                >
-                                    <ChevronRight size={16} />
-                                </button>
-                            </div>
-                        </div>
-                    )}
                 </div>
+
+                {/* Pagination — outside overflow-x-auto so it's always fully visible */}
+                {filteredInquiries.length > itemsPerPage && (
+                    <div className="px-4 sm:px-6 py-4 border-t border-admin-border bg-gray-50 flex flex-wrap items-center justify-between gap-3">
+                        <div className="text-sm text-gray-500">
+                            Showing{' '}
+                            <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span>
+                            {' '}–{' '}
+                            <span className="font-medium">{Math.min(currentPage * itemsPerPage, filteredInquiries.length)}</span>
+                            {' '}of{' '}
+                            <span className="font-medium">{filteredInquiries.length}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                disabled={currentPage === 1}
+                                className="p-2 border border-admin-border rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed bg-white"
+                            >
+                                <ChevronLeft size={16} />
+                            </button>
+                            <span className="text-sm font-medium text-gray-600 min-w-[52px] text-center">
+                                {currentPage} / {totalPages}
+                            </span>
+                            <button
+                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                disabled={currentPage === totalPages}
+                                className="p-2 border border-admin-border rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed bg-white"
+                            >
+                                <ChevronRight size={16} />
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
