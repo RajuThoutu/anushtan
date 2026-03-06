@@ -70,8 +70,22 @@ export default function DashboardClient() {
         if (!hasDateFilter) {
             if (activeTab === 'mywork') {
                 result = result.filter(inq => inq.assignedTo === userName || inq.activityLog?.[0]?.counselorName === userName);
+            } else if (activeTab === 'all') {
+                // Default to this week for the All tab
+                const today = new Date();
+                const day = today.getDay();
+                const diffToMonday = day === 0 ? -6 : 1 - day;
+                const monday = new Date(today);
+                monday.setDate(today.getDate() + diffToMonday);
+                const sunday = new Date(monday);
+                sunday.setDate(monday.getDate() + 6);
+                const weekStart = monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                const weekEnd = sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                result = result.filter(inq => {
+                    const dayString = new Date(inq.inquiryDate || inq.createdAt).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                    return dayString >= weekStart && dayString <= weekEnd;
+                });
             }
-            // 'all' tab shows everything, no filter
         } else {
             // If date filters are active, still apply "My Work" filter if on that tab
             if (activeTab === 'mywork') {
