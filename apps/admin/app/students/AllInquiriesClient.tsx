@@ -63,6 +63,7 @@ export default function AllInquiriesClient() {
     // Filters
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('All');
+    const [sourceFilter, setSourceFilter] = useState('All');
     const [dateStart, setDateStart] = useState('');
     const [dateEnd, setDateEnd] = useState('');
 
@@ -95,6 +96,26 @@ export default function AllInquiriesClient() {
         }
     };
 
+    // Source badge config
+    const getSourceBadge = (source?: string) => {
+        switch (source) {
+            case 'Website':
+                return { label: '🌐 Anushtan Website', className: 'bg-blue-50 text-blue-700 border-blue-200' };
+            case 'WhatsApp':
+                return { label: '💬 WhatsApp', className: 'bg-green-50 text-green-700 border-green-200' };
+            case 'PhoneCall':
+                return { label: '📞 Phone Call', className: 'bg-gray-100 text-gray-600 border-gray-200' };
+            case 'PaperForm':
+                return { label: '📄 Paper Form', className: 'bg-orange-50 text-orange-700 border-orange-200' };
+            case 'Referral':
+                return { label: '🤝 Referral', className: 'bg-purple-50 text-purple-700 border-purple-200' };
+            case 'QRScan':
+                return { label: '📷 QR Scan', className: 'bg-teal-50 text-teal-700 border-teal-200' };
+            default:
+                return { label: '➕ Other', className: 'bg-gray-100 text-gray-500 border-gray-200' };
+        }
+    };
+
     // Filter Logic
     const filteredInquiries = inquiries.filter(inq => {
         const matchesSearch =
@@ -104,6 +125,8 @@ export default function AllInquiriesClient() {
 
         const matchesStatus = statusFilter === 'All' || inq.status === statusFilter;
 
+        const matchesSource = sourceFilter === 'All' || (inq.source || 'Other') === sourceFilter;
+
         let matchesDate = true;
         if (dateStart && dateEnd) {
             const inqDateObj = new Date(inq.inquiryDate);
@@ -111,7 +134,7 @@ export default function AllInquiriesClient() {
             matchesDate = inqDateStr >= dateStart && inqDateStr <= dateEnd;
         }
 
-        return matchesSearch && matchesStatus && matchesDate;
+        return matchesSearch && matchesStatus && matchesSource && matchesDate;
     });
 
     // Pagination Logic
@@ -137,7 +160,8 @@ export default function AllInquiriesClient() {
         total: inquiries.length,
         today: inquiries.filter(i => new Date(i.inquiryDate).toDateString() === new Date().toDateString()).length,
         open: inquiries.filter(i => ['New', 'Follow-up'].includes(i.status)).length,
-        converted: inquiries.filter(i => i.status === 'Converted').length
+        converted: inquiries.filter(i => i.status === 'Converted').length,
+        website: inquiries.filter(i => i.source === 'Website').length,
     };
 
     if (loading) {
@@ -228,7 +252,7 @@ export default function AllInquiriesClient() {
     return (
         <div className="space-y-6">
             {/* Quick View Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm">
                     <div className="text-sm text-gray-500 font-medium">Total Inquiries</div>
                     <div className="text-2xl font-bold text-admin-text mt-1">{stats.total}</div>
@@ -244,6 +268,14 @@ export default function AllInquiriesClient() {
                 <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm">
                     <div className="text-sm text-gray-500 font-medium">Converted</div>
                     <div className="text-2xl font-bold text-admin-blue mt-1">{stats.converted}</div>
+                </div>
+                <div
+                    className="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm cursor-pointer hover:bg-blue-100 transition-colors"
+                    onClick={() => setSourceFilter(sourceFilter === 'Website' ? 'All' : 'Website')}
+                    title="Click to filter website inquiries"
+                >
+                    <div className="text-sm text-blue-600 font-medium">🌐 From Website</div>
+                    <div className="text-2xl font-bold text-blue-700 mt-1">{stats.website}</div>
                 </div>
             </div>
 
@@ -282,6 +314,24 @@ export default function AllInquiriesClient() {
                             <option value="Follow-up">Follow-up</option>
                             <option value="Converted">Converted</option>
                             <option value="Casual Inquiry">Casual Inquiry</option>
+                        </select>
+                    </div>
+
+                    {/* Source Filter */}
+                    <div className="flex items-center gap-1.5">
+                        <select
+                            value={sourceFilter}
+                            onChange={(e) => setSourceFilter(e.target.value)}
+                            className="border border-admin-border rounded-lg px-2.5 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
+                        >
+                            <option value="All">All Sources</option>
+                            <option value="Website">🌐 Website</option>
+                            <option value="WhatsApp">💬 WhatsApp</option>
+                            <option value="PhoneCall">📞 Phone Call</option>
+                            <option value="PaperForm">📄 Paper Form</option>
+                            <option value="Referral">🤝 Referral</option>
+                            <option value="QRScan">📷 QR Scan</option>
+                            <option value="Other">➕ Other</option>
                         </select>
                     </div>
 
@@ -438,6 +488,11 @@ export default function AllInquiriesClient() {
                                             )}
                                             <div className="inline-block font-semibold text-admin-text">{inq.studentName}</div>
                                             <div className="text-xs text-gray-500 mt-0.5">{inq.currentClass}</div>
+                                            {inq.source && (
+                                                <span className={`inline-flex items-center mt-1 px-2 py-0.5 rounded-full text-[10px] font-medium border ${getSourceBadge(inq.source).className}`}>
+                                                    {getSourceBadge(inq.source).label}
+                                                </span>
+                                            )}
                                         </div>
                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(inq.status)}`}>
                                             {inq.status}
@@ -521,6 +576,11 @@ export default function AllInquiriesClient() {
                                             <td className="px-6 py-4">
                                                 <div className="font-medium text-admin-text">{inq.studentName}</div>
                                                 <div className="text-xs text-gray-500">{inq.currentClass}</div>
+                                                {inq.source && (
+                                                    <span className={`inline-flex items-center mt-1 px-2 py-0.5 rounded-full text-[10px] font-medium border ${getSourceBadge(inq.source).className}`}>
+                                                        {getSourceBadge(inq.source).label}
+                                                    </span>
+                                                )}
                                             </td>
                                             <td className="px-6 py-4 text-sm text-gray-600">
                                                 <div>{inq.phone}</div>
