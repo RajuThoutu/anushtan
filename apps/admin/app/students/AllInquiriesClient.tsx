@@ -194,9 +194,11 @@ export default function AllInquiriesClient() {
 
     // Filter Logic
     const filteredInquiries = inquiries.filter(inq => {
+        const q = searchTerm.toLowerCase();
         const matchesSearch =
-            inq.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (inq.inquiryId || inq.id).toLowerCase().includes(searchTerm.toLowerCase()) ||
+            inq.studentName.toLowerCase().includes(q) ||
+            inq.parentName.toLowerCase().includes(q) ||
+            (inq.inquiryId || inq.id).toLowerCase().includes(q) ||
             inq.phone.includes(searchTerm);
 
         const matchesStatus = statusFilter === 'All' || inq.status === statusFilter;
