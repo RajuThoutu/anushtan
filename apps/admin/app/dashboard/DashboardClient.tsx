@@ -59,6 +59,7 @@ export default function DashboardClient() {
         dateTo: '',
     });
     const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+    const [totalDbCount, setTotalDbCount] = useState<number | null>(null); // all-time total from DB
     const [loading, setLoading] = useState(true);       // initial full-page spinner
     const [tabLoading, setTabLoading] = useState(false); // subtle per-tab refresh indicator
     const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
@@ -66,6 +67,14 @@ export default function DashboardClient() {
     const itemsPerPage = 20;
 
     const userName = session?.user?.name || '';
+
+    // Fetch total count once for the "All Inquiries" tab badge
+    useEffect(() => {
+        fetch('/api/counselor/inquiries/count', { cache: 'no-store' })
+            .then(r => r.json())
+            .then(d => { if (d.success) setTotalDbCount(d.count); })
+            .catch(() => {});
+    }, []);
 
     const fetchInquiries = async (tab: Tab = activeTab) => {
         setTabLoading(true);
@@ -211,7 +220,8 @@ export default function DashboardClient() {
         return inquiries.filter(inq => inq.assignedTo === userName || inq.activityLog?.[0]?.counselorName === userName).length;
     }, [inquiries, userName]);
 
-    const allCount = inquiries.length;
+    // "All Inquiries" tab shows total DB count so users can see 250+ even when only 7-day records are loaded
+    const allCount = totalDbCount ?? inquiries.length;
 
     // Handle save
     const handleSave = async (id: string, updates: CounselorUpdates) => {
