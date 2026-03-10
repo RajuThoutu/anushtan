@@ -13,7 +13,13 @@ interface DbNotification {
     createdAt: string;
 }
 
-export function NotificationBell() {
+interface NotificationBellProps {
+    /** 'dark' (default) — white icon for dark/gradient backgrounds.
+     *  'light' — gray icon for white/light backgrounds (mobile header). */
+    variant?: 'dark' | 'light';
+}
+
+export function NotificationBell({ variant = 'dark' }: NotificationBellProps) {
     const [notifications, setNotifications] = useState<DbNotification[]>([]);
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
@@ -81,7 +87,11 @@ export function NotificationBell() {
             {/* Bell button */}
             <button
                 onClick={() => setOpen(o => !o)}
-                className="relative p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition"
+                className={`relative p-2 rounded-lg transition ${
+                    variant === 'light'
+                        ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                        : 'text-white/80 hover:text-white hover:bg-white/10'
+                }`}
                 title="Notifications"
             >
                 <Bell size={20} />

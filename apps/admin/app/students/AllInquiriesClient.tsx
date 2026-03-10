@@ -134,12 +134,16 @@ export default function AllInquiriesClient() {
         }
     };
 
-    // On session resolve: fetch total count + load last 7 days for ALL roles
+    // On session resolve: fetch total count for everyone; counselors skip auto-load (search-first)
     useEffect(() => {
         if (sessionStatus === 'loading') return;
         fetchTotalCount();
-        fetchInquiries(); // all roles: last 7 days by default
-    }, [sessionStatus]);
+        if (isCounselor) {
+            setLoading(false); // counselors: wait for search input — no auto-load
+        } else {
+            fetchInquiries(); // HR+: last 7 days by default
+        }
+    }, [isCounselor, sessionStatus]);
 
     // Re-fetch when custom date filters change (HR+ only has these controls)
     useEffect(() => {
@@ -148,13 +152,17 @@ export default function AllInquiriesClient() {
         setCurrentPage(1);
     }, [dateStart, dateEnd]);
 
-    // All roles: debounced search across ALL records; clears back to 7-day window on empty
+    // All roles: debounced search across ALL records; on clear — counselors return to empty state, HR+ reloads 7-day
     useEffect(() => {
         if (sessionStatus === 'loading') return;
         if (searchTerm.trim().length < 2) {
             if (hasSearched) {
                 setHasSearched(false);
-                fetchInquiries({ dateFrom: dateStart || undefined, dateTo: dateEnd || undefined });
+                if (isCounselor) {
+                    setInquiries([]); // counselors: back to search-first empty state
+                } else {
+                    fetchInquiries({ dateFrom: dateStart || undefined, dateTo: dateEnd || undefined });
+                }
             }
             return;
         }
@@ -236,6 +244,45 @@ export default function AllInquiriesClient() {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-admin-emerald"></div>
+            </div>
+        );
+    }
+
+    // Counselor: show search-only screen until they type ≥ 2 chars
+    if (isCounselor && searchTerm.trim().length < 2) {
+        return (
+            <div className="space-y-4">
+                {/* Search bar */}
+                <div className="bg-white rounded-xl border border-admin-border shadow-sm p-3">
+                    <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                        <input
+                            type="text"
+                            placeholder="Search by student name, phone, or ID..."
+                            className="w-full pl-10 pr-3 py-2.5 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-emerald text-sm"
+                            value={searchTerm}
+                            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+                            autoFocus
+                        />
+                    </div>
+                </div>
+                {/* Empty prompt */}
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                    {totalCount !== null && (
+                        <div className="mb-6 bg-admin-blue/5 border border-admin-blue/20 rounded-2xl px-6 py-3 flex items-center gap-3">
+                            <span className="text-3xl font-bold text-admin-blue">{totalCount.toLocaleString()}</span>
+                            <span className="text-sm text-gray-500 leading-tight">total<br/>records</span>
+                        </div>
+                    )}
+                    <div className="text-4xl mb-3">🔍</div>
+                    <p className="text-base font-semibold text-gray-700">Search to find a student</p>
+                    <p className="text-sm text-gray-400 mt-1 max-w-xs">
+                        Enter a name, phone number, or inquiry ID to cross-check all system records.
+                    </p>
+                    <p className="text-xs text-gray-400 mt-4">
+                        To add a new inquiry, tap the <span className="font-semibold">+</span> button above.
+                    </p>
+                </div>
             </div>
         );
     }

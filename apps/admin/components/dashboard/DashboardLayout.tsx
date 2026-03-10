@@ -27,6 +27,7 @@ interface NavItem {
     icon: React.ReactNode;
     roles?: string[];
     group?: 'main' | 'admin';
+    showCount?: boolean; // show total inquiry count badge
 }
 
 const navItems: NavItem[] = [
@@ -42,6 +43,7 @@ const navItems: NavItem[] = [
         icon: <ClipboardList size={20} />,
         roles: ['super_admin', 'admin', 'hr'],
         group: 'main',
+        showCount: true,
     },
     {
         label: 'Reports',
@@ -143,9 +145,18 @@ export function DashboardSidebar() {
     const pathname = usePathname();
     const { data: session } = useSession();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [inquiryCount, setInquiryCount] = useState<number | null>(null);
 
     const userRole = session?.user?.role || '';
     const userName = session?.user?.name || 'User';
+
+    // Fetch total inquiry count for the nav badge (non-critical, silent fail)
+    useEffect(() => {
+        fetch('/api/counselor/inquiries/count', { cache: 'no-store' })
+            .then(r => r.json())
+            .then(d => { if (d.success) setInquiryCount(d.count); })
+            .catch(() => {});
+    }, []);
 
     const filteredNavItems = navItems.filter(item => {
         if (!item.roles) return true;
@@ -170,7 +181,7 @@ export function DashboardSidebar() {
 
                 {/* Right: Bell + Add */}
                 <div className="ml-auto flex items-center gap-1">
-                    <NotificationBell />
+                    <NotificationBell variant="light" />
                     <AddInquiryButton />
                 </div>
             </div>
@@ -295,7 +306,17 @@ export function DashboardSidebar() {
                                     >
                                         <span>{item.icon}</span>
                                         <span className="font-medium text-sm">{item.label}</span>
-                                        {isActive && (
+                                        {/* Total count badge */}
+                                        {item.showCount && inquiryCount !== null && (
+                                            <span className={`ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                                                isActive
+                                                    ? 'bg-white/25 text-white'
+                                                    : 'bg-white/15 text-white/80'
+                                            }`}>
+                                                {inquiryCount.toLocaleString()}
+                                            </span>
+                                        )}
+                                        {isActive && !item.showCount && (
                                             <span className="ml-auto w-1.5 h-1.5 bg-white rounded-full" />
                                         )}
                                     </Link>
