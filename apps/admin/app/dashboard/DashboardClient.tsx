@@ -11,6 +11,40 @@ import type { SheetInquiry as Inquiry } from '@repo/database';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
+/** Build date params for the API based on which tab is active.
+ *  Filters all happen server-side — only relevant records come over the wire. */
+function getTabDateRange(tab: Tab, filters: FilterState): { dateFrom: string; dateTo: string } {
+    // If the user manually set a date range, honour it
+    if (filters.dateFrom || filters.dateTo) {
+        return { dateFrom: filters.dateFrom, dateTo: filters.dateTo };
+    }
+    const today = new Date();
+    const todayIST = today.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+    if (tab === 'today') {
+        return { dateFrom: todayIST, dateTo: todayIST };
+    }
+    if (tab === 'all') {
+        // This week Mon–Sun in IST
+        const day = today.getDay();
+        const diffToMonday = day === 0 ? -6 : 1 - day;
+        const monday = new Date(today);
+        monday.setDate(today.getDate() + diffToMonday);
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        return {
+            dateFrom: monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }),
+            dateTo:   sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }),
+        };
+    }
+    // 'mywork' — last 30 days (covers realistic counselor caseload)
+    const thirtyDaysAgo = new Date(today);
+    thirtyDaysAgo.setDate(today.getDate() - 30);
+    return {
+        dateFrom: thirtyDaysAgo.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }),
+        dateTo: todayIST,
+    };
+}
+
 export default function DashboardClient() {
     const { data: session } = useSession();
     const router = useRouter();
@@ -25,37 +59,49 @@ export default function DashboardClient() {
         dateTo: '',
     });
     const [inquiries, setInquiries] = useState<Inquiry[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);       // initial full-page spinner
+    const [tabLoading, setTabLoading] = useState(false); // subtle per-tab refresh indicator
     const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 20;
 
     const userName = session?.user?.name || '';
 
-    // Fetch inquiries — counselors don't auto-load
-    useEffect(() => {
-        if (isCounselor) {
-            setLoading(false);
-            return;
-        }
-        fetchInquiries();
-        const interval = setInterval(fetchInquiries, 30000);
-        return () => clearInterval(interval);
-    }, [isCounselor]);
-
-    const fetchInquiries = async () => {
+    const fetchInquiries = async (tab: Tab = activeTab) => {
+        setTabLoading(true);
         try {
-            const response = await fetch('/api/counselor/inquiries', { cache: 'no-store' });
+            const { dateFrom, dateTo } = getTabDateRange(tab, filters);
+            const params = new URLSearchParams();
+            if (dateFrom) params.set('dateFrom', dateFrom);
+            if (dateTo)   params.set('dateTo',   dateTo);
+            const qs = params.toString();
+            const response = await fetch(
+                `/api/counselor/inquiries${qs ? '?' + qs : ''}`,
+                { cache: 'no-store' }
+            );
             const data = await response.json();
-            if (data.success) {
-                setInquiries(data.data || []);
-            }
+            if (data.success) setInquiries(data.data || []);
         } catch (error) {
             console.error('Failed to fetch inquiries:', error);
         } finally {
             setLoading(false);
+            setTabLoading(false);
         }
     };
+
+    // Re-fetch when tab changes or on mount; auto-refresh every 90 s
+    useEffect(() => {
+        if (isCounselor) { setLoading(false); return; }
+        fetchInquiries(activeTab);
+        const interval = setInterval(() => fetchInquiries(activeTab), 90000);
+        return () => clearInterval(interval);
+    }, [isCounselor, activeTab]);
+
+    // Re-fetch when custom date filters change (server needs to widen/narrow the window)
+    useEffect(() => {
+        if (isCounselor) return;
+        fetchInquiries(activeTab);
+    }, [filters.dateFrom, filters.dateTo]);
 
     // Filter inquiries based on tab and filters
     const filteredInquiries = useMemo(() => {
@@ -341,7 +387,7 @@ export default function DashboardClient() {
                             inquiries={paginatedInquiries}
                             selectedId={selectedInquiry?.id || null}
                             onSelect={setSelectedInquiry}
-                            loading={loading}
+                            loading={loading || tabLoading}
                         />
 
                         {/* Pagination */}

@@ -256,6 +256,34 @@ export async function getAllInquiries() {
     });
 }
 
+/**
+ * Fetch inquiries within a date range (server-side filter for dashboard performance).
+ * dateFrom / dateTo are UTC Date objects — caller converts IST YYYY-MM-DD strings.
+ */
+export async function getInquiriesByDateRange(dateFrom: Date, dateTo: Date) {
+    return prisma.inquiry.findMany({
+        where: {
+            inquiryDate: { gte: dateFrom, lte: dateTo },
+        },
+        orderBy: { inquiryDate: 'desc' },
+        take: 500, // safety cap
+        include: {
+            activityLog: {
+                orderBy: { createdAt: 'desc' },
+                take: 1,
+                select: {
+                    counselorName: true,
+                    action: true,
+                    oldValue: true,
+                    newValue: true,
+                    comments: true,
+                    createdAt: true,
+                },
+            },
+        },
+    });
+}
+
 export async function searchInquiries(query: string) {
     const q = query.trim();
     return prisma.inquiry.findMany({
