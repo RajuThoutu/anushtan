@@ -48,6 +48,16 @@ interface Inquiry {
     notes?: string;
 }
 
+// Date helpers (IST-aware)
+function getLast7DaysStart() {
+    const d = new Date();
+    d.setDate(d.getDate() - 7);
+    return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+}
+function getTodayIST() {
+    return new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+}
+
 export default function AllInquiriesClient() {
     const router = useRouter();
     const { data: session, status: sessionStatus } = useSession();
@@ -55,7 +65,8 @@ export default function AllInquiriesClient() {
     const isCounselor = userRole === 'counselor';
 
     const [inquiries, setInquiries] = useState<Inquiry[]>([]);
-    const [loading, setLoading] = useState(true); // always spinner until session resolves
+    const [totalCount, setTotalCount] = useState<number | null>(null); // all-time total
+    const [loading, setLoading] = useState(true);
     const [searching, setSearching] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
     const [error, setError] = useState('');
@@ -65,7 +76,7 @@ export default function AllInquiriesClient() {
     const [followUpDate, setFollowUpDate] = useState('');
     const [isSettingFollowUp, setIsSettingFollowUp] = useState(false);
 
-    // Filters
+    // Filters (date filters only for HR+)
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('All');
     const [sourceFilter, setSourceFilter] = useState('All');
@@ -77,58 +88,81 @@ export default function AllInquiriesClient() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
-    // Wait for session to resolve, then decide what to load
-    useEffect(() => {
-        if (sessionStatus === 'loading') return; // don't fetch until we know the role
-        if (isCounselor) {
-            setLoading(false); // counselors: show search-first UI, no auto-fetch
-        } else {
-            fetchInquiries(); // HR+: load all
-        }
-    }, [isCounselor, sessionStatus]);
+    /** Fast total count — single COUNT(*), no row data */
+    const fetchTotalCount = async () => {
+        try {
+            const res = await fetch('/api/counselor/inquiries/count', { cache: 'no-store' });
+            const data = await res.json();
+            if (data.success) setTotalCount(data.count);
+        } catch {}
+    };
 
-    // Counselor: debounced search as they type
-    useEffect(() => {
-        if (!isCounselor || sessionStatus === 'loading') return;
-        if (searchTerm.trim().length < 2) {
-            if (hasSearched) {
-                setInquiries([]);
-                setHasSearched(false);
-            }
-            return;
-        }
-        const timer = setTimeout(() => {
-            fetchInquiries(searchTerm.trim());
-        }, 400);
-        return () => clearTimeout(timer);
-    }, [searchTerm, isCounselor, sessionStatus]);
-
-    const fetchInquiries = async (search?: string) => {
+    /**
+     * HR+: load last 7 days by default; pass explicit dateFrom/dateTo to override.
+     * Counselors: pass { search } to run a text search.
+     */
+    const fetchInquiries = async (opts: { search?: string; dateFrom?: string; dateTo?: string } = {}) => {
+        const { search, dateFrom, dateTo } = opts;
         const isSearch = !!search;
         if (isSearch) setSearching(true);
         try {
-            const url = search
-                ? `/api/counselor/inquiries?search=${encodeURIComponent(search)}`
-                : '/api/counselor/inquiries';
+            let url: string;
+            if (search) {
+                url = `/api/counselor/inquiries?search=${encodeURIComponent(search)}`;
+            } else {
+                const from = dateFrom ?? getLast7DaysStart();
+                const to   = dateTo   ?? getTodayIST();
+                url = `/api/counselor/inquiries?dateFrom=${from}&dateTo=${to}`;
+            }
             const response = await fetch(url, { cache: 'no-store' });
             const data = await response.json();
-
             if (data.success) {
-                const sorted = data.data.sort((a: Inquiry, b: Inquiry) => {
-                    return new Date(b.inquiryDate).getTime() - new Date(a.inquiryDate).getTime();
-                });
+                const sorted = [...data.data].sort((a: Inquiry, b: Inquiry) =>
+                    new Date(b.inquiryDate).getTime() - new Date(a.inquiryDate).getTime()
+                );
                 setInquiries(sorted);
                 if (isSearch) setHasSearched(true);
             } else {
                 setError('Failed to load inquiries');
             }
-        } catch (err) {
+        } catch {
             setError('An error occurred while fetching data');
         } finally {
             setLoading(false);
             setSearching(false);
         }
     };
+
+    // On session resolve: fetch total count for everyone; load 7-day records for HR+
+    useEffect(() => {
+        if (sessionStatus === 'loading') return;
+        fetchTotalCount();
+        if (isCounselor) {
+            setLoading(false); // counselors: search-first UI, no auto-load
+        } else {
+            fetchInquiries(); // HR+: last 7 days
+        }
+    }, [isCounselor, sessionStatus]);
+
+    // HR+: re-fetch when custom date filters change
+    useEffect(() => {
+        if (sessionStatus === 'loading' || isCounselor) return;
+        fetchInquiries({ dateFrom: dateStart || undefined, dateTo: dateEnd || undefined });
+        setCurrentPage(1);
+    }, [dateStart, dateEnd]);
+
+    // Counselor: debounced search as they type
+    useEffect(() => {
+        if (!isCounselor || sessionStatus === 'loading') return;
+        if (searchTerm.trim().length < 2) {
+            if (hasSearched) { setInquiries([]); setHasSearched(false); }
+            return;
+        }
+        const timer = setTimeout(() => {
+            fetchInquiries({ search: searchTerm.trim() });
+        }, 400);
+        return () => clearTimeout(timer);
+    }, [searchTerm, isCounselor, sessionStatus]);
 
     // Source badge config
     const getSourceBadge = (source?: string) => {
@@ -189,9 +223,9 @@ export default function AllInquiriesClient() {
         }
     };
 
-    // Summary Stats
+    // Summary Stats — Total uses all-time count; others computed from loaded 7-day window
     const stats = {
-        total: inquiries.length,
+        total: totalCount ?? inquiries.length,
         today: inquiries.filter(i => new Date(i.inquiryDate).toDateString() === new Date().toDateString()).length,
         open: inquiries.filter(i => ['New', 'Follow-up'].includes(i.status)).length,
         converted: inquiries.filter(i => i.status === 'Converted').length,
@@ -225,9 +259,16 @@ export default function AllInquiriesClient() {
                     </div>
                 </div>
                 {/* Empty prompt */}
-                <div className="flex flex-col items-center justify-center py-20 text-center">
-                    <div className="text-5xl mb-4">🔍</div>
-                    <p className="text-lg font-semibold text-gray-700">Search to find a student</p>
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                    {/* Total count badge */}
+                    {totalCount !== null && (
+                        <div className="mb-6 bg-admin-blue/5 border border-admin-blue/20 rounded-2xl px-6 py-3 flex items-center gap-3">
+                            <span className="text-3xl font-bold text-admin-blue">{totalCount.toLocaleString()}</span>
+                            <span className="text-sm text-gray-500 leading-tight">total<br/>records</span>
+                        </div>
+                    )}
+                    <div className="text-4xl mb-3">🔍</div>
+                    <p className="text-base font-semibold text-gray-700">Search to find a student</p>
                     <p className="text-sm text-gray-400 mt-1 max-w-xs">
                         Enter a name, phone number, or inquiry ID to cross-check existing records.
                     </p>
@@ -277,7 +318,8 @@ export default function AllInquiriesClient() {
             if (data.success) {
                 alert(`Successfully deleted ${data.count} inquiries.`);
                 setSelectedInquiries(new Set());
-                fetchInquiries();
+                fetchTotalCount();
+                fetchInquiries({ dateFrom: dateStart || undefined, dateTo: dateEnd || undefined });
             } else {
                 alert(data.error || 'Failed to delete inquiries');
             }
@@ -305,7 +347,7 @@ export default function AllInquiriesClient() {
                 setSelectedInquiries(new Set());
                 setShowFollowUpModal(false);
                 setFollowUpDate('');
-                fetchInquiries();
+                fetchInquiries({ dateFrom: dateStart || undefined, dateTo: dateEnd || undefined });
             } else {
                 alert(data.error || 'Failed to set follow-up date');
             }

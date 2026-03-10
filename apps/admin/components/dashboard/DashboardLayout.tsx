@@ -78,13 +78,8 @@ const navItems: NavItem[] = [
     },
 ];
 
-// Bottom nav items — counselors skip Inquiries, get QR Code instead
-const hrBottomNavItems = [
-    { label: 'Home', href: '/dashboard', Icon: LayoutDashboard },
-    { label: 'Inquiries', href: '/students', Icon: ClipboardList },
-    { label: 'Follow-ups', href: '/followups', Icon: CalendarClock },
-];
-const counselorBottomNavItems = [
+// All roles share the same bottom nav — All Inquiries is accessible via the sidebar (More)
+const bottomNavItems = [
     { label: 'Home', href: '/dashboard', Icon: LayoutDashboard },
     { label: 'Follow-ups', href: '/followups', Icon: CalendarClock },
     { label: 'QR Code', href: '/qr', Icon: QrCode },
@@ -151,14 +146,11 @@ export function DashboardSidebar() {
 
     const userRole = session?.user?.role || '';
     const userName = session?.user?.name || 'User';
-    const isCounselor = userRole === 'counselor';
 
     const filteredNavItems = navItems.filter(item => {
         if (!item.roles) return true;
         return item.roles.includes(userRole);
     });
-
-    const bottomNavItems = isCounselor ? counselorBottomNavItems : hrBottomNavItems;
 
     const handleSignOut = () => {
         signOut({ callbackUrl: '/' });
