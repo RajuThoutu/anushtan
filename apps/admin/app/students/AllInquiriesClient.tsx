@@ -50,9 +50,14 @@ interface Inquiry {
 
 export default function AllInquiriesClient() {
     const router = useRouter();
-    const { data: session } = useSession();
+    const { data: session, status: sessionStatus } = useSession();
+    const userRole = session?.user?.role ?? '';
+    const isCounselor = userRole === 'counselor';
+
     const [inquiries, setInquiries] = useState<Inquiry[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true); // always spinner until session resolves
+    const [searching, setSearching] = useState(false);
+    const [hasSearched, setHasSearched] = useState(false);
     const [error, setError] = useState('');
     const [selectedInquiries, setSelectedInquiries] = useState<Set<string>>(new Set());
     const [isDeleting, setIsDeleting] = useState(false);
@@ -72,21 +77,48 @@ export default function AllInquiriesClient() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
+    // Wait for session to resolve, then decide what to load
     useEffect(() => {
-        fetchInquiries();
-    }, []);
+        if (sessionStatus === 'loading') return; // don't fetch until we know the role
+        if (isCounselor) {
+            setLoading(false); // counselors: show search-first UI, no auto-fetch
+        } else {
+            fetchInquiries(); // HR+: load all
+        }
+    }, [isCounselor, sessionStatus]);
 
-    const fetchInquiries = async () => {
+    // Counselor: debounced search as they type
+    useEffect(() => {
+        if (!isCounselor || sessionStatus === 'loading') return;
+        if (searchTerm.trim().length < 2) {
+            if (hasSearched) {
+                setInquiries([]);
+                setHasSearched(false);
+            }
+            return;
+        }
+        const timer = setTimeout(() => {
+            fetchInquiries(searchTerm.trim());
+        }, 400);
+        return () => clearTimeout(timer);
+    }, [searchTerm, isCounselor, sessionStatus]);
+
+    const fetchInquiries = async (search?: string) => {
+        const isSearch = !!search;
+        if (isSearch) setSearching(true);
         try {
-            const response = await fetch('/api/counselor/inquiries', { cache: 'no-store' });
+            const url = search
+                ? `/api/counselor/inquiries?search=${encodeURIComponent(search)}`
+                : '/api/counselor/inquiries';
+            const response = await fetch(url, { cache: 'no-store' });
             const data = await response.json();
 
             if (data.success) {
-                // Sort by inquiryDate desc
                 const sorted = data.data.sort((a: Inquiry, b: Inquiry) => {
                     return new Date(b.inquiryDate).getTime() - new Date(a.inquiryDate).getTime();
                 });
                 setInquiries(sorted);
+                if (isSearch) setHasSearched(true);
             } else {
                 setError('Failed to load inquiries');
             }
@@ -94,6 +126,7 @@ export default function AllInquiriesClient() {
             setError('An error occurred while fetching data');
         } finally {
             setLoading(false);
+            setSearching(false);
         }
     };
 
@@ -169,6 +202,39 @@ export default function AllInquiriesClient() {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-admin-emerald"></div>
+            </div>
+        );
+    }
+
+    // Counselor: show search-only prompt before they've typed anything
+    if (isCounselor && !hasSearched && searchTerm.trim().length < 2) {
+        return (
+            <div className="space-y-4">
+                {/* Search bar */}
+                <div className="bg-white rounded-xl border border-admin-border shadow-sm p-3">
+                    <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                        <input
+                            type="text"
+                            placeholder="Search by student name, phone, or ID..."
+                            className="w-full pl-10 pr-3 py-2.5 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-emerald text-sm"
+                            value={searchTerm}
+                            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+                            autoFocus
+                        />
+                    </div>
+                </div>
+                {/* Empty prompt */}
+                <div className="flex flex-col items-center justify-center py-20 text-center">
+                    <div className="text-5xl mb-4">🔍</div>
+                    <p className="text-lg font-semibold text-gray-700">Search to find a student</p>
+                    <p className="text-sm text-gray-400 mt-1 max-w-xs">
+                        Enter a name, phone number, or inquiry ID to cross-check existing records.
+                    </p>
+                    <p className="text-xs text-gray-400 mt-4">
+                        To add a new inquiry, tap the <span className="font-semibold">+</span> button above.
+                    </p>
+                </div>
             </div>
         );
     }
@@ -252,33 +318,50 @@ export default function AllInquiriesClient() {
 
     return (
         <div className="space-y-6">
-            {/* Quick View Stats — horizontal scroll on mobile, grid on desktop */}
-            <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 md:mx-0 md:px-0 md:grid md:grid-cols-5 md:gap-4 scrollbar-hide">
-                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
-                    <div className="text-xs text-gray-500 font-medium">Total</div>
-                    <div className="text-2xl font-bold text-admin-text mt-1">{stats.total}</div>
+            {/* Counselor: search results header */}
+            {isCounselor && (
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => { setSearchTerm(''); setInquiries([]); setHasSearched(false); }}
+                        className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1"
+                    >
+                        ← New search
+                    </button>
+                    <span className="text-sm text-gray-400">
+                        {searching ? 'Searching...' : `${inquiries.length} result${inquiries.length !== 1 ? 's' : ''} for "${searchTerm}"`}
+                    </span>
                 </div>
-                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
-                    <div className="text-xs text-gray-500 font-medium">Today</div>
-                    <div className="text-2xl font-bold text-admin-emerald mt-1">+{stats.today}</div>
+            )}
+
+            {/* Quick View Stats — hidden for counselors (search mode shows only results) */}
+            {!isCounselor && (
+                <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 md:mx-0 md:px-0 md:grid md:grid-cols-5 md:gap-4 scrollbar-hide">
+                    <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
+                        <div className="text-xs text-gray-500 font-medium">Total</div>
+                        <div className="text-2xl font-bold text-admin-text mt-1">{stats.total}</div>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
+                        <div className="text-xs text-gray-500 font-medium">Today</div>
+                        <div className="text-2xl font-bold text-admin-emerald mt-1">+{stats.today}</div>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
+                        <div className="text-xs text-gray-500 font-medium">Open / Active</div>
+                        <div className="text-2xl font-bold text-yellow-600 mt-1">{stats.open}</div>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
+                        <div className="text-xs text-gray-500 font-medium">Converted</div>
+                        <div className="text-2xl font-bold text-admin-blue mt-1">{stats.converted}</div>
+                    </div>
+                    <div
+                        className="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm cursor-pointer hover:bg-blue-100 transition-colors shrink-0 min-w-[130px] md:min-w-0"
+                        onClick={() => setSourceFilter(sourceFilter === 'Website' ? 'All' : 'Website')}
+                        title="Click to filter website inquiries"
+                    >
+                        <div className="text-xs text-blue-600 font-medium">🌐 Website</div>
+                        <div className="text-2xl font-bold text-blue-700 mt-1">{stats.website}</div>
+                    </div>
                 </div>
-                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
-                    <div className="text-xs text-gray-500 font-medium">Open / Active</div>
-                    <div className="text-2xl font-bold text-yellow-600 mt-1">{stats.open}</div>
-                </div>
-                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
-                    <div className="text-xs text-gray-500 font-medium">Converted</div>
-                    <div className="text-2xl font-bold text-admin-blue mt-1">{stats.converted}</div>
-                </div>
-                <div
-                    className="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm cursor-pointer hover:bg-blue-100 transition-colors shrink-0 min-w-[130px] md:min-w-0"
-                    onClick={() => setSourceFilter(sourceFilter === 'Website' ? 'All' : 'Website')}
-                    title="Click to filter website inquiries"
-                >
-                    <div className="text-xs text-blue-600 font-medium">🌐 Website</div>
-                    <div className="text-2xl font-bold text-blue-700 mt-1">{stats.website}</div>
-                </div>
-            </div>
+            )}
 
             {/* Filters Bar */}
             <div className="bg-white rounded-xl border border-admin-border shadow-sm overflow-hidden">
@@ -291,30 +374,34 @@ export default function AllInquiriesClient() {
                             placeholder="Name, ID, Phone..."
                             className="w-full pl-9 pr-3 py-2 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-emerald text-sm"
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
                         />
                     </div>
-                    {/* Mobile: Filter toggle button */}
-                    <button
-                        onClick={() => setShowMobileFilters(f => !f)}
-                        className={`md:hidden flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-colors shrink-0 ${
-                            (statusFilter !== 'All' || sourceFilter !== 'All' || dateStart)
-                                ? 'bg-admin-emerald/10 border-admin-emerald text-admin-emerald'
-                                : 'border-admin-border text-gray-500'
-                        }`}
-                    >
-                        <Filter size={14} />
-                        {(statusFilter !== 'All' || sourceFilter !== 'All' || dateStart) && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-admin-emerald" />
-                        )}
-                    </button>
-                    <div className="flex-shrink-0">
-                        <ExportButton data={filteredInquiries} filename="All_Inquiries" />
-                    </div>
+                    {/* Mobile: Filter toggle button — HR+ only */}
+                    {!isCounselor && (
+                        <button
+                            onClick={() => setShowMobileFilters(f => !f)}
+                            className={`md:hidden flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-colors shrink-0 ${
+                                (statusFilter !== 'All' || sourceFilter !== 'All' || dateStart)
+                                    ? 'bg-admin-emerald/10 border-admin-emerald text-admin-emerald'
+                                    : 'border-admin-border text-gray-500'
+                            }`}
+                        >
+                            <Filter size={14} />
+                            {(statusFilter !== 'All' || sourceFilter !== 'All' || dateStart) && (
+                                <span className="w-1.5 h-1.5 rounded-full bg-admin-emerald" />
+                            )}
+                        </button>
+                    )}
+                    {!isCounselor && (
+                        <div className="flex-shrink-0">
+                            <ExportButton data={filteredInquiries} filename="All_Inquiries" />
+                        </div>
+                    )}
                 </div>
 
-                {/* Mobile: expandable filter panel */}
-                {showMobileFilters && (
+                {/* Mobile: expandable filter panel — HR+ only */}
+                {!isCounselor && showMobileFilters && (
                     <div className="md:hidden border-t border-admin-border p-3 space-y-2.5 bg-admin-bg/40">
                         <div className="grid grid-cols-2 gap-2">
                             <select
@@ -371,8 +458,8 @@ export default function AllInquiriesClient() {
                     </div>
                 )}
 
-                {/* Desktop: always-visible filter row */}
-                <div className="hidden md:flex flex-wrap gap-2 items-center px-3 pb-3">
+                {/* Desktop: always-visible filter row — HR+ only */}
+                <div className={`flex-wrap gap-2 items-center px-3 pb-3 ${isCounselor ? 'hidden' : 'hidden md:flex'}`}>
                     <div className="flex items-center gap-1.5">
                         <Filter size={15} className="text-gray-400 shrink-0" />
                         <select

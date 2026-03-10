@@ -256,6 +256,36 @@ export async function getAllInquiries() {
     });
 }
 
+export async function searchInquiries(query: string) {
+    const q = query.trim();
+    return prisma.inquiry.findMany({
+        where: {
+            OR: [
+                { studentName: { contains: q, mode: 'insensitive' } },
+                { parentName: { contains: q, mode: 'insensitive' } },
+                { phone: { contains: q } },
+                { inquiryId: { contains: q, mode: 'insensitive' } },
+            ],
+        },
+        orderBy: { inquiryDate: 'desc' },
+        take: 50,
+        include: {
+            activityLog: {
+                orderBy: { createdAt: 'desc' },
+                take: 1,
+                select: {
+                    counselorName: true,
+                    action: true,
+                    oldValue: true,
+                    newValue: true,
+                    comments: true,
+                    createdAt: true,
+                },
+            },
+        },
+    });
+}
+
 
 /** Fetch a single inquiry by its human-readable ID (e.g. "S-42"). */
 export async function getInquiryById(inquiryId: string) {
