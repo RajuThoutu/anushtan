@@ -256,6 +256,11 @@ export async function getAllInquiries() {
     });
 }
 
+/** Lightweight total count — COUNT(*) only, no row data returned. */
+export async function countAllInquiries(): Promise<number> {
+    return prisma.inquiry.count();
+}
+
 /**
  * Fetch inquiries within a date range (server-side filter for dashboard performance).
  * dateFrom / dateTo are UTC Date objects — caller converts IST YYYY-MM-DD strings.
