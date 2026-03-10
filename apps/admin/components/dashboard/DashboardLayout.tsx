@@ -40,6 +40,7 @@ const navItems: NavItem[] = [
         label: 'All Inquiries',
         href: '/students',
         icon: <ClipboardList size={20} />,
+        roles: ['super_admin', 'admin', 'hr'],
         group: 'main',
     },
     {
@@ -153,8 +154,6 @@ export function DashboardSidebar() {
     const isCounselor = userRole === 'counselor';
 
     const filteredNavItems = navItems.filter(item => {
-        // Counselors don't see All Inquiries in sidebar (they use search via the page directly)
-        if (isCounselor && item.href === '/students') return false;
         if (!item.roles) return true;
         return item.roles.includes(userRole);
     });
