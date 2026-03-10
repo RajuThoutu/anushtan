@@ -203,8 +203,10 @@ export default function AllInquiriesClient() {
 
         const matchesSource = sourceFilter === 'All' || (inq.source || 'Other') === sourceFilter;
 
+        // Skip date filter when search is active — server already returned all-time results
         let matchesDate = true;
-        if (dateStart && dateEnd) {
+        const isSearchActive = searchTerm.trim().length >= 2;
+        if (!isSearchActive && dateStart && dateEnd) {
             const inqDateObj = new Date(inq.inquiryDate);
             const inqDateStr = inqDateObj.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
             matchesDate = inqDateStr >= dateStart && inqDateStr <= dateEnd;

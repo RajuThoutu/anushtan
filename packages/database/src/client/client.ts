@@ -301,7 +301,7 @@ export async function searchInquiries(query: string) {
             ],
         },
         orderBy: { inquiryDate: 'desc' },
-        take: 50,
+        take: 500, // covers all records — no old matches silently dropped
         include: {
             activityLog: {
                 orderBy: { createdAt: 'desc' },
