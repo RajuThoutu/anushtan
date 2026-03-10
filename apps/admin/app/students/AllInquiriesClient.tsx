@@ -66,6 +66,7 @@ export default function AllInquiriesClient() {
     const [sourceFilter, setSourceFilter] = useState('All');
     const [dateStart, setDateStart] = useState('');
     const [dateEnd, setDateEnd] = useState('');
+    const [showMobileFilters, setShowMobileFilters] = useState(false);
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -251,56 +252,127 @@ export default function AllInquiriesClient() {
 
     return (
         <div className="space-y-6">
-            {/* Quick View Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm">
-                    <div className="text-sm text-gray-500 font-medium">Total Inquiries</div>
+            {/* Quick View Stats — horizontal scroll on mobile, grid on desktop */}
+            <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 md:mx-0 md:px-0 md:grid md:grid-cols-5 md:gap-4 scrollbar-hide">
+                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
+                    <div className="text-xs text-gray-500 font-medium">Total</div>
                     <div className="text-2xl font-bold text-admin-text mt-1">{stats.total}</div>
                 </div>
-                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm">
-                    <div className="text-sm text-gray-500 font-medium">Today's Inquiries</div>
+                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
+                    <div className="text-xs text-gray-500 font-medium">Today</div>
                     <div className="text-2xl font-bold text-admin-emerald mt-1">+{stats.today}</div>
                 </div>
-                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm">
-                    <div className="text-sm text-gray-500 font-medium">Open / Active</div>
+                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
+                    <div className="text-xs text-gray-500 font-medium">Open / Active</div>
                     <div className="text-2xl font-bold text-yellow-600 mt-1">{stats.open}</div>
                 </div>
-                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm">
-                    <div className="text-sm text-gray-500 font-medium">Converted</div>
+                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
+                    <div className="text-xs text-gray-500 font-medium">Converted</div>
                     <div className="text-2xl font-bold text-admin-blue mt-1">{stats.converted}</div>
                 </div>
                 <div
-                    className="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm cursor-pointer hover:bg-blue-100 transition-colors"
+                    className="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm cursor-pointer hover:bg-blue-100 transition-colors shrink-0 min-w-[130px] md:min-w-0"
                     onClick={() => setSourceFilter(sourceFilter === 'Website' ? 'All' : 'Website')}
                     title="Click to filter website inquiries"
                 >
-                    <div className="text-sm text-blue-600 font-medium">🌐 From Website</div>
+                    <div className="text-xs text-blue-600 font-medium">🌐 Website</div>
                     <div className="text-2xl font-bold text-blue-700 mt-1">{stats.website}</div>
                 </div>
             </div>
 
             {/* Filters Bar */}
-            <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm space-y-3">
-                {/* Row 1: Search + Export */}
-                <div className="flex gap-3 items-center">
+            <div className="bg-white rounded-xl border border-admin-border shadow-sm overflow-hidden">
+                {/* Row 1: Search + Filter toggle (mobile) + Export */}
+                <div className="flex gap-2 items-center p-3">
                     <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                         <input
                             type="text"
-                            placeholder="Search by Name, ID, Phone..."
-                            className="w-full pl-10 pr-4 py-2 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-emerald text-sm"
+                            placeholder="Name, ID, Phone..."
+                            className="w-full pl-9 pr-3 py-2 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-emerald text-sm"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
+                    {/* Mobile: Filter toggle button */}
+                    <button
+                        onClick={() => setShowMobileFilters(f => !f)}
+                        className={`md:hidden flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-colors shrink-0 ${
+                            (statusFilter !== 'All' || sourceFilter !== 'All' || dateStart)
+                                ? 'bg-admin-emerald/10 border-admin-emerald text-admin-emerald'
+                                : 'border-admin-border text-gray-500'
+                        }`}
+                    >
+                        <Filter size={14} />
+                        {(statusFilter !== 'All' || sourceFilter !== 'All' || dateStart) && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-admin-emerald" />
+                        )}
+                    </button>
                     <div className="flex-shrink-0">
                         <ExportButton data={filteredInquiries} filename="All_Inquiries" />
                     </div>
                 </div>
 
-                {/* Row 2: Filters */}
-                <div className="flex flex-wrap gap-2 items-center">
-                    {/* Status Filter */}
+                {/* Mobile: expandable filter panel */}
+                {showMobileFilters && (
+                    <div className="md:hidden border-t border-admin-border p-3 space-y-2.5 bg-admin-bg/40">
+                        <div className="grid grid-cols-2 gap-2">
+                            <select
+                                value={statusFilter}
+                                onChange={(e) => setStatusFilter(e.target.value)}
+                                className="border border-admin-border rounded-lg px-2.5 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
+                            >
+                                <option value="All">All Statuses</option>
+                                <option value="New">New</option>
+                                <option value="Open">Open</option>
+                                <option value="Follow-up">Follow-up</option>
+                                <option value="Converted">Converted</option>
+                                <option value="Casual Inquiry">Casual</option>
+                            </select>
+                            <select
+                                value={sourceFilter}
+                                onChange={(e) => setSourceFilter(e.target.value)}
+                                className="border border-admin-border rounded-lg px-2.5 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
+                            >
+                                <option value="All">All Sources</option>
+                                <option value="Website">🌐 Website</option>
+                                <option value="WhatsApp">💬 WhatsApp</option>
+                                <option value="PhoneCall">📞 Phone</option>
+                                <option value="PaperForm">📄 Paper</option>
+                                <option value="Referral">🤝 Referral</option>
+                                <option value="QRScan">📷 QR</option>
+                                <option value="Other">➕ Other</option>
+                            </select>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                            <input
+                                type="date"
+                                className="border border-admin-border rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-admin-emerald w-full"
+                                value={dateStart}
+                                onChange={(e) => setDateStart(e.target.value)}
+                                placeholder="From"
+                            />
+                            <input
+                                type="date"
+                                className="border border-admin-border rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-admin-emerald w-full"
+                                value={dateEnd}
+                                onChange={(e) => setDateEnd(e.target.value)}
+                                placeholder="To"
+                            />
+                        </div>
+                        {(statusFilter !== 'All' || sourceFilter !== 'All' || dateStart) && (
+                            <button
+                                onClick={() => { setStatusFilter('All'); setSourceFilter('All'); setDateStart(''); setDateEnd(''); }}
+                                className="text-xs text-red-500 font-medium"
+                            >
+                                Clear filters
+                            </button>
+                        )}
+                    </div>
+                )}
+
+                {/* Desktop: always-visible filter row */}
+                <div className="hidden md:flex flex-wrap gap-2 items-center px-3 pb-3">
                     <div className="flex items-center gap-1.5">
                         <Filter size={15} className="text-gray-400 shrink-0" />
                         <select
@@ -317,7 +389,6 @@ export default function AllInquiriesClient() {
                         </select>
                     </div>
 
-                    {/* Source Filter */}
                     <div className="flex items-center gap-1.5">
                         <select
                             value={sourceFilter}
@@ -335,7 +406,6 @@ export default function AllInquiriesClient() {
                         </select>
                     </div>
 
-                    {/* Date Quick Select */}
                     <select
                         className="border border-admin-border rounded-lg px-2.5 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
                         onChange={(e) => {
@@ -343,7 +413,6 @@ export default function AllInquiriesClient() {
                             const today = new Date();
                             let start = '';
                             let end = '';
-
                             if (val === 'today') {
                                 start = end = today.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                             } else if (val === 'yesterday') {
@@ -373,11 +442,7 @@ export default function AllInquiriesClient() {
                                 start = new Date(today.getFullYear(), today.getMonth() - 1, 1).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                                 end = new Date(today.getFullYear(), today.getMonth(), 0).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
                             }
-
-                            if (val !== 'custom') {
-                                setDateStart(start);
-                                setDateEnd(end);
-                            }
+                            if (val !== 'custom') { setDateStart(start); setDateEnd(end); }
                         }}
                     >
                         <option value="custom">Quick Date...</option>
@@ -389,8 +454,7 @@ export default function AllInquiriesClient() {
                         <option value="lastMonth">Last Month</option>
                     </select>
 
-                    {/* Custom Date Range */}
-                    <div className="flex items-center gap-1.5 flex-wrap">
+                    <div className="flex items-center gap-1.5">
                         <Calendar size={15} className="text-gray-400 shrink-0" />
                         <input
                             type="date"

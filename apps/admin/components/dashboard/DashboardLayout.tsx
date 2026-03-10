@@ -15,6 +15,7 @@ import {
     CalendarClock,
     MessageSquare,
     Power,
+    MoreHorizontal,
 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { AddInquiryButton } from './AddInquiryButton';
@@ -29,7 +30,6 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-    // ── Main ─────────────────────────────────────────────────────────────────
     {
         label: 'Dashboard',
         href: '/dashboard',
@@ -68,7 +68,6 @@ const navItems: NavItem[] = [
         icon: <QrCode size={20} />,
         group: 'main',
     },
-    // ── Admin Tools (super_admin only) ────────────────────────────────────────
     {
         label: 'WhatsApp',
         href: '/admin/whatsapp',
@@ -78,11 +77,17 @@ const navItems: NavItem[] = [
     },
 ];
 
+// Bottom nav primary items (always visible on mobile bar)
+const bottomNavItems = [
+    { label: 'Home', href: '/dashboard', Icon: LayoutDashboard },
+    { label: 'Inquiries', href: '/students', Icon: ClipboardList },
+    { label: 'Follow-ups', href: '/followups', Icon: CalendarClock },
+];
+
 function LogoutButton() {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
 
-    // Close on outside click
     useEffect(() => {
         if (!open) return;
         const handler = (e: MouseEvent) => {
@@ -141,7 +146,6 @@ export function DashboardSidebar() {
     const userRole = session?.user?.role || '';
     const userName = session?.user?.name || 'User';
 
-    // Filter nav items based on role
     const filteredNavItems = navItems.filter(item => {
         if (!item.roles) return true;
         return item.roles.includes(userRole);
@@ -153,71 +157,105 @@ export function DashboardSidebar() {
 
     return (
         <>
-            {/* Mobile Header Bar */}
-            <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-gradient-to-r from-admin-blue to-admin-purple shadow-lg z-40 flex items-center px-4">
-                <button
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    className="p-2 hover:bg-white/10 rounded-lg transition-all"
-                    aria-label="Toggle menu"
-                >
-                    {isMobileMenuOpen ? <X size={24} className="text-white" /> : <Menu size={24} className="text-white" />}
-                </button>
-                <div className="flex items-center gap-2 ml-4">
-                    <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+            {/* ── Mobile Top Header ───────────────────────────────────────────── */}
+            <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-white border-b border-gray-100 shadow-sm z-40 flex items-center px-4">
+                {/* Brand */}
+                <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 bg-gradient-to-br from-admin-blue to-admin-purple rounded-lg flex items-center justify-center shadow-sm">
                         <span className="text-white font-bold text-sm">A</span>
                     </div>
-                    <h1 className="font-heading text-lg font-bold text-white">
-                        Anushtan
-                    </h1>
+                    <span className="font-heading text-base font-bold text-gray-900">Anushtan</span>
                 </div>
 
-                {/* Mobile: Bell + Add + Logout */}
+                {/* Right: Bell + Add */}
                 <div className="ml-auto flex items-center gap-1">
                     <NotificationBell />
                     <AddInquiryButton />
-                    <LogoutButton />
                 </div>
             </div>
 
-            {/* Overlay for mobile */}
+            {/* ── Mobile Bottom Navigation Bar ────────────────────────────────── */}
+            <nav
+                className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40"
+                style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+            >
+                <div className="flex items-stretch h-16">
+                    {bottomNavItems.map(({ label, href, Icon }) => {
+                        const isActive = pathname === href || pathname.startsWith(href + '/');
+                        return (
+                            <Link
+                                key={href}
+                                href={href}
+                                className="flex-1 flex flex-col items-center justify-center gap-0.5 relative transition-colors"
+                            >
+                                {/* Active indicator pill at top */}
+                                {isActive && (
+                                    <span className="absolute top-0 left-1/4 right-1/4 h-[3px] bg-admin-blue rounded-b-full" />
+                                )}
+                                <Icon
+                                    size={22}
+                                    strokeWidth={isActive ? 2.5 : 1.5}
+                                    className={isActive ? 'text-admin-blue' : 'text-gray-400'}
+                                />
+                                <span className={`text-[10px] font-semibold tracking-wide ${isActive ? 'text-admin-blue' : 'text-gray-400'}`}>
+                                    {label}
+                                </span>
+                            </Link>
+                        );
+                    })}
+
+                    {/* More → opens sidebar drawer */}
+                    <button
+                        onClick={() => setIsMobileMenuOpen(true)}
+                        className="flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors"
+                        aria-label="More options"
+                    >
+                        <MoreHorizontal size={22} strokeWidth={1.5} className="text-gray-400" />
+                        <span className="text-[10px] font-semibold tracking-wide text-gray-400">More</span>
+                    </button>
+                </div>
+            </nav>
+
+            {/* ── Sidebar Overlay (mobile) ─────────────────────────────────────── */}
             {isMobileMenuOpen && (
                 <div
-                    className="lg:hidden fixed inset-0 bg-black/50 z-40"
+                    className="lg:hidden fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
                     onClick={() => setIsMobileMenuOpen(false)}
                 />
             )}
 
-            {/* Sidebar */}
+            {/* ── Sidebar Drawer ───────────────────────────────────────────────── */}
             <aside
                 className={`
-                    fixed left-0 top-0 h-screen w-64
+                    fixed left-0 top-0 h-screen w-72
                     bg-gradient-to-br from-admin-blue via-admin-purple to-admin-blue-dark
-                    flex flex-col z-50 transition-transform duration-300 shadow-2xl
-                    lg:translate-x-0
+                    flex flex-col z-50 transition-transform duration-300 ease-out shadow-2xl
+                    lg:translate-x-0 lg:w-64
                     ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
                 `}
             >
-                {/* Logo - Desktop only */}
-                <div className="hidden lg:block p-6 border-b border-white/20">
-                    <Link href="/dashboard" className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
-                            <span className="text-white font-bold text-xl">A</span>
-                        </div>
-                        <div>
-                            <h1 className="font-heading text-xl font-bold text-white">
-                                Anushtan
-                            </h1>
-                            <p className="text-xs text-white/80">Admin Portal</p>
-                        </div>
-                    </Link>
+                {/* Logo — shown on both mobile and desktop */}
+                <div className="p-5 border-b border-white/20 flex items-center gap-3 shrink-0">
+                    {/* Mobile close button */}
+                    <button
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="lg:hidden w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors -ml-1"
+                        aria-label="Close menu"
+                    >
+                        <X size={18} className="text-white/70" />
+                    </button>
+                    <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
+                        <span className="text-white font-bold text-lg">A</span>
+                    </div>
+                    <div>
+                        <h1 className="font-heading text-lg font-bold text-white leading-tight">Anushtan</h1>
+                        <p className="text-xs text-white/60">Admin Portal</p>
+                    </div>
                 </div>
 
-                {/* Mobile: Add padding for header */}
-                <div className="lg:hidden h-16" />
-
                 {/* Navigation */}
-                <nav className="flex-1 p-4 overflow-y-auto">
-                    <ul className="space-y-2">
+                <nav className="flex-1 p-3 overflow-y-auto">
+                    <ul className="space-y-1">
                         {filteredNavItems.map((item, index) => {
                             const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
                             const colors = [
@@ -229,7 +267,6 @@ export function DashboardSidebar() {
                             ];
                             const colorClass = colors[index % colors.length];
 
-                            // Show "Admin Tools" divider before first admin-group item
                             const isFirstAdmin = item.group === 'admin' &&
                                 (index === 0 || filteredNavItems[index - 1].group !== 'admin');
 
@@ -248,17 +285,17 @@ export function DashboardSidebar() {
                                         href={item.href}
                                         onClick={() => setIsMobileMenuOpen(false)}
                                         className={`
-                                            flex items-center gap-3 px-4 py-3 rounded-xl transition-all group
+                                            flex items-center gap-3 px-4 py-3 rounded-xl transition-all
                                             ${isActive
-                                                ? `bg-gradient-to-r ${colorClass} text-white shadow-lg scale-105`
-                                                : 'text-white/80 hover:bg-white/10 hover:text-white'
+                                                ? `bg-gradient-to-r ${colorClass} text-white shadow-lg`
+                                                : 'text-white/75 hover:bg-white/10 hover:text-white'
                                             }
                                         `}
                                     >
-                                        <span className={isActive ? 'drop-shadow-md' : ''}>{item.icon}</span>
-                                        <span className="font-medium">{item.label}</span>
+                                        <span>{item.icon}</span>
+                                        <span className="font-medium text-sm">{item.label}</span>
                                         {isActive && (
-                                            <span className="ml-auto w-2 h-2 bg-white rounded-full animate-pulse" />
+                                            <span className="ml-auto w-1.5 h-1.5 bg-white rounded-full" />
                                         )}
                                     </Link>
                                 </li>
@@ -267,28 +304,24 @@ export function DashboardSidebar() {
                     </ul>
                 </nav>
 
-                {/* User Info */}
-                <div className="p-4 border-t border-white/20 bg-black/10 backdrop-blur-sm">
+                {/* User Info + Logout */}
+                <div className="p-4 border-t border-white/20 bg-black/10 shrink-0">
                     <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-admin-amber to-admin-coral rounded-full flex items-center justify-center shadow-lg">
+                        <div className="w-9 h-9 bg-gradient-to-br from-admin-amber to-admin-coral rounded-full flex items-center justify-center shadow-md shrink-0">
                             <span className="text-white font-bold text-sm">
                                 {userName.charAt(0).toUpperCase()}
                             </span>
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="font-medium text-white truncate">
-                                {userName}
-                            </p>
-                            <p className="text-xs text-white/70 uppercase">
-                                {userRole.replace('_', ' ')}
-                            </p>
+                            <p className="font-semibold text-white text-sm truncate">{userName}</p>
+                            <p className="text-xs text-white/60 uppercase tracking-wider">{userRole.replace('_', ' ')}</p>
                         </div>
                     </div>
                     <button
                         onClick={handleSignOut}
-                        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-white/90 hover:bg-white/10 rounded-lg transition-all"
+                        className="flex items-center gap-2 w-full px-3 py-2 text-sm text-white/80 hover:bg-white/10 rounded-lg transition-all"
                     >
-                        <LogOut size={16} />
+                        <LogOut size={15} />
                         <span>Sign Out</span>
                     </button>
                 </div>
@@ -305,8 +338,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     return (
         <div className="min-h-screen bg-admin-bg">
             <DashboardSidebar />
-            {/* Add top padding on mobile to account for fixed header */}
-            <main className="lg:ml-64 h-screen pt-16 lg:pt-0 flex flex-col overflow-hidden">
+            {/* Mobile: pt-14 (top bar) + pb-16 (bottom nav). Desktop: ml-64 (sidebar) */}
+            <main className="lg:ml-64 h-screen pt-14 pb-16 lg:pt-0 lg:pb-0 flex flex-col overflow-hidden">
                 {/* Desktop Header */}
                 <header className="hidden lg:flex shrink-0 items-center justify-between px-8 py-4 bg-gradient-to-r from-admin-blue to-admin-purple border-b border-white/10 z-30">
                     <div className="font-heading text-xl font-bold text-white">
