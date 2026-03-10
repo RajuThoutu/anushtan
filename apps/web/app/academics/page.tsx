@@ -1,7 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PageHeader } from "@/components/sections/PageHeader";
-import { SectionHeader } from "@repo/ui";
 import type { Metadata } from 'next';
 import { Lightbulb, Users, Sprout, ChefHat, FlaskConical, Cpu } from "lucide-react";
 
@@ -16,44 +15,46 @@ const keyPillars = [
         name: "Conceptual Learning",
         description: "Focus on why and how, not rote memorisation that builds strong fundamentals and clarity of thought.",
         icon: Lightbulb,
-        color: "from-blue-500 to-blue-600"
+        color: "from-blue-500 to-blue-600",
     },
     {
         id: 2,
         name: "Activity-Based Pedagogy",
         description: "Learning through experiments, projects, discussions, sports, team games and real-life applications, making education joyful and meaningful.",
         icon: Users,
-        color: "from-green-500 to-green-600"
+        color: "from-green-500 to-green-600",
     },
     {
         id: 3,
         name: "Farming & Goshala Exposure",
         description: "Hands-on engagement with soil, crops, nature, and cows, fostering respect for life, sustainability, and Indian agrarian wisdom.",
         icon: Sprout,
-        color: "from-emerald-500 to-emerald-600"
+        color: "from-emerald-500 to-emerald-600",
     },
     {
         id: 4,
         name: "Cooking as a Life Skill",
         description: "Practical understanding of nutrition, health, measurements, teamwork, and self-reliance through guided cooking activities.",
         icon: ChefHat,
-        color: "from-orange-500 to-orange-600"
+        color: "from-orange-500 to-orange-600",
     },
     {
         id: 5,
         name: "Science Labs & Robotics",
         description: "Inquiry-driven science education with labs, robotics, tinkering, and problem-solving, encouraging innovation and curiosity.",
         icon: FlaskConical,
-        color: "from-purple-500 to-purple-600"
+        color: "from-purple-500 to-purple-600",
     },
     {
         id: 6,
         name: "AI Tools & Digital Literacy",
         description: "Age-appropriate exposure to AI tools, logical thinking, and technology, preparing students for future careers with responsibility.",
         icon: Cpu,
-        color: "from-indigo-500 to-indigo-600"
-    }
+        color: "from-indigo-500 to-indigo-600",
+    },
 ];
+
+const devanagariOrdinals = ["०१", "०२", "०३", "०४", "०५", "०६"];
 
 export default function Academics() {
     return (
@@ -68,12 +69,15 @@ export default function Academics() {
             <section className="py-12 bg-white border-y border-anushtan-border">
                 <div className="container-custom max-w-4xl mx-auto text-center">
                     <p className="text-xl md:text-2xl text-anushtan-charcoal leading-relaxed font-light">
-                        The Anushtan Curriculum is thoughtfully designed to nurture <strong className="font-semibold text-anushtan-terracotta">thinking minds, skilled hands, and conscious hearts</strong>, fully aligned with the spirit and framework of <strong className="font-semibold text-anushtan-terracotta">NEP-2020</strong>.
+                        The Anushtan Curriculum is thoughtfully designed to nurture{" "}
+                        <strong className="font-semibold text-anushtan-terracotta">thinking minds, skilled hands, and conscious hearts</strong>,
+                        fully aligned with the spirit and framework of{" "}
+                        <strong className="font-semibold text-anushtan-terracotta">NEP-2020</strong>.
                     </p>
                 </div>
             </section>
 
-            {/* Key Pillars of Learning */}
+            {/* Key Pillars — alternating rows with Devanagari ordinals */}
             <section className="py-20 bg-anushtan-parchment">
                 <div className="container-custom">
                     <div className="text-center mb-16">
@@ -86,24 +90,42 @@ export default function Academics() {
                         <div className="h-1 w-24 bg-anushtan-gold mx-auto"></div>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                        {keyPillars.map((pillar) => {
+                    <div className="space-y-10 max-w-5xl mx-auto">
+                        {keyPillars.map((pillar, idx) => {
                             const Icon = pillar.icon;
+                            const isEven = idx % 2 === 0;
                             return (
                                 <div
                                     key={pillar.id}
-                                    className="bg-white rounded-2xl p-8 border border-anushtan-border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+                                    className={`flex flex-col md:flex-row items-center gap-6 md:gap-12 bg-white rounded-2xl border border-anushtan-border p-8 shadow-sm hover:shadow-lg transition-all duration-300 ${
+                                        !isEven ? "md:flex-row-reverse" : ""
+                                    }`}
                                 >
-                                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${pillar.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                                        <Icon className="w-8 h-8 text-white" />
+                                    {/* Devanagari ordinal */}
+                                    <div className="shrink-0 flex items-center justify-center w-24 md:w-32">
+                                        <span
+                                            className="font-heading font-bold text-anushtan-terracotta leading-none select-none"
+                                            style={{ fontSize: "clamp(60px, 8vw, 96px)", opacity: 0.15 }}
+                                        >
+                                            {devanagariOrdinals[idx]}
+                                        </span>
                                     </div>
-                                    <h3 className="font-heading text-2xl font-bold text-anushtan-charcoal mb-4 min-h-[3.5rem] flex items-end">
-                                        {pillar.name}
-                                    </h3>
-                                    <div className="w-12 h-[2px] bg-anushtan-gold/50 mb-4"></div>
-                                    <p className="text-anushtan-charcoal/80 leading-relaxed">
-                                        {pillar.description}
-                                    </p>
+
+                                    {/* Content */}
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${pillar.color} flex items-center justify-center shrink-0`}>
+                                                <Icon className="w-7 h-7 text-white" />
+                                            </div>
+                                            <h3 className="font-heading text-2xl font-bold text-anushtan-charcoal">
+                                                {pillar.name}
+                                            </h3>
+                                        </div>
+                                        <div className="w-12 h-[2px] bg-anushtan-gold/50 mb-4"></div>
+                                        <p className="text-anushtan-charcoal/80 leading-relaxed text-lg">
+                                            {pillar.description}
+                                        </p>
+                                    </div>
                                 </div>
                             );
                         })}
@@ -115,7 +137,6 @@ export default function Academics() {
             <section className="py-16 bg-white">
                 <div className="container-custom">
                     <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                        {/* Academic Orientation */}
                         <div className="bg-anushtan-parchment rounded-xl p-8 border border-anushtan-border">
                             <h3 className="font-heading text-2xl font-bold text-anushtan-terracotta mb-4">
                                 Academic Orientation
@@ -129,8 +150,6 @@ export default function Academics() {
                                 </p>
                             </div>
                         </div>
-
-                        {/* Structure of Learning */}
                         <div className="bg-anushtan-parchment rounded-xl p-8 border border-anushtan-border">
                             <h3 className="font-heading text-2xl font-bold text-anushtan-terracotta mb-4">
                                 Structure of Learning

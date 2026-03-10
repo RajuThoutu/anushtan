@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
+import { ScrollProgressBar } from "@/components/layout/ScrollProgressBar";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={clsx(playfair.variable, inter.variable)}>
       <body className="antialiased min-h-screen flex flex-col font-body">
+        <ScrollProgressBar />
         {children}
       </body>
     </html>

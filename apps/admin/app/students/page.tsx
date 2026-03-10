@@ -13,13 +13,13 @@ export default async function StudentsPage() {
 
     return (
         <DashboardLayout>
-            <div className="p-8">
+            <div className="p-4 sm:p-8">
                 {/* Header */}
-                <div className="mb-8">
-                    <h1 className="font-heading text-3xl font-bold bg-gradient-to-r from-admin-blue to-admin-purple bg-clip-text text-transparent mb-2">
+                <div className="mb-4 sm:mb-8">
+                    <h1 className="font-heading text-2xl sm:text-3xl font-bold bg-gradient-to-r from-admin-blue to-admin-purple bg-clip-text text-transparent mb-1 sm:mb-2">
                         All Student Inquiries
                     </h1>
-                    <p className="text-admin-text-secondary">
+                    <p className="text-admin-text-secondary text-sm">
                         Search and manage all student inquiries
                     </p>
                 </div>

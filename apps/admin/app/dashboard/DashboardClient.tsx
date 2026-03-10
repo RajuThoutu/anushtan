@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { InquiryTabs, type Tab } from '@/components/dashboard/InquiryTabs';
 import { InquiryFilters, type FilterState } from '@/components/dashboard/InquiryFilters';
@@ -8,9 +9,13 @@ import { InquiryList } from '@/components/dashboard/InquiryList';
 import { InquiryDetailPanel, type CounselorUpdates } from '@/components/dashboard/InquiryDetailPanel';
 import type { SheetInquiry as Inquiry } from '@repo/database';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardClient() {
     const { data: session } = useSession();
+    const router = useRouter();
+    const userRole = session?.user?.role ?? '';
+    const isCounselor = userRole === 'counselor';
     const [activeTab, setActiveTab] = useState<Tab>('today');
     const [filters, setFilters] = useState<FilterState>({
         search: '',
@@ -22,16 +27,21 @@ export default function DashboardClient() {
     const [inquiries, setInquiries] = useState<Inquiry[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 20;
 
     const userName = session?.user?.name || '';
 
-    // Fetch inquiries
+    // Fetch inquiries — counselors don't auto-load
     useEffect(() => {
+        if (isCounselor) {
+            setLoading(false);
+            return;
+        }
         fetchInquiries();
-        // Auto-refresh every 30 seconds
         const interval = setInterval(fetchInquiries, 30000);
         return () => clearInterval(interval);
-    }, []);
+    }, [isCounselor]);
 
     const fetchInquiries = async () => {
         try {
@@ -67,8 +77,22 @@ export default function DashboardClient() {
         if (!hasDateFilter) {
             if (activeTab === 'mywork') {
                 result = result.filter(inq => inq.assignedTo === userName || inq.activityLog?.[0]?.counselorName === userName);
+            } else if (activeTab === 'all') {
+                // Default to this week for the All tab
+                const today = new Date();
+                const day = today.getDay();
+                const diffToMonday = day === 0 ? -6 : 1 - day;
+                const monday = new Date(today);
+                monday.setDate(today.getDate() + diffToMonday);
+                const sunday = new Date(monday);
+                sunday.setDate(monday.getDate() + 6);
+                const weekStart = monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                const weekEnd = sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                result = result.filter(inq => {
+                    const dayString = new Date(inq.inquiryDate || inq.createdAt).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                    return dayString >= weekStart && dayString <= weekEnd;
+                });
             }
-            // 'all' tab shows everything, no filter
         } else {
             // If date filters are active, still apply "My Work" filter if on that tab
             if (activeTab === 'mywork') {
@@ -115,6 +139,17 @@ export default function DashboardClient() {
 
         return result;
     }, [inquiries, activeTab, filters, userName]);
+
+    // Reset to page 1 whenever filters/tab changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [activeTab, filters]);
+
+    const totalPages = Math.max(1, Math.ceil(filteredInquiries.length / itemsPerPage));
+    const paginatedInquiries = filteredInquiries.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
     // Count for tabs
     const todayCount = useMemo(() => {
@@ -166,11 +201,123 @@ export default function DashboardClient() {
         }
     };
 
+    // Counselor: search state
+    const [counselorSearch, setCounselorSearch] = useState('');
+    const [counselorResults, setCounselorResults] = useState<Inquiry[]>([]);
+    const [counselorSearching, setCounselorSearching] = useState(false);
+    const [counselorHasSearched, setCounselorHasSearched] = useState(false);
+
+    useEffect(() => {
+        if (!isCounselor) return;
+        if (counselorSearch.trim().length < 2) {
+            setCounselorResults([]);
+            setCounselorHasSearched(false);
+            return;
+        }
+        const timer = setTimeout(async () => {
+            setCounselorSearching(true);
+            try {
+                const res = await fetch(`/api/counselor/inquiries?search=${encodeURIComponent(counselorSearch.trim())}`, { cache: 'no-store' });
+                const data = await res.json();
+                if (data.success) {
+                    setCounselorResults(data.data);
+                    setCounselorHasSearched(true);
+                }
+            } finally {
+                setCounselorSearching(false);
+            }
+        }, 400);
+        return () => clearTimeout(timer);
+    }, [counselorSearch, isCounselor]);
+
+    if (isCounselor) {
+        return (
+            <DashboardLayout>
+                <div className="h-full flex flex-col overflow-hidden">
+                    {/* Counselor: search-first view */}
+                    {!counselorHasSearched ? (
+                        <div className="flex-1 flex flex-col items-center justify-center px-6 py-10 text-center gap-6">
+                            <div>
+                                <p className="text-xl font-bold text-gray-800">Welcome back!</p>
+                                <p className="text-sm text-gray-500 mt-1">Use the <span className="font-semibold">+</span> button to capture a new lead.</p>
+                            </div>
+                            <div className="w-full max-w-sm">
+                                <div className="relative">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                    <input
+                                        type="text"
+                                        autoFocus
+                                        placeholder="Search student name, phone, ID..."
+                                        className="w-full pl-10 pr-4 py-3 border border-admin-border rounded-xl focus:outline-none focus:ring-2 focus:ring-admin-emerald text-sm shadow-sm"
+                                        value={counselorSearch}
+                                        onChange={(e) => setCounselorSearch(e.target.value)}
+                                    />
+                                </div>
+                                {counselorSearching && (
+                                    <p className="text-xs text-gray-400 mt-2">Searching...</p>
+                                )}
+                            </div>
+                            <p className="text-xs text-gray-400 max-w-xs">
+                                Cross-check existing records by entering a student name, phone number, or inquiry ID.
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="flex-1 min-h-0 flex flex-col">
+                            {/* Search bar + back */}
+                            <div className="px-4 pt-4 pb-2 flex items-center gap-3 bg-white border-b border-admin-border">
+                                <button
+                                    onClick={() => { setCounselorSearch(''); setCounselorResults([]); setCounselorHasSearched(false); }}
+                                    className="text-sm text-gray-500 hover:text-gray-700 shrink-0"
+                                >
+                                    ← Back
+                                </button>
+                                <div className="relative flex-1">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={15} />
+                                    <input
+                                        type="text"
+                                        placeholder="Search..."
+                                        className="w-full pl-9 pr-3 py-2 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-emerald text-sm"
+                                        value={counselorSearch}
+                                        onChange={(e) => setCounselorSearch(e.target.value)}
+                                        autoFocus
+                                    />
+                                </div>
+                                <span className="text-xs text-gray-400 shrink-0">
+                                    {counselorSearching ? 'Searching...' : `${counselorResults.length} found`}
+                                </span>
+                            </div>
+                            {/* Results */}
+                            <div className="flex-1 overflow-auto">
+                                <InquiryList
+                                    inquiries={counselorResults}
+                                    selectedId={selectedInquiry?.id ?? null}
+                                    onSelect={setSelectedInquiry}
+                                    loading={counselorSearching}
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Detail panel for counselor */}
+                    {selectedInquiry && (
+                        <div className="lg:hidden fixed inset-0 z-50 bg-white">
+                            <InquiryDetailPanel
+                                inquiry={selectedInquiry}
+                                onClose={() => setSelectedInquiry(null)}
+                                onSave={handleSave}
+                            />
+                        </div>
+                    )}
+                </div>
+            </DashboardLayout>
+        );
+    }
+
     return (
         <DashboardLayout>
             <div className="h-full flex flex-col lg:flex-row relative overflow-hidden">
                 {/* Main Content Area */}
-                <div className={`flex-1 flex flex-col min-w-0 ${selectedInquiry ? 'hidden lg:flex lg:w-1/2' : 'w-full'}`}>
+                <div className={`flex-1 min-h-0 flex flex-col min-w-0 ${selectedInquiry ? 'hidden lg:flex lg:w-1/2' : 'w-full'}`}>
                     {/* Tabs */}
                     <InquiryTabs
                         activeTab={activeTab}
@@ -189,13 +336,41 @@ export default function DashboardClient() {
                     )}
 
                     {/* List */}
-                    <div className="flex-1 bg-white overflow-hidden">
+                    <div className="flex-1 min-h-0 bg-white overflow-hidden flex flex-col">
                         <InquiryList
-                            inquiries={filteredInquiries}
+                            inquiries={paginatedInquiries}
                             selectedId={selectedInquiry?.id || null}
                             onSelect={setSelectedInquiry}
                             loading={loading}
                         />
+
+                        {/* Pagination */}
+                        {!loading && filteredInquiries.length > itemsPerPage && (
+                            <div className="shrink-0 border-t border-anushtan-border bg-gray-50 px-4 py-3 flex items-center justify-between gap-3">
+                                <span className="text-xs text-gray-500">
+                                    {(currentPage - 1) * itemsPerPage + 1}–{Math.min(currentPage * itemsPerPage, filteredInquiries.length)} of {filteredInquiries.length}
+                                </span>
+                                <div className="flex items-center gap-1.5">
+                                    <button
+                                        onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+                                        disabled={currentPage === 1}
+                                        className="p-1.5 border border-gray-200 rounded-lg bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                                    >
+                                        <ChevronLeft size={14} />
+                                    </button>
+                                    <span className="text-xs font-medium text-gray-600 min-w-[40px] text-center">
+                                        {currentPage}/{totalPages}
+                                    </span>
+                                    <button
+                                        onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+                                        disabled={currentPage === totalPages}
+                                        className="p-1.5 border border-gray-200 rounded-lg bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                                    >
+                                        <ChevronRight size={14} />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 

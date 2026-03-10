@@ -50,9 +50,14 @@ interface Inquiry {
 
 export default function AllInquiriesClient() {
     const router = useRouter();
-    const { data: session } = useSession();
+    const { data: session, status: sessionStatus } = useSession();
+    const userRole = session?.user?.role ?? '';
+    const isCounselor = userRole === 'counselor';
+
     const [inquiries, setInquiries] = useState<Inquiry[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true); // always spinner until session resolves
+    const [searching, setSearching] = useState(false);
+    const [hasSearched, setHasSearched] = useState(false);
     const [error, setError] = useState('');
     const [selectedInquiries, setSelectedInquiries] = useState<Set<string>>(new Set());
     const [isDeleting, setIsDeleting] = useState(false);
@@ -63,28 +68,57 @@ export default function AllInquiriesClient() {
     // Filters
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('All');
+    const [sourceFilter, setSourceFilter] = useState('All');
     const [dateStart, setDateStart] = useState('');
     const [dateEnd, setDateEnd] = useState('');
+    const [showMobileFilters, setShowMobileFilters] = useState(false);
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
+    // Wait for session to resolve, then decide what to load
     useEffect(() => {
-        fetchInquiries();
-    }, []);
+        if (sessionStatus === 'loading') return; // don't fetch until we know the role
+        if (isCounselor) {
+            setLoading(false); // counselors: show search-first UI, no auto-fetch
+        } else {
+            fetchInquiries(); // HR+: load all
+        }
+    }, [isCounselor, sessionStatus]);
 
-    const fetchInquiries = async () => {
+    // Counselor: debounced search as they type
+    useEffect(() => {
+        if (!isCounselor || sessionStatus === 'loading') return;
+        if (searchTerm.trim().length < 2) {
+            if (hasSearched) {
+                setInquiries([]);
+                setHasSearched(false);
+            }
+            return;
+        }
+        const timer = setTimeout(() => {
+            fetchInquiries(searchTerm.trim());
+        }, 400);
+        return () => clearTimeout(timer);
+    }, [searchTerm, isCounselor, sessionStatus]);
+
+    const fetchInquiries = async (search?: string) => {
+        const isSearch = !!search;
+        if (isSearch) setSearching(true);
         try {
-            const response = await fetch('/api/counselor/inquiries', { cache: 'no-store' });
+            const url = search
+                ? `/api/counselor/inquiries?search=${encodeURIComponent(search)}`
+                : '/api/counselor/inquiries';
+            const response = await fetch(url, { cache: 'no-store' });
             const data = await response.json();
 
             if (data.success) {
-                // Sort by inquiryDate desc
                 const sorted = data.data.sort((a: Inquiry, b: Inquiry) => {
                     return new Date(b.inquiryDate).getTime() - new Date(a.inquiryDate).getTime();
                 });
                 setInquiries(sorted);
+                if (isSearch) setHasSearched(true);
             } else {
                 setError('Failed to load inquiries');
             }
@@ -92,6 +126,27 @@ export default function AllInquiriesClient() {
             setError('An error occurred while fetching data');
         } finally {
             setLoading(false);
+            setSearching(false);
+        }
+    };
+
+    // Source badge config
+    const getSourceBadge = (source?: string) => {
+        switch (source) {
+            case 'Website':
+                return { label: '🌐 Anushtan Website', className: 'bg-blue-50 text-blue-700 border-blue-200' };
+            case 'WhatsApp':
+                return { label: '💬 WhatsApp', className: 'bg-green-50 text-green-700 border-green-200' };
+            case 'PhoneCall':
+                return { label: '📞 Phone Call', className: 'bg-gray-100 text-gray-600 border-gray-200' };
+            case 'PaperForm':
+                return { label: '📄 Paper Form', className: 'bg-orange-50 text-orange-700 border-orange-200' };
+            case 'Referral':
+                return { label: '🤝 Referral', className: 'bg-purple-50 text-purple-700 border-purple-200' };
+            case 'QRScan':
+                return { label: '📷 QR Scan', className: 'bg-teal-50 text-teal-700 border-teal-200' };
+            default:
+                return { label: '➕ Other', className: 'bg-gray-100 text-gray-500 border-gray-200' };
         }
     };
 
@@ -104,6 +159,8 @@ export default function AllInquiriesClient() {
 
         const matchesStatus = statusFilter === 'All' || inq.status === statusFilter;
 
+        const matchesSource = sourceFilter === 'All' || (inq.source || 'Other') === sourceFilter;
+
         let matchesDate = true;
         if (dateStart && dateEnd) {
             const inqDateObj = new Date(inq.inquiryDate);
@@ -111,7 +168,7 @@ export default function AllInquiriesClient() {
             matchesDate = inqDateStr >= dateStart && inqDateStr <= dateEnd;
         }
 
-        return matchesSearch && matchesStatus && matchesDate;
+        return matchesSearch && matchesStatus && matchesSource && matchesDate;
     });
 
     // Pagination Logic
@@ -137,13 +194,47 @@ export default function AllInquiriesClient() {
         total: inquiries.length,
         today: inquiries.filter(i => new Date(i.inquiryDate).toDateString() === new Date().toDateString()).length,
         open: inquiries.filter(i => ['New', 'Follow-up'].includes(i.status)).length,
-        converted: inquiries.filter(i => i.status === 'Converted').length
+        converted: inquiries.filter(i => i.status === 'Converted').length,
+        website: inquiries.filter(i => i.source === 'Website').length,
     };
 
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-admin-emerald"></div>
+            </div>
+        );
+    }
+
+    // Counselor: show search-only prompt before they've typed anything
+    if (isCounselor && !hasSearched && searchTerm.trim().length < 2) {
+        return (
+            <div className="space-y-4">
+                {/* Search bar */}
+                <div className="bg-white rounded-xl border border-admin-border shadow-sm p-3">
+                    <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                        <input
+                            type="text"
+                            placeholder="Search by student name, phone, or ID..."
+                            className="w-full pl-10 pr-3 py-2.5 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-emerald text-sm"
+                            value={searchTerm}
+                            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+                            autoFocus
+                        />
+                    </div>
+                </div>
+                {/* Empty prompt */}
+                <div className="flex flex-col items-center justify-center py-20 text-center">
+                    <div className="text-5xl mb-4">🔍</div>
+                    <p className="text-lg font-semibold text-gray-700">Search to find a student</p>
+                    <p className="text-sm text-gray-400 mt-1 max-w-xs">
+                        Enter a name, phone number, or inquiry ID to cross-check existing records.
+                    </p>
+                    <p className="text-xs text-gray-400 mt-4">
+                        To add a new inquiry, tap the <span className="font-semibold">+</span> button above.
+                    </p>
+                </div>
             </div>
         );
     }
@@ -227,50 +318,154 @@ export default function AllInquiriesClient() {
 
     return (
         <div className="space-y-6">
-            {/* Quick View Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm">
-                    <div className="text-sm text-gray-500 font-medium">Total Inquiries</div>
-                    <div className="text-2xl font-bold text-admin-text mt-1">{stats.total}</div>
+            {/* Counselor: search results header */}
+            {isCounselor && (
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => { setSearchTerm(''); setInquiries([]); setHasSearched(false); }}
+                        className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1"
+                    >
+                        ← New search
+                    </button>
+                    <span className="text-sm text-gray-400">
+                        {searching ? 'Searching...' : `${inquiries.length} result${inquiries.length !== 1 ? 's' : ''} for "${searchTerm}"`}
+                    </span>
                 </div>
-                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm">
-                    <div className="text-sm text-gray-500 font-medium">Today's Inquiries</div>
-                    <div className="text-2xl font-bold text-admin-emerald mt-1">+{stats.today}</div>
+            )}
+
+            {/* Quick View Stats — hidden for counselors (search mode shows only results) */}
+            {!isCounselor && (
+                <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 md:mx-0 md:px-0 md:grid md:grid-cols-5 md:gap-4 scrollbar-hide">
+                    <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
+                        <div className="text-xs text-gray-500 font-medium">Total</div>
+                        <div className="text-2xl font-bold text-admin-text mt-1">{stats.total}</div>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
+                        <div className="text-xs text-gray-500 font-medium">Today</div>
+                        <div className="text-2xl font-bold text-admin-emerald mt-1">+{stats.today}</div>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
+                        <div className="text-xs text-gray-500 font-medium">Open / Active</div>
+                        <div className="text-2xl font-bold text-yellow-600 mt-1">{stats.open}</div>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
+                        <div className="text-xs text-gray-500 font-medium">Converted</div>
+                        <div className="text-2xl font-bold text-admin-blue mt-1">{stats.converted}</div>
+                    </div>
+                    <div
+                        className="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm cursor-pointer hover:bg-blue-100 transition-colors shrink-0 min-w-[130px] md:min-w-0"
+                        onClick={() => setSourceFilter(sourceFilter === 'Website' ? 'All' : 'Website')}
+                        title="Click to filter website inquiries"
+                    >
+                        <div className="text-xs text-blue-600 font-medium">🌐 Website</div>
+                        <div className="text-2xl font-bold text-blue-700 mt-1">{stats.website}</div>
+                    </div>
                 </div>
-                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm">
-                    <div className="text-sm text-gray-500 font-medium">Open / Active</div>
-                    <div className="text-2xl font-bold text-yellow-600 mt-1">{stats.open}</div>
-                </div>
-                <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm">
-                    <div className="text-sm text-gray-500 font-medium">Converted</div>
-                    <div className="text-2xl font-bold text-admin-blue mt-1">{stats.converted}</div>
-                </div>
-            </div>
+            )}
 
             {/* Filters Bar */}
-            <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
-
-                {/* Search */}
-                <div className="relative flex-1 w-full md:w-auto">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                    <input
-                        type="text"
-                        placeholder="Search by Name, ID, Phone..."
-                        className="w-full pl-10 pr-4 py-2 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-emerald"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+            <div className="bg-white rounded-xl border border-admin-border shadow-sm overflow-hidden">
+                {/* Row 1: Search + Filter toggle (mobile) + Export */}
+                <div className="flex gap-2 items-center p-3">
+                    <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                        <input
+                            type="text"
+                            placeholder="Name, ID, Phone..."
+                            className="w-full pl-9 pr-3 py-2 border border-admin-border rounded-lg focus:outline-none focus:ring-2 focus:ring-admin-emerald text-sm"
+                            value={searchTerm}
+                            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+                        />
+                    </div>
+                    {/* Mobile: Filter toggle button — HR+ only */}
+                    {!isCounselor && (
+                        <button
+                            onClick={() => setShowMobileFilters(f => !f)}
+                            className={`md:hidden flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-colors shrink-0 ${
+                                (statusFilter !== 'All' || sourceFilter !== 'All' || dateStart)
+                                    ? 'bg-admin-emerald/10 border-admin-emerald text-admin-emerald'
+                                    : 'border-admin-border text-gray-500'
+                            }`}
+                        >
+                            <Filter size={14} />
+                            {(statusFilter !== 'All' || sourceFilter !== 'All' || dateStart) && (
+                                <span className="w-1.5 h-1.5 rounded-full bg-admin-emerald" />
+                            )}
+                        </button>
+                    )}
+                    {!isCounselor && (
+                        <div className="flex-shrink-0">
+                            <ExportButton data={filteredInquiries} filename="All_Inquiries" />
+                        </div>
+                    )}
                 </div>
 
-                {/* Filters Group */}
-                <div className="flex flex-wrap gap-4 w-full md:w-auto">
-                    {/* Status Filter */}
-                    <div className="flex items-center gap-2">
-                        <Filter size={18} className="text-gray-500" />
+                {/* Mobile: expandable filter panel — HR+ only */}
+                {!isCounselor && showMobileFilters && (
+                    <div className="md:hidden border-t border-admin-border p-3 space-y-2.5 bg-admin-bg/40">
+                        <div className="grid grid-cols-2 gap-2">
+                            <select
+                                value={statusFilter}
+                                onChange={(e) => setStatusFilter(e.target.value)}
+                                className="border border-admin-border rounded-lg px-2.5 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
+                            >
+                                <option value="All">All Statuses</option>
+                                <option value="New">New</option>
+                                <option value="Open">Open</option>
+                                <option value="Follow-up">Follow-up</option>
+                                <option value="Converted">Converted</option>
+                                <option value="Casual Inquiry">Casual</option>
+                            </select>
+                            <select
+                                value={sourceFilter}
+                                onChange={(e) => setSourceFilter(e.target.value)}
+                                className="border border-admin-border rounded-lg px-2.5 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
+                            >
+                                <option value="All">All Sources</option>
+                                <option value="Website">🌐 Website</option>
+                                <option value="WhatsApp">💬 WhatsApp</option>
+                                <option value="PhoneCall">📞 Phone</option>
+                                <option value="PaperForm">📄 Paper</option>
+                                <option value="Referral">🤝 Referral</option>
+                                <option value="QRScan">📷 QR</option>
+                                <option value="Other">➕ Other</option>
+                            </select>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                            <input
+                                type="date"
+                                className="border border-admin-border rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-admin-emerald w-full"
+                                value={dateStart}
+                                onChange={(e) => setDateStart(e.target.value)}
+                                placeholder="From"
+                            />
+                            <input
+                                type="date"
+                                className="border border-admin-border rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-admin-emerald w-full"
+                                value={dateEnd}
+                                onChange={(e) => setDateEnd(e.target.value)}
+                                placeholder="To"
+                            />
+                        </div>
+                        {(statusFilter !== 'All' || sourceFilter !== 'All' || dateStart) && (
+                            <button
+                                onClick={() => { setStatusFilter('All'); setSourceFilter('All'); setDateStart(''); setDateEnd(''); }}
+                                className="text-xs text-red-500 font-medium"
+                            >
+                                Clear filters
+                            </button>
+                        )}
+                    </div>
+                )}
+
+                {/* Desktop: always-visible filter row — HR+ only */}
+                <div className={`flex-wrap gap-2 items-center px-3 pb-3 ${isCounselor ? 'hidden' : 'hidden md:flex'}`}>
+                    <div className="flex items-center gap-1.5">
+                        <Filter size={15} className="text-gray-400 shrink-0" />
                         <select
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
-                            className="border border-admin-border rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
+                            className="border border-admin-border rounded-lg px-2.5 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
                         >
                             <option value="All">All Statuses</option>
                             <option value="New">New</option>
@@ -281,80 +476,86 @@ export default function AllInquiriesClient() {
                         </select>
                     </div>
 
-                    {/* Date Range */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                         <select
-                            className="border border-admin-border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
-                            onChange={(e) => {
-                                const val = e.target.value;
-                                const today = new Date();
-                                let start = '';
-                                let end = '';
-
-                                if (val === 'today') {
-                                    start = end = today.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                } else if (val === 'yesterday') {
-                                    const y = new Date(today);
-                                    y.setDate(today.getDate() - 1);
-                                    start = end = y.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                } else if (val === 'thisWeek') {
-                                    const d = new Date(today);
-                                    const day = d.getDay();
-                                    const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-                                    const monday = new Date(d.setDate(diff));
-                                    const sunday = new Date(d.setDate(monday.getDate() + 6));
-                                    start = monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                    end = sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                } else if (val === 'lastWeek') {
-                                    const d = new Date(today);
-                                    const day = d.getDay();
-                                    const diff = d.getDate() - day + (day === 0 ? -6 : 1) - 7;
-                                    const monday = new Date(d.setDate(diff));
-                                    const sunday = new Date(d.setDate(monday.getDate() + 6));
-                                    start = monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                    end = sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                } else if (val === 'thisMonth') {
-                                    start = new Date(today.getFullYear(), today.getMonth(), 1).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                    end = new Date(today.getFullYear(), today.getMonth() + 1, 0).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                } else if (val === 'lastMonth') {
-                                    start = new Date(today.getFullYear(), today.getMonth() - 1, 1).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                    end = new Date(today.getFullYear(), today.getMonth(), 0).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                                }
-
-                                if (val !== 'custom') {
-                                    setDateStart(start);
-                                    setDateEnd(end);
-                                }
-                            }}
+                            value={sourceFilter}
+                            onChange={(e) => setSourceFilter(e.target.value)}
+                            className="border border-admin-border rounded-lg px-2.5 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
                         >
-                            <option value="custom">Quick Select...</option>
-                            <option value="today">Today</option>
-                            <option value="yesterday">Yesterday</option>
-                            <option value="thisWeek">This Week</option>
-                            <option value="lastWeek">Last Week</option>
-                            <option value="thisMonth">This Month</option>
-                            <option value="lastMonth">Last Month</option>
+                            <option value="All">All Sources</option>
+                            <option value="Website">🌐 Website</option>
+                            <option value="WhatsApp">💬 WhatsApp</option>
+                            <option value="PhoneCall">📞 Phone Call</option>
+                            <option value="PaperForm">📄 Paper Form</option>
+                            <option value="Referral">🤝 Referral</option>
+                            <option value="QRScan">📷 QR Scan</option>
+                            <option value="Other">➕ Other</option>
                         </select>
-                        <Calendar size={18} className="text-gray-500" />
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="date"
-                                className="border border-admin-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-admin-emerald"
-                                value={dateStart}
-                                onChange={(e) => setDateStart(e.target.value)}
-                            />
-                            <span className="text-gray-400">-</span>
-                            <input
-                                type="date"
-                                className="border border-admin-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-admin-emerald"
-                                value={dateEnd}
-                                onChange={(e) => setDateEnd(e.target.value)}
-                            />
-                        </div>
                     </div>
-                    {/* Export Button */}
-                    <div className="flex-shrink-0 ml-auto">
-                        <ExportButton data={filteredInquiries} filename="All_Inquiries" />
+
+                    <select
+                        className="border border-admin-border rounded-lg px-2.5 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-admin-emerald"
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            const today = new Date();
+                            let start = '';
+                            let end = '';
+                            if (val === 'today') {
+                                start = end = today.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            } else if (val === 'yesterday') {
+                                const y = new Date(today);
+                                y.setDate(today.getDate() - 1);
+                                start = end = y.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            } else if (val === 'thisWeek') {
+                                const d = new Date(today);
+                                const day = d.getDay();
+                                const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+                                const monday = new Date(d.setDate(diff));
+                                const sunday = new Date(d.setDate(monday.getDate() + 6));
+                                start = monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                                end = sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            } else if (val === 'lastWeek') {
+                                const d = new Date(today);
+                                const day = d.getDay();
+                                const diff = d.getDate() - day + (day === 0 ? -6 : 1) - 7;
+                                const monday = new Date(d.setDate(diff));
+                                const sunday = new Date(d.setDate(monday.getDate() + 6));
+                                start = monday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                                end = sunday.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            } else if (val === 'thisMonth') {
+                                start = new Date(today.getFullYear(), today.getMonth(), 1).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                                end = new Date(today.getFullYear(), today.getMonth() + 1, 0).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            } else if (val === 'lastMonth') {
+                                start = new Date(today.getFullYear(), today.getMonth() - 1, 1).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                                end = new Date(today.getFullYear(), today.getMonth(), 0).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            }
+                            if (val !== 'custom') { setDateStart(start); setDateEnd(end); }
+                        }}
+                    >
+                        <option value="custom">Quick Date...</option>
+                        <option value="today">Today</option>
+                        <option value="yesterday">Yesterday</option>
+                        <option value="thisWeek">This Week</option>
+                        <option value="lastWeek">Last Week</option>
+                        <option value="thisMonth">This Month</option>
+                        <option value="lastMonth">Last Month</option>
+                    </select>
+
+                    <div className="flex items-center gap-1.5">
+                        <Calendar size={15} className="text-gray-400 shrink-0" />
+                        <input
+                            type="date"
+                            className="border border-admin-border rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-admin-emerald w-[130px]"
+                            value={dateStart}
+                            onChange={(e) => setDateStart(e.target.value)}
+                        />
+                        <span className="text-gray-400 text-sm">–</span>
+                        <input
+                            type="date"
+                            className="border border-admin-border rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-admin-emerald w-[130px]"
+                            value={dateEnd}
+                            onChange={(e) => setDateEnd(e.target.value)}
+                        />
                     </div>
                 </div>
             </div>
@@ -438,6 +639,11 @@ export default function AllInquiriesClient() {
                                             )}
                                             <div className="inline-block font-semibold text-admin-text">{inq.studentName}</div>
                                             <div className="text-xs text-gray-500 mt-0.5">{inq.currentClass}</div>
+                                            {inq.source && (
+                                                <span className={`inline-flex items-center mt-1 px-2 py-0.5 rounded-full text-[10px] font-medium border ${getSourceBadge(inq.source).className}`}>
+                                                    {getSourceBadge(inq.source).label}
+                                                </span>
+                                            )}
                                         </div>
                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(inq.status)}`}>
                                             {inq.status}
@@ -474,7 +680,7 @@ export default function AllInquiriesClient() {
                         )}
                     </div>
 
-                    {/* Desktop Table View */}
+                    {/* Desktop Table */}
                     <div className="hidden md:block overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
@@ -521,6 +727,11 @@ export default function AllInquiriesClient() {
                                             <td className="px-6 py-4">
                                                 <div className="font-medium text-admin-text">{inq.studentName}</div>
                                                 <div className="text-xs text-gray-500">{inq.currentClass}</div>
+                                                {inq.source && (
+                                                    <span className={`inline-flex items-center mt-1 px-2 py-0.5 rounded-full text-[10px] font-medium border ${getSourceBadge(inq.source).className}`}>
+                                                        {getSourceBadge(inq.source).label}
+                                                    </span>
+                                                )}
                                             </td>
                                             <td className="px-6 py-4 text-sm text-gray-600">
                                                 <div>{inq.phone}</div>
@@ -566,31 +777,40 @@ export default function AllInquiriesClient() {
                         </table>
                     </div>
 
-                    {/* Pagination */}
-                    {filteredInquiries.length > itemsPerPage && (
-                        <div className="px-6 py-4 border-t border-admin-border flex items-center justify-between bg-gray-50">
-                            <div className="text-sm text-gray-500">
-                                Showing <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-medium">{Math.min(currentPage * itemsPerPage, filteredInquiries.length)}</span> of <span className="font-medium">{filteredInquiries.length}</span> results
-                            </div>
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                                    disabled={currentPage === 1}
-                                    className="p-2 border border-admin-border rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed bg-white"
-                                >
-                                    <ChevronLeft size={16} />
-                                </button>
-                                <button
-                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                                    disabled={currentPage === totalPages}
-                                    className="p-2 border border-admin-border rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed bg-white"
-                                >
-                                    <ChevronRight size={16} />
-                                </button>
-                            </div>
-                        </div>
-                    )}
                 </div>
+
+                {/* Pagination — outside overflow-x-auto so it's always fully visible */}
+                {filteredInquiries.length > itemsPerPage && (
+                    <div className="px-4 sm:px-6 py-4 border-t border-admin-border bg-gray-50 flex flex-wrap items-center justify-between gap-3">
+                        <div className="text-sm text-gray-500">
+                            Showing{' '}
+                            <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span>
+                            {' '}–{' '}
+                            <span className="font-medium">{Math.min(currentPage * itemsPerPage, filteredInquiries.length)}</span>
+                            {' '}of{' '}
+                            <span className="font-medium">{filteredInquiries.length}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                disabled={currentPage === 1}
+                                className="p-2 border border-admin-border rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed bg-white"
+                            >
+                                <ChevronLeft size={16} />
+                            </button>
+                            <span className="text-sm font-medium text-gray-600 min-w-[52px] text-center">
+                                {currentPage} / {totalPages}
+                            </span>
+                            <button
+                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                disabled={currentPage === totalPages}
+                                className="p-2 border border-admin-border rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed bg-white"
+                            >
+                                <ChevronRight size={16} />
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

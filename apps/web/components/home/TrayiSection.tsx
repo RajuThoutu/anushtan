@@ -63,7 +63,7 @@ export const TrayiSection = () => {
                         <Card className="relative h-full bg-white border-2 border-anushtan-border p-0 overflow-hidden group-hover:-translate-y-2 transition-all duration-500 group-hover:border-anushtan-terracotta hover:shadow-[0_10px_40px_rgba(212,175,55,0.2)]">
                             <div className="h-96 w-full relative transition-all duration-700">
                                 <Image
-                                    src="/hero-swami-standing.jpg" // Placeholder for Vivekananda
+                                    src="/hero-swami-standing.jpg"
                                     alt="Swami Vivekananda"
                                     fill
                                     className="object-cover object-top"
