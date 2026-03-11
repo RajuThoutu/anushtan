@@ -76,18 +76,23 @@ export default function DashboardClient() {
             .catch(() => {});
     }, []);
 
-    const fetchInquiries = async (tab: Tab = activeTab) => {
+    const fetchInquiries = async (tab: Tab = activeTab, searchOverride?: string) => {
         setTabLoading(true);
         try {
-            const { dateFrom, dateTo } = getTabDateRange(tab, filters);
-            const params = new URLSearchParams();
-            if (dateFrom) params.set('dateFrom', dateFrom);
-            if (dateTo)   params.set('dateTo',   dateTo);
-            const qs = params.toString();
-            const response = await fetch(
-                `/api/counselor/inquiries${qs ? '?' + qs : ''}`,
-                { cache: 'no-store' }
-            );
+            const searchTerm = searchOverride !== undefined ? searchOverride : filters.search;
+            let url: string;
+            if (searchTerm.trim().length >= 2) {
+                // Search mode: query ALL records server-side (no date cap)
+                url = `/api/counselor/inquiries?search=${encodeURIComponent(searchTerm.trim())}`;
+            } else {
+                const { dateFrom, dateTo } = getTabDateRange(tab, filters);
+                const params = new URLSearchParams();
+                if (dateFrom) params.set('dateFrom', dateFrom);
+                if (dateTo)   params.set('dateTo',   dateTo);
+                const qs = params.toString();
+                url = `/api/counselor/inquiries${qs ? '?' + qs : ''}`;
+            }
+            const response = await fetch(url, { cache: 'no-store' });
             const data = await response.json();
             if (data.success) setInquiries(data.data || []);
         } catch (error) {
@@ -112,8 +117,24 @@ export default function DashboardClient() {
         fetchInquiries(activeTab);
     }, [filters.dateFrom, filters.dateTo]);
 
+    // Re-fetch when search term changes — debounced; clears to normal tab data when empty
+    useEffect(() => {
+        if (isCounselor) return;
+        const term = filters.search.trim();
+        if (term.length === 0) {
+            // Search cleared: reload normal date-range data for current tab
+            fetchInquiries(activeTab, '');
+            return;
+        }
+        if (term.length < 2) return; // wait for ≥2 chars
+        const timer = setTimeout(() => fetchInquiries(activeTab, term), 400);
+        return () => clearTimeout(timer);
+    }, [filters.search, isCounselor]);
+
     // Filter inquiries based on tab and filters
     const filteredInquiries = useMemo(() => {
+        const isSearchActive = filters.search.trim().length >= 2;
+
         // If active tab is "Today", strictly ignore all other user filters
         if (activeTab === 'today') {
             const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
@@ -129,7 +150,8 @@ export default function DashboardClient() {
         // If date filters are set, use them instead of tab filter
         const hasDateFilter = filters.dateFrom || filters.dateTo;
 
-        if (!hasDateFilter) {
+        if (!hasDateFilter && !isSearchActive) {
+            // No search, no custom date — apply tab-level date filter
             if (activeTab === 'mywork') {
                 result = result.filter(inq => inq.assignedTo === userName || inq.activityLog?.[0]?.counselorName === userName);
             } else if (activeTab === 'all') {
@@ -148,12 +170,13 @@ export default function DashboardClient() {
                     return dayString >= weekStart && dayString <= weekEnd;
                 });
             }
-        } else {
-            // If date filters are active, still apply "My Work" filter if on that tab
+        } else if (!isSearchActive) {
+            // Custom date active but no search — still apply "My Work" filter if on that tab
             if (activeTab === 'mywork') {
                 result = result.filter(inq => inq.assignedTo === userName || inq.activityLog?.[0]?.counselorName === userName);
             }
         }
+        // isSearchActive: skip all date filters — server already returned all-time matches
 
         // Search filter
         if (filters.search) {
