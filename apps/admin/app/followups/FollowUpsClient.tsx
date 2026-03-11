@@ -175,14 +175,17 @@ export function FollowUpsClient() {
             (i.phone || '').includes(searchTerm) ||
             (i.parentName || '').toLowerCase().includes(q);
 
-        return matchesDate && matchesSearch;
+        // Exclude closed statuses — converted / casual inquiries are done
+        const isOpen = i.status !== 'Converted' && i.status !== 'CasualInquiry';
+
+        return matchesDate && matchesSearch && isOpen;
     });
 
     // ── Breakdown counts ───────────────────────────────────────────────────
     const counts = {
         total: filteredItems.length,
         active: filteredItems.filter(i => ['New', 'Follow-up'].includes(i.status)).length,
-        converted: filteredItems.filter(i => i.status === 'Converted').length,
+        open: filteredItems.filter(i => i.status === 'Open').length,
         overdue: filteredItems.filter(i => {
             if (!i.followUpDate || !['New', 'Follow-up'].includes(i.status)) return false;
             return new Date(i.followUpDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }) < today;
@@ -291,8 +294,8 @@ export function FollowUpsClient() {
                     <p className="text-xs text-admin-text-secondary mt-0.5">Still Active</p>
                 </div>
                 <div className="bg-white rounded-xl border border-admin-border p-4 text-center shadow-sm">
-                    <p className="text-2xl font-bold text-emerald-600">{counts.converted}</p>
-                    <p className="text-xs text-admin-text-secondary mt-0.5">Converted</p>
+                    <p className="text-2xl font-bold text-indigo-600">{counts.open}</p>
+                    <p className="text-xs text-admin-text-secondary mt-0.5">Open</p>
                 </div>
                 <div className="bg-white rounded-xl border border-admin-border p-4 text-center shadow-sm">
                     <p className="text-2xl font-bold text-red-500">{counts.overdue}</p>
