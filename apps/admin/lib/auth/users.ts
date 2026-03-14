@@ -126,6 +126,15 @@ export const users: User[] = [
         name: 'CC3',
         role: 'career_councillor',
         is_active: true
+    },
+    {
+        id: '13',
+        email: 'sunayana',
+        // Password: sunayana@2026
+        password_hash: '$2b$10$QqxQ.9pwmJU8.y6mZ2NmGuRY/QEu6jgGegDRkYVjE.LSR/lgOtCWq',
+        name: 'Sunayana',
+        role: 'admin',
+        is_active: true
     }
 ]
 
