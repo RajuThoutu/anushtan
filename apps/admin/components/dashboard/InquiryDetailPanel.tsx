@@ -27,6 +27,13 @@ const statusOptions = [
 
 const priorityOptions = ['High', 'Medium', 'Low'];
 
+interface ActivityLogEntry {
+    counselorName: string;
+    action: string;
+    comments: string | null;
+    createdAt: string;
+}
+
 export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPanelProps) {
     // Calculate T+2 days default in IST
     const getDefaultFollowUpDate = () => {
@@ -42,8 +49,9 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
     });
     const [saving, setSaving] = useState(false);
     const [saveSuccess, setSaveSuccess] = useState(false);
+    const [activityLog, setActivityLog] = useState<ActivityLogEntry[]>([]);
 
-    // Reset form when inquiry changes
+    // Reset form and fetch full activity log when inquiry changes
     useEffect(() => {
         if (inquiry) {
             setFormData({
@@ -51,6 +59,12 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                 counselorComments: '', // Always empty when switching inquiry
                 followUpDate: inquiry.followUpDate ? new Date(inquiry.followUpDate).toISOString().split('T')[0] : getDefaultFollowUpDate(),
             });
+            // Fetch full activity log for this inquiry (list view only has take:1)
+            const inquiryKey = inquiry.inquiryId || inquiry.id;
+            fetch(`/api/counselor/inquiry/${encodeURIComponent(inquiryKey)}`, { cache: 'no-store' })
+                .then(r => r.json())
+                .then(d => { if (d.success && d.data?.activityLog) setActivityLog(d.data.activityLog); })
+                .catch(() => {});
         }
     }, [inquiry]);
 
@@ -78,6 +92,12 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
             setSaveSuccess(true);
             setFormData(prev => ({ ...prev, counselorComments: '' })); // Clear comment box
             setTimeout(() => setSaveSuccess(false), 3000);
+            // Re-fetch activity log so new comment appears immediately
+            const inquiryKey = inquiry.inquiryId || inquiry.id;
+            fetch(`/api/counselor/inquiry/${encodeURIComponent(inquiryKey)}`, { cache: 'no-store' })
+                .then(r => r.json())
+                .then(d => { if (d.success && d.data?.activityLog) setActivityLog(d.data.activityLog); })
+                .catch(() => {});
         } catch (error: any) {
             console.error('Failed to save:', error);
             alert(`Failed to save changes: ${error.message || 'Please try again.'}`);
@@ -248,13 +268,26 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                         </div>
 
                         {/* Comment History (Read-Only) */}
-                        {inquiry.counselorComments && (
+                        {activityLog.filter(e => e.comments).length > 0 && (
                             <div>
-                                <label className="block text-sm font-medium text-anushtan-charcoal mb-1">
+                                <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
                                     Comment History
                                 </label>
-                                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 text-sm text-gray-700 whitespace-pre-wrap max-h-48 overflow-y-auto">
-                                    {inquiry.counselorComments}
+                                <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+                                    {activityLog
+                                        .filter(e => e.comments)
+                                        .map((entry, i) => (
+                                            <div key={i} className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm">
+                                                <div className="flex items-center justify-between gap-2 mb-1">
+                                                    <span className="font-semibold text-anushtan-charcoal text-xs">{entry.counselorName}</span>
+                                                    <span className="text-[10px] text-gray-400 shrink-0">
+                                                        {new Date(entry.createdAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })}
+                                                    </span>
+                                                </div>
+                                                <p className="text-gray-700 whitespace-pre-wrap">{entry.comments}</p>
+                                            </div>
+                                        ))
+                                    }
                                 </div>
                             </div>
                         )}

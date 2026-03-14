@@ -25,7 +25,7 @@ export function InquiryDetailView({ inquiry, userName }: InquiryDetailViewProps)
 
     const [formData, setFormData] = useState({
         status: inquiry.status || 'New',
-        counselorComments: inquiry.counselorComments || inquiry.notes || '',
+        counselorComments: '', // always blank — new note per save; history shown below
         followUpDate: fmtFollowUpDate(inquiry.followUpDate) || t2IST(),
     });
     const router = useRouter();
@@ -221,9 +221,34 @@ export function InquiryDetailView({ inquiry, userName }: InquiryDetailViewProps)
 
 
 
+                        {/* Comment History — all past notes, newest first */}
+                        {inquiry.activityLog?.filter((e: any) => e.comments).length > 0 && (
+                            <div>
+                                <label className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                                    Comment History
+                                </label>
+                                <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+                                    {inquiry.activityLog
+                                        .filter((e: any) => e.comments)
+                                        .map((entry: any, i: number) => (
+                                            <div key={i} className="bg-white border border-anushtan-border rounded-lg p-3 text-sm">
+                                                <div className="flex items-center justify-between gap-2 mb-1">
+                                                    <span className="font-semibold text-anushtan-charcoal text-xs">{entry.counselorName}</span>
+                                                    <span className="text-[10px] text-gray-400 shrink-0">
+                                                        {new Date(entry.createdAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })}
+                                                    </span>
+                                                </div>
+                                                <p className="text-gray-700 whitespace-pre-wrap">{entry.comments}</p>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                            </div>
+                        )}
+
                         <div>
                             <label htmlFor="counselorComments" className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                                Counselor Comments
+                                Add New Note
                             </label>
                             <textarea
                                 id="counselorComments"
@@ -231,7 +256,7 @@ export function InquiryDetailView({ inquiry, userName }: InquiryDetailViewProps)
                                 onChange={(e) => setFormData({ ...formData, counselorComments: e.target.value })}
                                 rows={4}
                                 className="w-full px-4 py-2 border border-anushtan-border rounded-lg focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent outline-none resize-none"
-                                placeholder="Add your notes specific to counselor actions..."
+                                placeholder="Type a new note here..."
                             />
                         </div>
 
