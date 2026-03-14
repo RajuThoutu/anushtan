@@ -13,20 +13,30 @@ interface Props {
 
 // 1. Generate Static Params for SEO
 export async function generateStaticParams() {
-    const query = `*[_type == "event"]{ "slug": slug.current }`;
-    const slugs = await client.fetch(query);
-    return slugs.map((s: any) => ({ slug: s.slug }));
+    try {
+        const query = `*[_type == "event"]{ "slug": slug.current }`;
+        const slugs = await client.fetch(query);
+        return (slugs || []).map((s: any) => ({ slug: s.slug }));
+    } catch (error) {
+        console.error("Error generating static params:", error);
+        return [];
+    }
 }
 
 // 2. Fetch Event Data
 async function getEvent(slug: string) {
-    const query = `*[_type == "event" && slug.current == $slug][0] {
-    title,
-    date,
-    description,
-    gallery
-  }`;
-    return client.fetch(query, { slug });
+    try {
+        const query = `*[_type == "event" && slug.current == $slug][0] {
+        title,
+        date,
+        description,
+        gallery
+      }`;
+        return await client.fetch(query, { slug });
+    } catch (error) {
+        console.error("Error fetching event:", error);
+        return null;
+    }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
