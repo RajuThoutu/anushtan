@@ -104,7 +104,7 @@ export function DashboardSidebar() {
             {/* Sidebar */}
             <aside
                 className={`
-                    fixed left-0 top-0 h-screen w-64
+                    fixed left-0 top-0 h-dvh w-64
                     bg-gradient-to-br from-admin-blue via-admin-purple to-admin-blue-dark
                     flex flex-col z-50 transition-transform duration-300 shadow-2xl
                     lg:translate-x-0
@@ -130,7 +130,7 @@ export function DashboardSidebar() {
                 <div className="lg:hidden h-16" />
 
                 {/* Navigation */}
-                <nav className="flex-1 p-4 overflow-y-auto">
+                <nav className="flex-1 min-h-0 p-4 overflow-y-auto">
                     <ul className="space-y-2">
                         {filteredNavItems.map((item, index) => {
                             const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
@@ -170,7 +170,7 @@ export function DashboardSidebar() {
                 </nav>
 
                 {/* User Info */}
-                <div className="p-4 border-t border-white/20 bg-black/10 backdrop-blur-sm">
+                <div className="shrink-0 p-4 pb-safe border-t border-white/20 bg-black/10 backdrop-blur-sm">
                     <div className="flex items-center gap-3 mb-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-admin-amber to-admin-coral rounded-full flex items-center justify-center shadow-lg">
                             <span className="text-white font-bold text-sm">
@@ -205,10 +205,10 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
     return (
-        <div className="min-h-screen bg-admin-bg">
+        <div className="min-h-dvh bg-admin-bg">
             <DashboardSidebar />
             {/* Add top padding on mobile to account for fixed header */}
-            <main className="lg:ml-64 min-h-screen pt-16 lg:pt-0 flex flex-col">
+            <main className="lg:ml-64 min-h-dvh pt-16 lg:pt-0 flex flex-col">
                 {/* Desktop Header */}
                 <header className="hidden lg:flex items-center justify-between px-8 py-4 bg-white border-b border-anushtan-border sticky top-0 z-30">
                     <div className="font-heading text-xl font-bold text-anushtan-charcoal">
