@@ -16,6 +16,7 @@ import {
     MessageSquare,
     Power,
     MoreHorizontal,
+    GraduationCap,
 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { AddInquiryButton } from './AddInquiryButton';
@@ -57,6 +58,12 @@ const navItems: NavItem[] = [
         href: '/users',
         icon: <Users size={20} />,
         roles: ['super_admin'],
+        group: 'main',
+    },
+    {
+        label: 'CBSE Check',
+        href: '/cbse-check',
+        icon: <GraduationCap size={20} />,
         group: 'main',
     },
     {
