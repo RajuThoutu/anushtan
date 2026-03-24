@@ -535,10 +535,31 @@ export function FollowUpsClient() {
 
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Log Call / Comments</label>
+                                {/* Quick suggestions */}
+                                <div className="flex flex-wrap gap-1.5 mb-2">
+                                    {[
+                                        'Spoke with parent. Interested, follow up scheduled.',
+                                        'Shared fee structure with parent.',
+                                        'Shared school brochure / address.',
+                                        'Parent has concerns about transport.',
+                                        'Admission form submitted.',
+                                        'Parent not interested at this time.',
+                                        'Campus visit done. Decision pending.',
+                                    ].map((s) => (
+                                        <button
+                                            key={s}
+                                            type="button"
+                                            onClick={() => setModalComment(prev => prev ? prev + '\n' + s : s)}
+                                            className="text-xs px-2 py-1 bg-gray-100 hover:bg-purple-50 border border-gray-200 hover:border-admin-purple text-gray-600 hover:text-admin-purple rounded-full transition-colors"
+                                        >
+                                            {s}
+                                        </button>
+                                    ))}
+                                </div>
                                 <textarea
                                     value={modalComment}
                                     onChange={e => setModalComment(e.target.value)}
-                                    placeholder="Briefly describe the call or interaction..."
+                                    placeholder="Type or pick a suggestion above..."
                                     rows={3}
                                     className="w-full px-3 py-2 border border-admin-border rounded-xl focus:ring-2 focus:ring-admin-purple outline-none text-sm resize-none"
                                 />

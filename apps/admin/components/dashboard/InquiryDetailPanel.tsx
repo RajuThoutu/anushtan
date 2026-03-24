@@ -27,6 +27,16 @@ const statusOptions = [
 
 const priorityOptions = ['High', 'Medium', 'Low'];
 
+const SUGGESTED_COMMENTS = [
+    'Spoke with parent. Interested, follow up scheduled.',
+    'Shared fee structure with parent.',
+    'Shared school brochure / address.',
+    'Parent has concerns about transport.',
+    'Admission form submitted.',
+    'Parent not interested at this time.',
+    'Campus visit done. Decision pending.',
+];
+
 interface ActivityLogEntry {
     counselorName: string;
     action: string;
@@ -297,11 +307,29 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
                             <label className="block text-sm font-medium text-anushtan-charcoal mb-1">
                                 Add New Note
                             </label>
+                            {/* Quick suggestions */}
+                            <div className="flex flex-wrap gap-1.5 mb-2">
+                                {SUGGESTED_COMMENTS.map((suggestion) => (
+                                    <button
+                                        key={suggestion}
+                                        type="button"
+                                        onClick={() => setFormData(prev => ({
+                                            ...prev,
+                                            counselorComments: prev.counselorComments
+                                                ? prev.counselorComments + '\n' + suggestion
+                                                : suggestion,
+                                        }))}
+                                        className="text-xs px-2 py-1 bg-anushtan-parchment/80 hover:bg-anushtan-terracotta/10 border border-anushtan-border hover:border-anushtan-terracotta text-anushtan-charcoal/70 hover:text-anushtan-terracotta rounded-full transition-colors"
+                                    >
+                                        {suggestion}
+                                    </button>
+                                ))}
+                            </div>
                             <textarea
                                 value={formData.counselorComments}
                                 onChange={(e) => setFormData({ ...formData, counselorComments: e.target.value })}
                                 rows={3}
-                                placeholder="Type a new note here..."
+                                placeholder="Type a new note or pick a suggestion above..."
                                 className="w-full px-3 py-2 border border-anushtan-border rounded-lg focus:outline-none focus:border-anushtan-terracotta resize-none"
                             />
                         </div>
