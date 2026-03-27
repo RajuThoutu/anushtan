@@ -239,7 +239,7 @@ importers:
   packages/database:
     dependencies:
       '@prisma/client':
-        specifier: ^5.17.0
+        specifier: ^5.22.0
         version: 5.22.0(prisma@5.22.0)
       '@repo/env-config':
         specifier: workspace:*
@@ -255,7 +255,7 @@ importers:
         specifier: ^20.10.6
         version: 20.19.32
       prisma:
-        specifier: ^5.17.0
+        specifier: ^5.22.0
         version: 5.22.0
       typescript:
         specifier: ^5.3.3

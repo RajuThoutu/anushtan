@@ -622,7 +622,7 @@ export async function updateCounselorActions(
 
     // Auto-calculate case status
     let newCaseStatus: CaseStatus = current.caseStatus;
-    if (data.status === 'Converted' || data.status === 'Casual Inquiry') {
+    if (data.status === 'Converted' || data.status === 'Casual Inquiry' || data.status === 'Dropped') {
         newCaseStatus = 'ResolvedCompleted';
     } else if (data.status) {
         newCaseStatus = 'Active';

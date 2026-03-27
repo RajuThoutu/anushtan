@@ -11,14 +11,14 @@
         "postinstall": "prisma generate"
     },
     "dependencies": {
+        "@prisma/client": "^5.22.0",
         "@repo/env-config": "workspace:*",
-        "googleapis": "^140.0.0",
         "google-auth-library": "^9.0.0",
-        "@prisma/client": "^5.17.0"
+        "googleapis": "^140.0.0"
     },
     "devDependencies": {
-        "typescript": "^5.3.3",
         "@types/node": "^20.10.6",
-        "prisma": "^5.17.0"
+        "prisma": "^5.22.0",
+        "typescript": "^5.3.3"
     }
 }

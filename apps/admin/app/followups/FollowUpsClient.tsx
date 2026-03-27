@@ -35,9 +35,19 @@ function toISTDate(d: Date): string {
 const STATUS_STYLE: Record<string, string> = {
     'New': 'bg-blue-100 text-blue-700',
     'Follow-up': 'bg-purple-100 text-purple-700',
+    'FollowUp': 'bg-purple-100 text-purple-700',
     'Converted': 'bg-emerald-100 text-emerald-700',
     'Casual Inquiry': 'bg-gray-100 text-gray-600',
+    'CasualInquiry': 'bg-gray-100 text-gray-600',
+    'Dropped': 'bg-red-100 text-red-600',
 };
+
+/** Map Prisma enum keys to UI display values used in the dropdown */
+function toUIStatus(status: string): string {
+    if (status === 'FollowUp') return 'Follow-up';
+    if (status === 'CasualInquiry') return 'Casual Inquiry';
+    return status;
+}
 
 export function FollowUpsClient() {
     const router = useRouter();
@@ -78,7 +88,7 @@ export function FollowUpsClient() {
     const openModal = (inquiry: Inquiry, e: React.MouseEvent) => {
         e.stopPropagation();
         setSelectedInquiry(inquiry);
-        setModalStatus(inquiry.status);
+        setModalStatus(toUIStatus(inquiry.status));
         setModalDate(inquiry.followUpDate ? toISTDate(new Date(inquiry.followUpDate)) : todayIST());
         setModalComment('');
         setIsModalOpen(true);
@@ -175,8 +185,8 @@ export function FollowUpsClient() {
             (i.phone || '').includes(searchTerm) ||
             (i.parentName || '').toLowerCase().includes(q);
 
-        // Exclude closed statuses — converted / casual inquiries are done
-        const isOpen = i.status !== 'Converted' && i.status !== 'CasualInquiry';
+        // Exclude closed statuses — converted / casual inquiries / dropped are done
+        const isOpen = i.status !== 'Converted' && i.status !== 'CasualInquiry' && i.status !== 'Dropped';
 
         return matchesDate && matchesSearch && isOpen;
     });

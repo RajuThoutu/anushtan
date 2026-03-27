@@ -21,6 +21,7 @@ enum InquiryStatus {
   Converted
   Closed        // legacy — kept for existing DB rows; UI does not surface this
   CasualInquiry @map("Casual Inquiry")
+  Dropped
 }
 
 enum CaseStatus {
