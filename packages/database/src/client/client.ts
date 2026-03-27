@@ -242,7 +242,6 @@ export async function getAllInquiries() {
         include: {
             activityLog: {
                 orderBy: { createdAt: 'desc' },
-                take: 1,
                 select: {
                     counselorName: true,
                     action: true,
@@ -275,7 +274,6 @@ export async function getInquiriesByDateRange(dateFrom: Date, dateTo: Date) {
         include: {
             activityLog: {
                 orderBy: { createdAt: 'desc' },
-                take: 1,
                 select: {
                     counselorName: true,
                     action: true,
@@ -305,7 +303,6 @@ export async function searchInquiries(query: string) {
         include: {
             activityLog: {
                 orderBy: { createdAt: 'desc' },
-                take: 1,
                 select: {
                     counselorName: true,
                     action: true,

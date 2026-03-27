@@ -39,67 +39,67 @@ export function DirectorKpiCards({
     return (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Period Inquiries */}
-            <div className="bg-white rounded-xl border border-admin-border shadow-sm p-5">
-                <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-semibold text-admin-text-secondary uppercase tracking-wide">{periodLabel}</span>
-                    <div className="p-2 bg-blue-50 rounded-lg">
-                        <Users size={15} className="text-blue-600" />
+            <div className="bg-white rounded-xl border border-admin-border shadow-sm p-4">
+                <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] sm:text-xs font-semibold text-admin-text-secondary uppercase tracking-wide">{periodLabel}</span>
+                    <div className="p-1.5 bg-blue-50 rounded-lg">
+                        <Users size={14} className="text-blue-600" />
                     </div>
                 </div>
-                <p className="text-3xl font-bold text-admin-charcoal">{thisMonthTotal}</p>
-                <p className="text-sm text-admin-text-secondary mt-0.5 mb-2">New Inquiries</p>
+                <p className="text-2xl sm:text-3xl font-bold text-admin-charcoal">{thisMonthTotal}</p>
+                <p className="text-xs sm:text-sm text-admin-text-secondary mt-0.5 mb-2">New Inquiries</p>
                 <TrendBadge current={thisMonthTotal} previous={lastMonthTotal} />
             </div>
 
             {/* Period Conversions */}
-            <div className="bg-white rounded-xl border border-admin-border shadow-sm p-5">
-                <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-semibold text-admin-text-secondary uppercase tracking-wide">{periodLabel}</span>
-                    <div className="p-2 bg-emerald-50 rounded-lg">
-                        <CheckCircle2 size={15} className="text-emerald-600" />
+            <div className="bg-white rounded-xl border border-admin-border shadow-sm p-4">
+                <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] sm:text-xs font-semibold text-admin-text-secondary uppercase tracking-wide">{periodLabel}</span>
+                    <div className="p-1.5 bg-emerald-50 rounded-lg">
+                        <CheckCircle2 size={14} className="text-emerald-600" />
                     </div>
                 </div>
-                <p className="text-3xl font-bold text-admin-charcoal">
+                <p className="text-2xl sm:text-3xl font-bold text-admin-charcoal">
                     {thisMonthConverted}
-                    <span className="text-base font-semibold text-emerald-600 ml-1.5">({convRate}%)</span>
+                    <span className="text-sm sm:text-base font-semibold text-emerald-600 ml-1.5">({convRate}%)</span>
                 </p>
-                <p className="text-sm text-admin-text-secondary mt-0.5 mb-2">Conversions</p>
+                <p className="text-xs sm:text-sm text-admin-text-secondary mt-0.5 mb-2">Conversions</p>
                 <TrendBadge current={parseFloat(convRate)} previous={prevConvRate} />
             </div>
 
             {/* Overdue Follow-ups */}
-            <div className={`rounded-xl border shadow-sm p-5 transition-colors ${overdueFollowUps > 0 ? 'bg-red-50 border-red-200' : 'bg-white border-admin-border'}`}>
-                <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-semibold text-admin-text-secondary uppercase tracking-wide">Needs Action</span>
-                    <div className={`p-2 rounded-lg ${overdueFollowUps > 0 ? 'bg-red-100' : 'bg-gray-50'}`}>
-                        <AlertTriangle size={15} className={overdueFollowUps > 0 ? 'text-red-600' : 'text-gray-400'} />
+            <div className={`rounded-xl border shadow-sm p-4 transition-colors ${overdueFollowUps > 0 ? 'bg-red-50 border-red-200' : 'bg-white border-admin-border'}`}>
+                <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] sm:text-xs font-semibold text-admin-text-secondary uppercase tracking-wide">Needs Action</span>
+                    <div className={`p-1.5 rounded-lg ${overdueFollowUps > 0 ? 'bg-red-100' : 'bg-gray-50'}`}>
+                        <AlertTriangle size={14} className={overdueFollowUps > 0 ? 'text-red-600' : 'text-gray-400'} />
                     </div>
                 </div>
-                <p className={`text-3xl font-bold ${overdueFollowUps > 0 ? 'text-red-700' : 'text-admin-charcoal'}`}>
+                <p className={`text-2xl sm:text-3xl font-bold ${overdueFollowUps > 0 ? 'text-red-700' : 'text-admin-charcoal'}`}>
                     {overdueFollowUps}
                 </p>
-                <p className="text-sm text-admin-text-secondary mt-0.5 mb-2">Overdue Follow-ups</p>
+                <p className="text-xs sm:text-sm text-admin-text-secondary mt-0.5 mb-2">Overdue Follow-ups</p>
                 {overdueFollowUps > 0
-                    ? <span className="text-xs text-red-600 font-semibold">⚠ Immediate attention needed</span>
-                    : <span className="text-xs text-emerald-600 font-medium">All follow-ups on track</span>
+                    ? <span className="text-[10px] sm:text-xs text-red-600 font-semibold">⚠ Immediate attention needed</span>
+                    : <span className="text-[10px] sm:text-xs text-emerald-600 font-medium">All follow-ups on track</span>
                 }
             </div>
 
             {/* Unassigned Inquiries */}
-            <div className={`rounded-xl border shadow-sm p-5 transition-colors ${unassigned > 0 ? 'bg-amber-50 border-amber-200' : 'bg-white border-admin-border'}`}>
-                <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-semibold text-admin-text-secondary uppercase tracking-wide">Unassigned</span>
-                    <div className={`p-2 rounded-lg ${unassigned > 0 ? 'bg-amber-100' : 'bg-gray-50'}`}>
-                        <UserX size={15} className={unassigned > 0 ? 'text-amber-600' : 'text-gray-400'} />
+            <div className={`rounded-xl border shadow-sm p-4 transition-colors ${unassigned > 0 ? 'bg-amber-50 border-amber-200' : 'bg-white border-admin-border'}`}>
+                <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] sm:text-xs font-semibold text-admin-text-secondary uppercase tracking-wide">Unassigned</span>
+                    <div className={`p-1.5 rounded-lg ${unassigned > 0 ? 'bg-amber-100' : 'bg-gray-50'}`}>
+                        <UserX size={14} className={unassigned > 0 ? 'text-amber-600' : 'text-gray-400'} />
                     </div>
                 </div>
-                <p className={`text-3xl font-bold ${unassigned > 0 ? 'text-amber-700' : 'text-admin-charcoal'}`}>
+                <p className={`text-2xl sm:text-3xl font-bold ${unassigned > 0 ? 'text-amber-700' : 'text-admin-charcoal'}`}>
                     {unassigned}
                 </p>
-                <p className="text-sm text-admin-text-secondary mt-0.5 mb-2">Need a Counselor</p>
+                <p className="text-xs sm:text-sm text-admin-text-secondary mt-0.5 mb-2">Need a Counselor</p>
                 {unassigned > 0
-                    ? <span className="text-xs text-amber-600 font-semibold">Assign to a counselor</span>
-                    : <span className="text-xs text-emerald-600 font-medium">All inquiries assigned</span>
+                    ? <span className="text-[10px] sm:text-xs text-amber-600 font-semibold">Assign to a counselor</span>
+                    : <span className="text-[10px] sm:text-xs text-emerald-600 font-medium">All inquiries assigned</span>
                 }
             </div>
         </div>

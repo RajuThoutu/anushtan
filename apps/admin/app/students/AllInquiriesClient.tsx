@@ -295,11 +295,13 @@ export default function AllInquiriesClient() {
     const canBulkAction = ['super_admin', 'admin', 'hr'].includes(session?.user?.role ?? '');
 
     const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const next = new Set(selectedInquiries);
         if (e.target.checked) {
-            setSelectedInquiries(new Set(paginatedInquiries.map(inq => inq.inquiryId || inq.id)));
+            paginatedInquiries.forEach(inq => next.add(inq.inquiryId || inq.id));
         } else {
-            setSelectedInquiries(new Set());
+            paginatedInquiries.forEach(inq => next.delete(inq.inquiryId || inq.id));
         }
+        setSelectedInquiries(next);
     };
 
     const handleSelectOne = (id: string, checked: boolean) => {
@@ -388,29 +390,47 @@ export default function AllInquiriesClient() {
 
             {/* Quick View Stats — hidden for counselors (search mode shows only results) */}
             {!isCounselor && (
-                <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 md:mx-0 md:px-0 md:grid md:grid-cols-5 md:gap-4 scrollbar-hide">
-                    <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
-                        <div className="text-xs text-gray-500 font-medium">Total</div>
+                <div className="hidden md:grid md:grid-cols-5 gap-3">
+                    <div 
+                        className="bg-white p-3 rounded-xl border border-admin-border shadow-sm flex flex-col justify-center cursor-pointer hover:bg-gray-50 transition-colors"
+                        onClick={() => { setStatusFilter('All'); setSourceFilter('All'); setDateStart(''); setDateEnd(''); }}
+                    >
+                        <div className="text-xs text-gray-500 font-medium font-semibold">Total records</div>
                         <div className="text-2xl font-bold text-admin-text mt-1">{stats.total}</div>
                     </div>
-                    <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
-                        <div className="text-xs text-gray-500 font-medium">Today</div>
+                    <div 
+                        className="bg-white p-3 rounded-xl border border-admin-border shadow-sm flex flex-col justify-center cursor-pointer hover:bg-gray-50 transition-colors"
+                        onClick={() => {
+                            const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                            setDateStart(dateStart === today ? '' : today);
+                            setDateEnd(dateEnd === today ? '' : today);
+                            setStatusFilter('All');
+                            setSourceFilter('All');
+                        }}
+                    >
+                        <div className="text-xs text-gray-500 font-medium font-semibold">Added Today</div>
                         <div className="text-2xl font-bold text-admin-emerald mt-1">+{stats.today}</div>
                     </div>
-                    <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
-                        <div className="text-xs text-gray-500 font-medium">Open / Active</div>
+                    <div 
+                        className="bg-white p-3 rounded-xl border border-admin-border shadow-sm flex flex-col justify-center cursor-pointer hover:bg-yellow-50 transition-colors"
+                        onClick={() => setStatusFilter(statusFilter === 'Follow-up' ? 'All' : 'Follow-up')}
+                    >
+                        <div className="text-xs text-yellow-600 font-medium font-semibold">Follow-up / Open</div>
                         <div className="text-2xl font-bold text-yellow-600 mt-1">{stats.open}</div>
                     </div>
-                    <div className="bg-white p-4 rounded-xl border border-admin-border shadow-sm shrink-0 min-w-[130px] md:min-w-0">
-                        <div className="text-xs text-gray-500 font-medium">Converted</div>
+                    <div 
+                        className="bg-white p-3 rounded-xl border border-admin-border shadow-sm flex flex-col justify-center cursor-pointer hover:bg-blue-50 transition-colors"
+                        onClick={() => setStatusFilter(statusFilter === 'Converted' ? 'All' : 'Converted')}
+                    >
+                        <div className="text-xs text-blue-600 font-medium font-semibold">Converted</div>
                         <div className="text-2xl font-bold text-admin-blue mt-1">{stats.converted}</div>
                     </div>
                     <div
-                        className="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm cursor-pointer hover:bg-blue-100 transition-colors shrink-0 min-w-[130px] md:min-w-0"
+                        className="bg-blue-50 p-3 rounded-xl border border-blue-200 shadow-sm cursor-pointer hover:bg-blue-100 transition-colors flex flex-col justify-center col-span-2 sm:col-span-1"
                         onClick={() => setSourceFilter(sourceFilter === 'Website' ? 'All' : 'Website')}
                         title="Click to filter website inquiries"
                     >
-                        <div className="text-xs text-blue-600 font-medium">🌐 Website</div>
+                        <div className="text-xs text-blue-600 font-medium font-semibold">🌐 Website Direct</div>
                         <div className="text-2xl font-bold text-blue-700 mt-1">{stats.website}</div>
                     </div>
                 </div>
@@ -437,10 +457,11 @@ export default function AllInquiriesClient() {
                             className={`md:hidden flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-colors shrink-0 ${
                                 (statusFilter !== 'All' || sourceFilter !== 'All' || dateStart)
                                     ? 'bg-admin-emerald/10 border-admin-emerald text-admin-emerald'
-                                    : 'border-admin-border text-gray-500'
+                                    : 'border-admin-border text-gray-600 bg-gray-50'
                             }`}
                         >
                             <Filter size={14} />
+                            <span>Filters</span>
                             {(statusFilter !== 'All' || sourceFilter !== 'All' || dateStart) && (
                                 <span className="w-1.5 h-1.5 rounded-full bg-admin-emerald" />
                             )}
@@ -615,21 +636,21 @@ export default function AllInquiriesClient() {
 
             {/* Bulk Actions */}
             {canBulkAction && selectedInquiries.size > 0 && (
-                <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 flex items-center justify-between gap-4 flex-wrap">
+                <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 flex flex-col sm:flex-row items-center justify-between gap-4 flex-wrap">
                     <span className="text-amber-800 font-medium">
                         {selectedInquiries.size} {selectedInquiries.size === 1 ? 'inquiry' : 'inquiries'} selected
                     </span>
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 w-full sm:w-auto">
                         <button
                             onClick={() => setShowFollowUpModal(true)}
-                            className="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition-colors"
+                            className="flex-1 sm:flex-none px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition-colors"
                         >
                             Send to Follow-up
                         </button>
                         <button
                             onClick={handleBulkDelete}
                             disabled={isDeleting}
-                            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 transition-colors"
+                            className="flex-1 sm:flex-none px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 transition-colors"
                         >
                             {isDeleting ? 'Deleting...' : 'Delete'}
                         </button>
@@ -675,59 +696,71 @@ export default function AllInquiriesClient() {
             {/* Table */}
             <div className="bg-white rounded-xl border border-admin-border shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
-                    {/* Mobile Card View */}
-                    <div className="md:hidden space-y-4 p-4">
+                    {/* Mobile Card View (Ultra-Compact) */}
+                    <div className="md:hidden space-y-2 p-3 bg-gray-50">
+                        {canBulkAction && paginatedInquiries.length > 0 && (
+                            <div className="flex items-center gap-2 mb-2 px-1">
+                                <input
+                                    type="checkbox"
+                                    onChange={handleSelectAll}
+                                    checked={paginatedInquiries.length > 0 && paginatedInquiries.every(inq => selectedInquiries.has(inq.inquiryId || inq.id))}
+                                    className="rounded border-gray-300 w-4 h-4 text-admin-emerald focus:ring-admin-emerald"
+                                    id="mobile-select-all"
+                                />
+                                <label htmlFor="mobile-select-all" className="text-sm font-medium text-gray-700">
+                                    Select All on Page
+                                </label>
+                            </div>
+                        )}
                         {paginatedInquiries.length > 0 ? (
                             paginatedInquiries.map((inq) => (
-                                <div key={inq.id} className="bg-white p-4 rounded-xl border border-admin-border shadow-sm flex flex-col gap-3">
-                                    <div className="flex justify-between items-start">
-                                        <div>
+                                <div key={inq.id} className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm flex flex-col gap-2">
+                                    <div className="flex items-start justify-between gap-2">
+                                        <div className="flex items-start gap-2.5 max-w-[70%]">
                                             {canBulkAction && (
                                                 <input
                                                     type="checkbox"
                                                     checked={selectedInquiries.has(inq.inquiryId || inq.id)}
                                                     onChange={e => handleSelectOne(inq.inquiryId || inq.id, e.target.checked)}
-                                                    className="mr-3 rounded border-gray-300 text-admin-emerald focus:ring-admin-emerald"
+                                                    className="mt-1 shrink-0 rounded border-gray-300 w-4 h-4 text-admin-emerald focus:ring-admin-emerald"
                                                 />
                                             )}
-                                            <div className="inline-block font-semibold text-admin-text">{inq.studentName}</div>
-                                            <div className="text-xs text-gray-500 mt-0.5">{inq.currentClass}</div>
-                                            {inq.source && (
-                                                <span className={`inline-flex items-center mt-1 px-2 py-0.5 rounded-full text-[10px] font-medium border ${getSourceBadge(inq.source).className}`}>
-                                                    {getSourceBadge(inq.source).label}
-                                                </span>
-                                            )}
+                                            <div className="min-w-0 flex-1">
+                                                <div className="font-semibold text-sm text-gray-900 truncate flex items-center gap-1.5 flex-wrap">
+                                                    <span>{inq.studentName}</span>
+                                                    <span className="text-gray-400 font-normal text-xs">({inq.currentClass})</span>
+                                                    {inq.source && (
+                                                        <span className={`px-1.5 py-0.5 rounded text-[8px] uppercase tracking-wider font-semibold border ${getSourceBadge(inq.source).className}`}>
+                                                            {getSourceBadge(inq.source).label}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div className="text-xs text-gray-500 mt-1 flex items-center gap-2 truncate">
+                                                    <span>📞 {inq.phone}</span>
+                                                    {(inq.assignedTo || inq.counselorName) && (
+                                                        <span className="text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded text-[10px] shrink-0 border border-indigo-100">
+                                                            {inq.assignedTo || inq.counselorName}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(inq.status)}`}>
-                                            {inq.status}
-                                        </span>
-                                    </div>
-
-                                    {(inq.status === 'Open' || inq.status === 'Follow-up') && (inq.assignedTo || inq.counselorName) && (
-                                        <div className="flex items-center gap-1.5 text-xs text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-full px-2.5 py-0.5 w-fit mb-1">
-                                            <User size={12} className="text-indigo-500" />
-                                            <span className="font-medium">{inq.assignedTo || inq.counselorName}</span>
+                                        <div className="flex flex-col items-end gap-1.5 shrink-0">
+                                            <span className={`px-2 py-0.5 rounded whitespace-nowrap text-[10px] font-medium leading-none ${getStatusColor(inq.status)}`}>
+                                                {inq.status}
+                                            </span>
+                                            <button
+                                                onClick={() => router.push(`/inquiry/${inq.inquiryId || inq.id}`)}
+                                                className="text-[12px] text-admin-emerald font-semibold hover:underline bg-admin-emerald/10 px-2 py-0.5 rounded"
+                                            >
+                                                View →
+                                            </button>
                                         </div>
-                                    )}
-
-                                    <div className="text-sm text-gray-600 flex items-center gap-2">
-                                        <span>📞 {inq.phone}</span>
-                                    </div>
-                                    <div className="flex justify-between items-center mt-2 pt-2 border-t border-gray-100">
-                                        <div className="text-xs text-gray-400">
-                                            ID: {inq.inquiryId || inq.id} • {new Date(inq.inquiryDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })}
-                                        </div>
-                                        <button
-                                            onClick={() => router.push(`/inquiry/${inq.inquiryId || inq.id}`)}
-                                            className="text-admin-emerald text-sm font-medium hover:underline"
-                                        >
-                                            View Details →
-                                        </button>
                                     </div>
                                 </div>
                             ))
                         ) : (
-                            <div className="text-center py-8 text-gray-500">
+                            <div className="text-center py-6 text-sm text-gray-500 bg-white rounded-lg border border-gray-200">
                                 No inquiries found matching your filters.
                             </div>
                         )}
@@ -743,7 +776,7 @@ export default function AllInquiriesClient() {
                                             <input
                                                 type="checkbox"
                                                 onChange={handleSelectAll}
-                                                checked={paginatedInquiries.length > 0 && selectedInquiries.size === paginatedInquiries.length}
+                                                checked={paginatedInquiries.length > 0 && paginatedInquiries.every(inq => selectedInquiries.has(inq.inquiryId || inq.id))}
                                                 className="rounded border-gray-300 text-admin-emerald focus:ring-admin-emerald"
                                             />
                                         </th>

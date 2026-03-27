@@ -48,7 +48,7 @@ export function InquiryDetailView({ inquiry, userName }: InquiryDetailViewProps)
 
             if (data.success) {
                 alert('Counselor actions saved successfully!');
-                router.push('/dashboard');
+                router.back();
             } else {
                 alert('Failed to save. Please try again.');
             }
@@ -65,12 +65,13 @@ export function InquiryDetailView({ inquiry, userName }: InquiryDetailViewProps)
             <header className="bg-white border-b border-anushtan-border">
                 <div className="max-w-4xl mx-auto px-4 py-4">
                     <div className="flex items-center gap-4">
-                        <Link
-                            href="/dashboard"
+                        <button
+                            type="button"
+                            onClick={() => router.back()}
                             className="text-anushtan-charcoal hover:text-anushtan-terracotta"
                         >
-                            ← Back to Dashboard
-                        </Link>
+                            ← Go Back
+                        </button>
                         <div>
                             <h1 className="text-xl font-bold text-anushtan-charcoal">{inquiry.studentName}</h1>
                             <p className="text-sm text-anushtan-charcoal/60">{inquiry.currentClass}</p>

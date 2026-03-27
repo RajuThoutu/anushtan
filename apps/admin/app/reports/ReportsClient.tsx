@@ -34,6 +34,7 @@ interface Inquiry {
     studentName?: string;
     parentName?: string;
     phone?: string;
+    activityLog?: any[];
 }
 
 interface DirectorKpis {
@@ -123,6 +124,7 @@ export default function ReportsClient() {
     const [periodFilter, setPeriodFilter] = useState<PeriodFilter>('thisMonth');
     const [customStart, setCustomStart] = useState('');
     const [customEnd, setCustomEnd] = useState('');
+    const [activeTab, setActiveTab] = useState<'overview' | 'marketing' | 'counseling' | 'pipeline'>('overview');
 
     // ── Director Overview ──
     const [directorKpis, setDirectorKpis] = useState<DirectorKpis>({
@@ -134,6 +136,8 @@ export default function ReportsClient() {
     const [trendData30, setTrendData30] = useState<{ day: string; count: number; label: string }[]>([]);
     const [sourceConvData, setSourceConvData] = useState<{ source: string; total: number; converted: number; conversionRate: number }[]>([]);
     const [leaderboard, setLeaderboard] = useState<any[]>([]);
+    const [followUpLeaderboard, setFollowUpLeaderboard] = useState<any[]>([]);
+    const [followUpStats, setFollowUpStats] = useState<any[]>([]);
 
     // ── Existing sections ──
     const [funnelData, setFunnelData] = useState<{ stage: string; count: number }[]>([]);
@@ -251,7 +255,10 @@ export default function ReportsClient() {
 
         // ── Counselor Stats + Leaderboard ──────────────────────────────────
         const cMap = new Map<string, any>();
+        const fMap = new Map<string, any>();
+
         data.forEach(i => {
+            // -- Core Team (Assigned Counselor) --
             const name = i.counselorName || i.assignedTo || 'Unassigned';
             if (!cMap.has(name)) {
                 cMap.set(name, {
@@ -271,14 +278,48 @@ export default function ReportsClient() {
                 }
                 if (i.status === 'Follow-up') c.openFollowUp++;
             }
+
+            // -- Follow-up Team (Activity Logs) --
+            if (i.activityLog && Array.isArray(i.activityLog)) {
+                i.activityLog.forEach((log: any) => {
+                    if (log.action === 'note_added' || log.action === 'status_change' || log.action === 'follow_up_set') {
+                        const actor = log.counselorName || 'Unknown';
+                        if (!fMap.has(actor)) {
+                            fMap.set(actor, {
+                                name: actor, total: 0,
+                                statuses: { New: 0, FollowUp: 0, Converted: 0, CasualInquiry: 0 },
+                                overdue: 0, openFollowUp: 0,
+                            });
+                        }
+                        const f = fMap.get(actor)!;
+                        f.total++; // Each log is one "follow-up interaction"
+                        f.statuses.FollowUp++; // Map activity volume purely to FollowUp for chart rendering
+                    }
+                });
+            }
         });
+
         const statsArr = Array.from(cMap.values()).map(c => ({
             ...c,
             converted: c.statuses.Converted,
             conversionRate: c.total > 0 ? Number(((c.statuses.Converted / c.total) * 100).toFixed(1)) : 0,
         }));
-        setCounselorStats(statsArr);
-        setLeaderboard(statsArr);
+        
+        // Filter out known telecallers from core board
+        const isTelecaller = (n: string) => n.toLowerCase().includes('kavitha');
+        
+        setCounselorStats(statsArr.filter(c => !isTelecaller(c.name)));
+        setLeaderboard(statsArr.filter(c => !isTelecaller(c.name)));
+
+        const fStatsArr = Array.from(fMap.values()).map(f => ({
+            ...f,
+            converted: 0,
+            conversionRate: 0,
+        })).sort((a, b) => b.total - a.total);
+
+        // Explicitly filter for only the designated follow-up team
+        setFollowUpStats(fStatsArr.filter(f => isTelecaller(f.name)));
+        setFollowUpLeaderboard(fStatsArr.filter(f => isTelecaller(f.name)));
 
         // ── Grade Distribution ─────────────────────────────────────────────
         const gMap = new Map<string, { count: number; admissions: number }>();
@@ -334,10 +375,7 @@ export default function ReportsClient() {
 
     return (
         <div className="space-y-6">
-            {/* Export */}
-            <div className="flex justify-end">
-                <ExportButton data={inquiries} />
-            </div>
+
 
             {/* ── Period Filter Bar ──────────────────────────────────────────── */}
             <div className="flex flex-wrap items-center gap-2 p-4 bg-white rounded-xl border border-admin-border shadow-sm">
@@ -382,76 +420,103 @@ export default function ReportsClient() {
                 </span>
             </div>
 
-            {/* ═══════════════════════════════════════════════════════════════════
-                DIRECTOR OVERVIEW
-            ═══════════════════════════════════════════════════════════════════ */}
-            <section>
-                <div className="flex items-center gap-3 mb-5">
-                    <div className="h-5 w-1 rounded-full bg-gradient-to-b from-admin-purple to-admin-rose" />
-                    <h2 className="text-xl font-bold text-admin-charcoal">Director Overview</h2>
-                    <span className="text-xs font-medium text-admin-text-secondary bg-gray-100 px-2 py-0.5 rounded-full">
-                        {periodLabel}
-                    </span>
+            {/* ── Tabs Navigation ──────────────────────────────────────────────── */}
+            <div className="flex border-b border-admin-border mb-6">
+                {(['overview', 'marketing', 'counseling', 'pipeline'] as const).map(tab => (
+                    <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`px-6 py-3 text-sm font-semibold border-b-2 transition-colors capitalize -mb-[1px] ${
+                            activeTab === tab 
+                                ? 'border-admin-purple text-admin-purple' 
+                                : 'border-transparent text-admin-text-secondary hover:text-admin-text hover:border-gray-300'
+                        }`}
+                    >
+                        {tab}
+                    </button>
+                ))}
+            </div>
+
+            {/* ── Tab Content ─────────────────────────────────────────────────── */}
+            {activeTab === 'overview' && (
+                <div className="space-y-6 animate-in fade-in zoom-in-95 duration-200">
+                    <section>
+                        <div className="flex items-center gap-3 mb-5">
+                            <div className="h-5 w-1 rounded-full bg-gradient-to-b from-admin-purple to-admin-rose" />
+                            <h2 className="text-xl font-bold text-admin-charcoal">Director Overview</h2>
+                            <span className="text-xs font-medium text-admin-text-secondary bg-gray-100 px-2 py-0.5 rounded-full">
+                                {periodLabel}
+                            </span>
+                        </div>
+                        <DirectorKpiCards {...directorKpis} periodLabel={periodLabel} />
+                    </section>
+
+                    <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <FollowUpHealthChart {...followUpHealth} />
+                        <div className="lg:col-span-2">
+                            <TrendChart data={trendData30} />
+                        </div>
+                    </section>
                 </div>
-                <DirectorKpiCards {...directorKpis} periodLabel={periodLabel} />
-            </section>
+            )}
 
-            {/* ═══════════════════════════════════════════════════════════════════
-                FOLLOW-UP HEALTH  +  30-DAY TREND
-            ═══════════════════════════════════════════════════════════════════ */}
-            <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <FollowUpHealthChart {...followUpHealth} />
-                <div className="lg:col-span-2">
-                    <TrendChart data={trendData30} />
+            {activeTab === 'marketing' && (
+                <div className="space-y-6 animate-in fade-in zoom-in-95 duration-200">
+                    <section>
+                        <SectionHeading label="Marketing Insights" color="bg-blue-400" />
+                        <div className="grid grid-cols-1 gap-6 mb-6">
+                            <SourceConversionChart data={sourceConvData} />
+                        </div>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div className="bg-white p-6 rounded-xl border border-admin-border shadow-sm">
+                                <h3 className="text-lg font-semibold text-admin-text mb-5">Demand by Grade Level</h3>
+                                <GradeDistributionChart data={gradeData} />
+                            </div>
+                            <div className="bg-white p-6 rounded-xl border border-admin-border shadow-sm">
+                                <h3 className="text-lg font-semibold text-admin-text mb-5">Boarding Type Preference</h3>
+                                <BoardingTypeChart data={boardingData} />
+                            </div>
+                        </div>
+                    </section>
                 </div>
-            </section>
+            )}
 
-            {/* ═══════════════════════════════════════════════════════════════════
-                SOURCE EFFECTIVENESS  +  COUNSELOR LEADERBOARD
-            ═══════════════════════════════════════════════════════════════════ */}
-            <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <SourceConversionChart data={sourceConvData} />
-                <CounselorLeaderboard data={leaderboard} />
-            </section>
+            {activeTab === 'counseling' && (
+                <div className="space-y-6 animate-in fade-in zoom-in-95 duration-200">
+                    <section>
+                        <SectionHeading label="Counselor Performance (Core Team)" color="bg-emerald-400" />
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                            <CounselorLeaderboard data={leaderboard} />
+                        </div>
+                        <div className="grid grid-cols-1 gap-6 mb-10">
+                            <CounselorPerformanceChart data={counselorStats} />
+                        </div>
 
-            {/* ═══════════════════════════════════════════════════════════════════
-                MARKET INSIGHTS
-            ═══════════════════════════════════════════════════════════════════ */}
-            <section>
-                <SectionHeading label="Market Insights" color="bg-blue-400" />
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div className="bg-white p-6 rounded-xl border border-admin-border shadow-sm">
-                        <h3 className="text-lg font-semibold text-admin-text mb-5">Demand by Grade Level</h3>
-                        <GradeDistributionChart data={gradeData} />
-                    </div>
-                    <div className="bg-white p-6 rounded-xl border border-admin-border shadow-sm">
-                        <h3 className="text-lg font-semibold text-admin-text mb-5">Boarding Type Preference</h3>
-                        <BoardingTypeChart data={boardingData} />
-                    </div>
+                        <SectionHeading label="Follow-up Team Activity (Actions taken)" color="bg-purple-400" />
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                            <CounselorLeaderboard data={followUpLeaderboard} />
+                        </div>
+                        <div className="grid grid-cols-1 gap-6">
+                            <CounselorPerformanceChart data={followUpStats} />
+                        </div>
+                    </section>
                 </div>
-            </section>
+            )}
 
-            {/* ═══════════════════════════════════════════════════════════════════
-                PIPELINE & SCHOOL BREAKDOWN
-            ═══════════════════════════════════════════════════════════════════ */}
-            <section>
-                <SectionHeading label="Pipeline & Schools" color="bg-amber-400" />
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <SchoolDrilldownChart inquiries={inquiries} />
-                    <div className="bg-white p-6 rounded-xl border border-admin-border shadow-sm">
-                        <h3 className="text-lg font-semibold text-admin-text mb-5">Admission Pipeline</h3>
-                        <AdmissionFunnelChart data={funnelData} />
-                    </div>
+            {activeTab === 'pipeline' && (
+                <div className="space-y-6 animate-in fade-in zoom-in-95 duration-200">
+                    <section>
+                        <SectionHeading label="Pipeline & Schools" color="bg-amber-400" />
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <SchoolDrilldownChart inquiries={inquiries} />
+                            <div className="bg-white p-6 rounded-xl border border-admin-border shadow-sm">
+                                <h3 className="text-lg font-semibold text-admin-text mb-5">Admission Pipeline</h3>
+                                <AdmissionFunnelChart data={funnelData} />
+                            </div>
+                        </div>
+                    </section>
                 </div>
-            </section>
-
-            {/* ═══════════════════════════════════════════════════════════════════
-                COUNSELOR WORKLOAD
-            ═══════════════════════════════════════════════════════════════════ */}
-            <section>
-                <SectionHeading label="Counselor Workload" color="bg-emerald-400" />
-                <CounselorPerformanceChart data={counselorStats} />
-            </section>
+            )}
         </div>
     );
 }
