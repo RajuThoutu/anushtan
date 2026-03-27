@@ -255,17 +255,19 @@ export function InquiryDetailPanel({ inquiry, onClose, onSave }: InquiryDetailPa
 
 
                         {/* Follow-up Date */}
-                        <div>
-                            <label className="block text-sm font-medium text-anushtan-charcoal mb-1">
-                                Follow-up Date
-                            </label>
-                            <input
-                                type="date"
-                                value={formData.followUpDate}
-                                onChange={(e) => setFormData({ ...formData, followUpDate: e.target.value })}
-                                className="w-full px-3 py-2 border border-anushtan-border rounded-lg focus:outline-none focus:border-anushtan-terracotta"
-                            />
-                        </div>
+                        {formData.status !== 'Converted' && (
+                            <div>
+                                <label className="block text-sm font-medium text-anushtan-charcoal mb-1">
+                                    Follow-up Date
+                                </label>
+                                <input
+                                    type="date"
+                                    value={formData.followUpDate}
+                                    onChange={(e) => setFormData({ ...formData, followUpDate: e.target.value })}
+                                    className="w-full px-3 py-2 border border-anushtan-border rounded-lg focus:outline-none focus:border-anushtan-terracotta"
+                                />
+                            </div>
+                        )}
 
                         {/* Comment History (Read-Only) */}
                         {activityLog.filter(e => e.comments).length > 0 && (
