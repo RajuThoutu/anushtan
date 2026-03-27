@@ -19,7 +19,7 @@ export async function POST(request: Request) {
         }
 
         const body = await request.json();
-        const { id, status, followUpDate, counselorComments, unassign } = body;
+        const { id, status, followUpDate, counselorComments, unassign, source } = body;
         console.log('[API] Request body:', JSON.stringify(body));
 
         if (!id) {
@@ -35,6 +35,7 @@ export async function POST(request: Request) {
             followUpDate,
             counselorComments,
             unassign,
+            source,
             updatedBy: session.user.name, // Pass counselor name for audit trail
         });
 

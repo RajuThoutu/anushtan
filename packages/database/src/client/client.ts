@@ -603,6 +603,8 @@ export async function updateCounselorActions(
         counselorComments?: string;
         priority?: string;
         unassign?: boolean;
+        /** 'followup_tab' when logged from the Follow-ups page; undefined otherwise */
+        source?: string;
     }
 ) {
     console.log(`[DB] updateCounselorActions: ${idOrInquiryId}`, data);
@@ -661,7 +663,7 @@ export async function updateCounselorActions(
         data: {
             inquiryId: trueInquiryId,
             counselorName: actorName,
-            action: data.unassign ? 'unassigned' : (data.status ? 'status_change' : data.counselorComments ? 'note_added' : 'assigned'),
+            action: data.unassign ? 'unassigned' : data.source === 'followup_tab' ? 'followup_call' : (data.status ? 'status_change' : data.counselorComments ? 'note_added' : 'assigned'),
             oldValue: current.status,
             newValue: data.status ?? current.status,
             comments: data.counselorComments ?? null,
@@ -678,6 +680,72 @@ export async function updateCounselorActions(
     });
 
     return { success: true };
+}
+
+// ─── Follow-up Activity Report ────────────────────────────────────────────────
+
+/**
+ * Returns per-counselor follow-up call activity for the given date range.
+ * Only includes activity logged via the Follow-ups tab (action = 'followup_call').
+ */
+export async function getFollowUpActivityReport(dateFrom: Date, dateTo: Date) {
+    const logs = await prisma.counselorActivityLog.findMany({
+        where: {
+            action: 'followup_call',
+            createdAt: { gte: dateFrom, lte: dateTo },
+        },
+        include: {
+            inquiry: {
+                select: { followUpDate: true, studentName: true, inquiryId: true, status: true },
+            },
+        },
+        orderBy: { createdAt: 'asc' },
+    });
+
+    // Aggregate per counselor
+    const map: Record<string, {
+        counselorName: string;
+        totalCalls: number;
+        uniqueInquiries: Set<string>;
+        overdueHandled: number;
+        calls: {
+            inquiryId: string;
+            studentName: string;
+            loggedAt: Date;
+            comments: string | null;
+            wasOverdue: boolean;
+            newStatus: string | null;
+        }[];
+    }> = {};
+
+    for (const log of logs) {
+        const name = log.counselorName;
+        if (!map[name]) {
+            map[name] = { counselorName: name, totalCalls: 0, uniqueInquiries: new Set(), overdueHandled: 0, calls: [] };
+        }
+        const wasOverdue = !!(log.inquiry.followUpDate && log.inquiry.followUpDate < log.createdAt);
+        map[name].totalCalls++;
+        map[name].uniqueInquiries.add(log.inquiryId);
+        if (wasOverdue) map[name].overdueHandled++;
+        map[name].calls.push({
+            inquiryId: log.inquiryId,
+            studentName: log.inquiry.studentName,
+            loggedAt: log.createdAt,
+            comments: log.comments,
+            wasOverdue,
+            newStatus: log.newValue,
+        });
+    }
+
+    return Object.values(map)
+        .sort((a, b) => b.totalCalls - a.totalCalls)
+        .map(c => ({
+            counselorName: c.counselorName,
+            totalCalls: c.totalCalls,
+            uniqueInquiries: c.uniqueInquiries.size,
+            overdueHandled: c.overdueHandled,
+            calls: c.calls,
+        }));
 }
 
 // ─── Notifications ────────────────────────────────────────────────────────────

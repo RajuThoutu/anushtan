@@ -17,6 +17,7 @@ import {
     Power,
     MoreHorizontal,
     GraduationCap,
+    Phone,
 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { AddInquiryButton } from './AddInquiryButton';
@@ -50,6 +51,13 @@ const navItems: NavItem[] = [
         label: 'Reports',
         href: '/reports',
         icon: <BarChart3 size={20} />,
+        roles: ['super_admin', 'admin', 'hr'],
+        group: 'admin',
+    },
+    {
+        label: 'Follow-up Activity',
+        href: '/reports/followup-activity',
+        icon: <Phone size={20} />,
         roles: ['super_admin', 'admin', 'hr'],
         group: 'main',
     },
