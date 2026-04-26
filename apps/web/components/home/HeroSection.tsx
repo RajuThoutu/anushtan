@@ -98,7 +98,7 @@ export const HeroSection = () => {
                 </div>
 
                 {/* Animated headline — word by word */}
-                <h1 className="font-heading text-6xl md:text-7xl lg:text-9xl font-bold text-anushtan-charcoal mb-8 leading-none drop-shadow-sm">
+                <h1 className="font-heading text-5xl md:text-7xl lg:text-9xl font-bold text-anushtan-charcoal mb-8 leading-none drop-shadow-sm">
                     <span className="block">
                         {["Ancient", "Roots."].map((word, i) => (
                             <motion.span

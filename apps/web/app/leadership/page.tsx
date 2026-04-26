@@ -2,6 +2,12 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SectionHeader } from "@repo/ui";
 import Image from 'next/image';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Leadership | Anushtan Indic School',
+    description: 'The organizational framework and leadership guiding the Anushtan Indic School vision.',
+};
 
 // Placeholder data generator
 const generatePlaceholders = (count: number, role: string) =>
@@ -117,8 +123,28 @@ export default function LeadershipPage() {
                         </div>
                     </div>
                 </section>
-
                 <div className="container-custom py-16 space-y-20">
+
+                    {/* Organization Chart */}
+                    <section>
+                        <div className="mb-10 text-center md:text-left">
+                            <h2 className="font-heading text-3xl md:text-4xl font-bold text-anushtan-maroon mb-3 border-b-2 border-anushtan-gold inline-block pb-1">
+                                Organizational Framework
+                            </h2>
+                            <p className="text-anushtan-charcoal/70 mt-2 text-lg">The structural hierarchy operating under the Trishakti Framework.</p>
+                        </div>
+                        <div className="bg-white border border-anushtan-terracotta/10 rounded-2xl p-6 md:p-10 shadow-xl shadow-anushtan-terracotta/5 overflow-x-auto flex justify-center w-full">
+                            <div className="relative w-full max-w-[1200px] aspect-[4/3] md:aspect-[16/9] min-w-[800px]">
+                                <Image
+                                    src="/anushtan_org_chart_v3.svg"
+                                    alt="Anushtan Organization Chart"
+                                    fill
+                                    className="object-contain"
+                                    priority
+                                />
+                            </div>
+                        </div>
+                    </section>
 
                     {/* Section 1: Chief Advisors */}
                     <LeadershipSection

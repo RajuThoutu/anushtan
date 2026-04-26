@@ -220,7 +220,7 @@ export default function About() {
                     <div className="grid md:grid-cols-2 gap-6">
                         <LeadershipCompactCard
                             name="Sri. Raju Thoutu"
-                            title="Architect - CITI BANK, USA"
+                            title="Architect & AI Strategist"
                             bio="Renowned Professional with Deep Expertise in Infrastructure Planning and Sustainable Development."
                         />
                         <LeadershipCompactCard

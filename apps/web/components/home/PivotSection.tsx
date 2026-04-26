@@ -3,6 +3,27 @@
 import { motion } from "framer-motion";
 import { Microscope, Leaf, Landmark } from "lucide-react";
 
+const SPECIALIZATIONS = [
+    {
+        title: "Mathematical Sciences",
+        subtitle: "JEE / BITSAT Focus",
+        icon: Microscope,
+        colorClass: "red",
+    },
+    {
+        title: "Life Sciences",
+        subtitle: "NEET / Research Focus",
+        icon: Leaf,
+        colorClass: "green",
+    },
+    {
+        title: "Management & Governance",
+        subtitle: "IAS / Leadership Focus",
+        icon: Landmark,
+        colorClass: "yellow",
+    }
+];
+
 export const PivotSection = () => {
     return (
         <section className="py-24 bg-anushtan-parchment text-anushtan-charcoal relative overflow-hidden">
@@ -102,38 +123,20 @@ export const PivotSection = () => {
 
                                 {/* 3. Cards Row */}
                                 <div className="flex w-full justify-between items-start pt-8">
-                                    {/* Card 1 */}
-                                    <div className="w-[90vw] flex justify-center snap-center px-2">
-                                        <div className="bg-white border border-anushtan-gold/10 p-8 rounded-xl text-center shadow-sm w-full relative">
-                                            <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-100">
-                                                <Microscope className="w-8 h-8 text-red-600" />
+                                    {SPECIALIZATIONS.map((spec, idx) => {
+                                        const Icon = spec.icon;
+                                        return (
+                                            <div key={`mobile-${idx}`} className="w-[90vw] flex justify-center snap-center px-2">
+                                                <div className="bg-white border border-anushtan-gold/10 p-8 rounded-xl text-center shadow-sm w-full relative">
+                                                    <div className={`w-16 h-16 bg-${spec.colorClass}-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-${spec.colorClass}-100`}>
+                                                        <Icon className={`w-8 h-8 text-${spec.colorClass}-600`} />
+                                                    </div>
+                                                    <h3 className={`font-heading text-xl font-bold text-${spec.colorClass}-700 mb-1`}>{spec.title}</h3>
+                                                    <p className={`text-xs text-${spec.colorClass}-900/60 uppercase tracking-widest`}>{spec.subtitle}</p>
+                                                </div>
                                             </div>
-                                            <h3 className="font-heading text-xl font-bold text-red-700 mb-1">Mathematical Sciences</h3>
-                                            <p className="text-xs text-red-900/60 uppercase tracking-widest">JEE / BITSAT Focus</p>
-                                        </div>
-                                    </div>
-
-                                    {/* Card 2 */}
-                                    <div className="w-[90vw] flex justify-center snap-center px-2">
-                                        <div className="bg-white border border-anushtan-gold/10 p-8 rounded-xl text-center shadow-sm w-full relative">
-                                            <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-100">
-                                                <Leaf className="w-8 h-8 text-green-600" />
-                                            </div>
-                                            <h3 className="font-heading text-xl font-bold text-green-700 mb-1">Life Sciences</h3>
-                                            <p className="text-xs text-green-900/60 uppercase tracking-widest">NEET / Research Focus</p>
-                                        </div>
-                                    </div>
-
-                                    {/* Card 3 */}
-                                    <div className="w-[90vw] flex justify-center snap-center px-2">
-                                        <div className="bg-white border border-anushtan-gold/10 p-8 rounded-xl text-center shadow-sm w-full relative">
-                                            <div className="w-16 h-16 bg-yellow-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-100">
-                                                <Landmark className="w-8 h-8 text-yellow-600" />
-                                            </div>
-                                            <h3 className="font-heading text-xl font-bold text-yellow-700 mb-1">Management & Governance</h3>
-                                            <p className="text-xs text-yellow-900/60 uppercase tracking-widest">IAS / Leadership Focus</p>
-                                        </div>
-                                    </div>
+                                        );
+                                    })}
                                 </div>
 
                                 {/* Swipe Indicator */}
@@ -174,47 +177,24 @@ export const PivotSection = () => {
                             {/* Decorative Branch Lines (Desktop) */}
                             <div className="hidden md:block absolute top-[-48px] left-1/2 -translate-x-1/2 w-full h-24 border-t-2 border-l-2 border-r-2 border-anushtan-terracotta rounded-t-[4rem] pointer-events-none" style={{ width: '66%' }} />
 
-                            {/* Branch 1: Mathematical Sciences */}
-                            <motion.div
-                                initial={{ y: 50, opacity: 0 }}
-                                whileInView={{ y: 0, opacity: 1 }}
-                                transition={{ delay: 0.2 }}
-                                className="bg-red-50/50 border border-red-200 p-8 rounded-xl text-center hover:bg-red-100/50 transition-colors group shadow-lg shadow-red-900/5 hover:shadow-xl"
-                            >
-                                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl group-hover:bg-red-200 transition-colors">
-                                    <Microscope className="w-8 h-8 text-red-600" />
-                                </div>
-                                <h3 className="font-heading text-2xl font-bold text-red-700 mb-2">Mathematical Sciences</h3>
-                                <p className="text-sm text-red-900/60 mb-4">JEE / BITSAT Focus</p>
-                            </motion.div>
-
-                            {/* Branch 2: Life Sciences */}
-                            <motion.div
-                                initial={{ y: 50, opacity: 0 }}
-                                whileInView={{ y: 0, opacity: 1 }}
-                                transition={{ delay: 0.4 }}
-                                className="bg-green-50/50 border border-green-200 p-8 rounded-xl text-center hover:bg-green-100/50 transition-colors mt-0 md:mt-12 group shadow-lg shadow-green-900/5 hover:shadow-xl"
-                            >
-                                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl group-hover:bg-green-200 transition-colors">
-                                    <Leaf className="w-8 h-8 text-green-600" />
-                                </div>
-                                <h3 className="font-heading text-2xl font-bold text-green-700 mb-2">Life Sciences</h3>
-                                <p className="text-sm text-green-900/60 mb-4">NEET / Research Focus</p>
-                            </motion.div>
-
-                            {/* Branch 3: Management */}
-                            <motion.div
-                                initial={{ y: 50, opacity: 0 }}
-                                whileInView={{ y: 0, opacity: 1 }}
-                                transition={{ delay: 0.6 }}
-                                className="bg-yellow-50/50 border border-yellow-200 p-8 rounded-xl text-center hover:bg-yellow-100/50 transition-colors group shadow-lg shadow-yellow-900/5 hover:shadow-xl"
-                            >
-                                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl group-hover:bg-yellow-200 transition-colors">
-                                    <Landmark className="w-8 h-8 text-yellow-600" />
-                                </div>
-                                <h3 className="font-heading text-2xl font-bold text-yellow-700 mb-2">Management & Governance</h3>
-                                <p className="text-sm text-yellow-900/60 mb-4">IAS / Leadership Focus</p>
-                            </motion.div>
+                            {SPECIALIZATIONS.map((spec, idx) => {
+                                const Icon = spec.icon;
+                                return (
+                                    <motion.div
+                                        key={`desktop-${idx}`}
+                                        initial={{ y: 50, opacity: 0 }}
+                                        whileInView={{ y: 0, opacity: 1 }}
+                                        transition={{ delay: 0.2 + idx * 0.2 }}
+                                        className={`bg-${spec.colorClass}-50/50 border border-${spec.colorClass}-200 p-8 rounded-xl text-center hover:bg-${spec.colorClass}-100/50 transition-colors ${idx === 1 ? 'mt-0 md:mt-12' : ''} group shadow-lg shadow-${spec.colorClass}-900/5 hover:shadow-xl`}
+                                    >
+                                        <div className={`w-16 h-16 bg-${spec.colorClass}-100 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl group-hover:bg-${spec.colorClass}-200 transition-colors`}>
+                                            <Icon className={`w-8 h-8 text-${spec.colorClass}-600`} />
+                                        </div>
+                                        <h3 className={`font-heading text-2xl font-bold text-${spec.colorClass}-700 mb-2`}>{spec.title}</h3>
+                                        <p className={`text-sm text-${spec.colorClass}-900/60 mb-4`}>{spec.subtitle}</p>
+                                    </motion.div>
+                                );
+                            })}
                         </div>
                     </div>
 

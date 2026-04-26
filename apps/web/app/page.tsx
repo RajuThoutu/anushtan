@@ -14,7 +14,7 @@ import { InfrastructureSection } from "@/components/home/InfrastructureSection";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Anushtan In: Ancient Roots, Global Minds',
+  title: 'Anushtan Indic School | Ancient Roots, Global Minds',
   description: 'Anushtan Indic School: A vibrant ecosystem cultivating specialized excellence in Soul, Mind, and Future technologies.',
 };
 
@@ -45,7 +45,7 @@ export default function Home() {
       <section className="py-24 bg-anushtan-terracotta text-white text-center relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[url('/pattern.png')] mix-blend-overlay" />
         <div className="container-custom relative z-10">
-          <h2 className="font-heading text-4xl md:text-5xl font-bold mb-6">The Awakening Begins June 2026</h2>
+          <h2 className="font-heading text-4xl md:text-5xl font-bold mb-6">Our Founding Cohort Begins This June!</h2>
           <p className="text-white/90 max-w-2xl mx-auto mb-10 text-xl font-light">
             Founding seats are limited. Join the cohort that will redefine Indian education.
           </p>
