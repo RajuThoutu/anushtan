@@ -133,7 +133,7 @@ export const users: User[] = [
         // Password: sunayana@2026
         password_hash: '$2b$10$QqxQ.9pwmJU8.y6mZ2NmGuRY/QEu6jgGegDRkYVjE.LSR/lgOtCWq',
         name: 'Sunayana',
-        role: 'admin',
+        role: 'hr',
         is_active: true
     }
 ]
