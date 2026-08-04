@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { SectionHeader } from "@repo/ui";
 import Image from 'next/image';
 import type { Metadata } from 'next';
 
@@ -9,95 +8,45 @@ export const metadata: Metadata = {
     description: 'The organizational framework and leadership guiding the Anushtan Indic School vision.',
 };
 
-// Placeholder data generator
-const generatePlaceholders = (count: number, role: string) =>
-    Array(count).fill(null).map((_, i) => ({
-        id: i,
-        name: "Name of the Person",
-        title: role,
-        bio: "A brief description about the person, their background, and their contribution to the philosophy of Anushtan Indic School.",
-        image: "/logo.jpg" // Using logo as placeholder
-    }));
-
+const principal = [{
+    id: 'or-sunayana',
+    name: "O.R. Sunayana",
+    title: "Principal, Anushtan Indic School",
+    bio: "Leading the day-to-day academic culture, care, and growth of every child at Anushtan.",
+    image: "/images/or-sunayana-principal.png"
+}];
 const chiefAdvisors = [
     {
         id: 'sbr-talks',
-        name: "SBR Talks",
-        title: "Strategic Academic Advisor",
-        bio: "Providing the foundational pedagogical framework for Anushtan. SBR Talks serves as the strategic compass for our 'Descriptive Logic' standard, ensuring that our academic protocols prioritize first-principles thinking over rote-learning factories. His guidance bridges the gap between ancient educational ideologies and modern competitive excellence.",
-        image: "/logo.jpg"
+        name: "Pratishtan Edu Research / SBR Talks",
+        title: "Chief Academic Advisor",
+        bio: "Providing strategic direction for a thoughtful, concept-led learning culture."
     },
     {
         id: 'bharath-teja',
-        name: "Bharath Teja",
-        title: "Founder & CEO, Nine Education | IIT Kharagpur Alumnus",
-        bio: "An IIT Kharagpur alumnus and visionary leader, Bharath Teja specializes in student-centric learning models and academic excellence. His leadership at Nine Education and his focus on high-energy, empathy-led teaching ensure Anushtan remains at the forefront of both traditional values and future-ready skills.",
-        image: "/logo.jpg"
-    },
-    {
-        id: 'jaswanth',
-        name: "Jaswanth",
-        title: "Director, Nine Education | IIT Kharagpur Alumnus",
-        bio: "An IIT Kharagpur graduate with 13+ years of expertise, Jaswanth blends academic rigor with emotional intelligence. As a Heartfulness Meditation Trainer, he guides Anushtan in creating a stress-free environment, ensuring students achieve peak performance while maintaining mental well-being and inner peace.",
-        image: "/logo.jpg"
-    },
-    {
-        id: 'srikanth',
-        name: "Srikanth",
-        title: "Director, Nine Education | IIT Alumnus",
-        bio: "A strategist and IIT alumnus, Srikanth specializes in analytical problem-solving and modern technology trends. He advocates for Speed Mathematics and Logical Interpretation, equipping Anushtan students with the IQ and technical mastery required for elite global opportunities in high-growth fields like HFT and advanced coding.",
-        image: "/logo.jpg"
-    },
-    {
-        id: 'mr-nimma-divi-reddy',
-        name: "Mr. Nimma Divi Reddy",
-        title: "Global IT Leader & Educationist | NIT Warangal Alumnus",
-        bio: "A distinguished alumnus of NIT Warangal (REC) with a B.Tech and M.Tech, Mr. Nimma Divi Reddy brings over 25 years of global leadership experience within Fortune 100 companies. Having served in high-level roles as Director, VP, and CEO, he combines world-class corporate strategy with a deep passion for education. Currently managing four premier schools in Trivandrum and serving as a partner at UrbanSky, Mr. Reddy provides Anushtan with the strategic vision to scale institutional excellence while integrating cutting-edge global IT perspectives into our educational framework.",
-        image: "/logo.jpg"
+        name: "Bharat Teja",
+        title: "Academic Advisor",
+        bio: "Guiding academic excellence and student-centred learning at Anushtan."
     }
 ];
 const directors = [
     {
         id: 'raju-thoutu',
-        name: "Raju T",
-        title: "Architect & AI Strategist",
-        bio: "An Architect by profession and an AI Strategist specializing in corporate AI adoption. Bringing high-level expertise from the United States financial sector, Raju bridges the gap between cutting-edge technology and human values. Deeply rooted in Bharatiya ethos, he steers Anushtan’s strategic technological roadmap, ensuring students are future-ready yet culturally grounded.",
-        image: "/logo.jpg"
-    },
-    {
-        id: 'srikanth-bollavaram',
-        name: "Srikanth B",
-        title: "Transformation Strategist",
-        bio: "A transformation strategist with an extensive background heading digital initiatives for global MNCs across the United States and Europe. Srikanth brings international-standard corporate governance and rigorous institutional supervision to Anushtan. He specializes in architecting scalable systems of excellence, ensuring the school’s growth is guided by elite global benchmarks.",
-        image: "/logo.jpg"
+        name: "Raju Thoutu",
+        title: "Director",
+        bio: "Guiding Anushtan’s strategic growth with a focus on future-ready learning and strong values."
     },
     {
         id: 'sreedhar-bollavaram',
         name: "Sreedhar B",
-        title: "Founder & Executive Director, Pratishtan Educational Services",
-        bio: "Founder and Executive Director of Pratishtan Educational Services Pvt. Ltd. He brings over 15 years of experience in the software industry — with a strong background in corporate leadership and a proven track record of building & scaling startups.",
-        image: "/logo.jpg"
+        title: "Director",
+        bio: "Guiding institutional direction and value-based, student-centred learning."
     },
     {
-        id: 'karthikeya-narendrula',
-        name: "Karthikeya Narendrula",
-        title: "Serial Entrepreneur & Permaculture Designer",
-        bio: "A serial entrepreneur, permaculture designer, and pedagogy researcher committed to building learner-centric, nature-aligned education systems that preserve curiosity, character and nurture life skills.",
-        image: "/logo.jpg"
-    },
-    {
-        id: 'ramu-tavutu',
-        name: "Ramu T",
-        title: "Global IT Leader & Product Specialist",
-        bio: "A seasoned leader with vast experience in global IT project management and product leadership. With extensive international exposure across South Africa and the United States, Ramu specializes in educational innovations derived from studying diverse global schooling systems. He leads the integration of world-class pedagogical practices into the Anushtan framework to ensure our students are globally competitive.",
-        image: "/logo.jpg"
-    },
-    {
-        id: 'naren-s',
-        name: "Naren S",
-        title: "Director. Physical Education",
-        bio: "Director of Physical Education, ensuring students achieve physical vitality and discipline through sports and fitness.",
-        image: "/logo.jpg"
+        id: 'kartik-narendrula',
+        name: "Kartik Narendrula",
+        title: "Director",
+        bio: "Guiding sustainable, nature-aligned learning and long-term school development."
     }
 ];
 
@@ -118,47 +67,32 @@ export default function LeadershipPage() {
                                 A Convergence of Vision and Governance
                             </h2>
                             <p className="text-lg md:text-xl font-light text-white/90 leading-relaxed tracking-wide">
-                                “Anushtan is not managed by a traditional board, but governed by a collective of Global System Architects, IITians, and Strategic Visionaries. Our advisors provide the 'Traceability Matrix' that ensures our 2026-ready curriculum remains anchored in Sanatana values while meeting the highest international standards of logical mastery.”
+                                A focused group of school, academic, and institutional leaders guides Anushtan with clarity and continuity.
                             </p>
                         </div>
                     </div>
                 </section>
                 <div className="container-custom py-16 space-y-20">
 
-                    {/* Organization Chart */}
-                    <section>
-                        <div className="mb-10 text-center md:text-left">
-                            <h2 className="font-heading text-3xl md:text-4xl font-bold text-anushtan-maroon mb-3 border-b-2 border-anushtan-gold inline-block pb-1">
-                                Organizational Framework
-                            </h2>
-                            <p className="text-anushtan-charcoal/70 mt-2 text-lg">The structural hierarchy operating under the Trishakti Framework.</p>
-                        </div>
-                        <div className="bg-white border border-anushtan-terracotta/10 rounded-2xl p-6 md:p-10 shadow-xl shadow-anushtan-terracotta/5 overflow-x-auto flex justify-center w-full">
-                            <div className="relative w-full max-w-[1200px] aspect-[4/3] md:aspect-[16/9] min-w-[800px]">
-                                <Image
-                                    src="/anushtan_org_chart_v3.svg"
-                                    alt="Anushtan Organization Chart"
-                                    fill
-                                    className="object-contain"
-                                    priority
-                                />
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* Section 1: Chief Advisors */}
                     <LeadershipSection
-                        title="Chief Advisors"
-                        items={chiefAdvisors}
-                        description="Our guiding lights providing strategic direction and wisdom."
+                        title="School Leadership"
+                        items={principal}
+                        description="The Principal leads Anushtan’s academic culture and day-to-day school life."
                         cols={1}
+                    />
+
+                    <LeadershipSection
+                        title="Chief Advisory"
+                        items={chiefAdvisors}
+                        description="Academic guidance and strategic direction for the school’s learning culture."
+                        cols={2}
                     />
 
                     {/* Section 2: Directors */}
                     <LeadershipSection
                         title="Directors"
                         items={directors}
-                        cols={1}
+                        cols={3}
                     />
 
 
@@ -171,7 +105,9 @@ export default function LeadershipPage() {
     );
 }
 
-function LeadershipSection({ title, items, description, cols = 3 }: { title: string, items: any[], description?: string, cols?: number }) {
+type Leader = { id: string; name: string; title: string; bio: string; image?: string };
+
+function LeadershipSection({ title, items, description, cols = 3 }: { title: string, items: Leader[], description?: string, cols?: number }) {
     return (
         <section>
             <div className="mb-10 text-center md:text-left">
@@ -196,18 +132,14 @@ function LeadershipSection({ title, items, description, cols = 3 }: { title: str
     );
 }
 
-function LeadershipCard({ person }: { person: any }) {
+function LeadershipCard({ person }: { person: Leader }) {
     return (
-        <div className="bg-white border border-anushtan-border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow p-8 flex flex-col md:flex-row items-center md:items-start md:text-left text-center gap-8">
-            <div className="w-48 h-48 md:w-56 md:h-56 relative flex-shrink-0 rounded-full overflow-hidden border-4 border-anushtan-ivory shadow-md">
-                <Image
-                    src={person.image}
-                    alt={person.name}
-                    fill
-                    className="object-cover"
-                />
-            </div>
-
+        <div className="bg-white border border-anushtan-border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow p-8 flex flex-col items-center gap-6 text-center">
+            {person.image && (
+                <div className="relative h-40 w-32 shrink-0 overflow-hidden rounded-t-full border-4 border-anushtan-ivory shadow-md">
+                    <Image src={person.image} alt={person.name} fill className="object-cover object-top" sizes="128px" />
+                </div>
+            )}
             <div className="flex-grow">
                 <h3 className="font-heading text-2xl md:text-3xl font-bold text-[#6B3126] mb-2">
                     {person.name}

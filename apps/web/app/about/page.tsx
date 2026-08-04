@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Footer } from "@/components/layout/Footer";
 import type { Metadata } from 'next';
 import { Triangle, Flower } from "lucide-react";
+import { TrayiSection } from "@/components/home/TrayiSection";
 
 export const metadata: Metadata = {
     title: 'About | Anushtan Indic School',
@@ -158,6 +159,8 @@ export default function About() {
                 </div>
             </section>
 
+            <TrayiSection />
+
             {/* 4. Leadership & Governance */}
             <section className="py-24 bg-white">
                 <div className="container-custom max-w-7xl mx-auto">
@@ -170,45 +173,36 @@ export default function About() {
                         </h2>
                         <div className="h-1 w-24 bg-anushtan-gold mx-auto mb-8"></div>
                         <p className="text-xl text-anushtan-charcoal/80 leading-relaxed max-w-4xl mx-auto">
-                            Governed by a collective of Global Experts, IITians, and Strategic Visionaries dedicated to building a world-class Indic educational institution.
+                            A focused group of school, academic, and institutional leaders guiding Anushtan with clarity and continuity.
                         </p>
                     </div>
 
-                    {/* Strategic Academic Partner — Featured card */}
+                    {/* Principal */}
                     <div className="mb-16">
-                        <h3 className="font-heading text-2xl font-bold text-anushtan-charcoal mb-6 text-center">Strategic Academic Partner</h3>
+                        <h3 className="font-heading text-2xl font-bold text-anushtan-charcoal mb-6 text-center">School Leadership</h3>
                         <FeaturedLeaderCard
-                            name="Pratishtan Edu Research / SBR Talks"
-                            title="Strategic Academic Advisor"
-                            bio="Providing the foundational pedagogical framework for Anushtan's 'Descriptive Logic' standard — a transformative approach to conceptual education that builds thinking minds, not rote memorizers."
+                            name="O.R. Sunayana"
+                            title="Principal, Anushtan Indic School"
+                            bio="Leading the day-to-day academic culture, care, and growth of every child at Anushtan."
+                            image="/images/or-sunayana-principal.png"
                         />
                     </div>
 
-                    {/* Advisory Board */}
+                    {/* Chief advisory */}
                     <div className="text-center mb-8">
-                        <h3 className="font-heading text-2xl font-bold text-anushtan-charcoal mb-4">Our Advisory Board & Guiding Force</h3>
+                        <h3 className="font-heading text-2xl font-bold text-anushtan-charcoal mb-4">Chief Advisory</h3>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-                        <LeadershipCompactCard
-                            name="Sri. Srikanth Bollavaram"
-                            title="Vice President - PEPSICO, USA"
-                            bio="Visionary Leader with Global Corporate Exposure and Strong Commitment to Nation-Building Through Education."
-                        />
+                    <div className="grid md:grid-cols-2 gap-6 mb-16">
                         <LeadershipCompactCard
                             name="Sri. Bharat Teja"
-                            title="B.TECH, M.TECH, IIT Kharagpur"
-                            bio="Education Visionary with Strong Academic and Research Orientation."
+                            title="Academic Advisor"
+                            bio="Guiding academic excellence and student-centred learning at Anushtan."
                         />
                         <LeadershipCompactCard
-                            name="Sri. Jaswanth"
-                            title="B.TECH, IIT Kharagpur"
-                            bio="Mentor in Technology-Driven Farming and Innovation Frameworks."
-                        />
-                        <LeadershipCompactCard
-                            name="Sri. Divi Reddy"
-                            title="B.TECH, M.TECH, NIT Warangal"
-                            bio="Former Director & CEO US Based Software Companies, Expert in Global Systems, Technology Leadership and Institutional Strategy."
+                            name="Pratishtan Edu Research / SBR Talks"
+                            title="Chief Academic Advisor"
+                            bio="Providing strategic direction for a thoughtful, concept-led learning culture."
                         />
                     </div>
 
@@ -217,7 +211,7 @@ export default function About() {
                         <h3 className="font-heading text-2xl font-bold text-anushtan-charcoal mb-4">Directors</h3>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <LeadershipCompactCard
                             name="Sri. Raju Thoutu"
                             title="Architect & AI Strategist"
@@ -233,16 +227,6 @@ export default function About() {
                             title="Research Scholar - Organic Farming"
                             bio="Advocate of Sustainability, Environmental Responsibility and Rural Development."
                         />
-                        <LeadershipCompactCard
-                            name="Sri. Goutham Reddy"
-                            title="B.Tech, IIT Mandi - AI Application Engineer"
-                            bio="Specializing in building pre-trained Real-world AI solutions."
-                        />
-                        <LeadershipCompactCard
-                            name="Ramu T"
-                            title="Global IT Leader & Product Specialist"
-                            bio="Integrating world-class pedagogical practices from diverse global schooling systems."
-                        />
                     </div>
                 </div>
             </section>
@@ -252,19 +236,26 @@ export default function About() {
     );
 }
 
-function FeaturedLeaderCard({ name, title, bio }: { name: string; title: string; bio: string }) {
+function FeaturedLeaderCard({ name, title, bio, image }: { name: string; title: string; bio: string; image?: string }) {
     return (
         <div className="relative overflow-hidden rounded-xl border-2 border-anushtan-gold/30 hover:border-anushtan-gold/60 transition-all p-8 md:p-10"
             style={{ background: "linear-gradient(135deg, rgba(197,160,89,0.08) 0%, rgba(107,49,38,0.05) 100%)" }}
         >
             {/* Decorative element */}
             <span className="absolute top-6 right-8 font-heading text-[80px] font-bold text-anushtan-terracotta/[0.06] leading-none select-none">✦</span>
-            <div className="relative z-10">
-                <div className="text-anushtan-gold/70 text-xs uppercase tracking-widest font-bold mb-3">Strategic Partner</div>
-                <h4 className="font-heading text-2xl md:text-3xl font-bold text-anushtan-terracotta mb-2">{name}</h4>
-                <div className="text-anushtan-gold text-sm font-medium mb-4">{title}</div>
-                <div className="w-12 h-[2px] bg-anushtan-gold/40 mb-4" />
-                <p className="text-anushtan-charcoal/80 leading-relaxed md:max-w-2xl">{bio}</p>
+            <div className="relative z-10 flex flex-col-reverse gap-8 md:flex-row md:items-center md:justify-between">
+                <div>
+                    <div className="text-anushtan-gold/70 text-xs uppercase tracking-widest font-bold mb-3">School Leadership</div>
+                    <h4 className="font-heading text-2xl md:text-3xl font-bold text-anushtan-terracotta mb-2">{name}</h4>
+                    <div className="text-anushtan-gold text-sm font-medium mb-4">{title}</div>
+                    <div className="w-12 h-[2px] bg-anushtan-gold/40 mb-4" />
+                    <p className="text-anushtan-charcoal/80 leading-relaxed md:max-w-2xl">{bio}</p>
+                </div>
+                {image && (
+                    <div className="relative h-44 w-36 shrink-0 self-center overflow-hidden rounded-t-full border-4 border-white shadow-lg md:h-52 md:w-44">
+                        <Image src={image} alt={name} fill className="object-cover object-top" sizes="176px" />
+                    </div>
+                )}
             </div>
         </div>
     );

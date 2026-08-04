@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import { Button } from '@repo/ui';
 import { submitInquiry } from '@/app/actions/inquiry';
 
 interface FormData {
     name: string;
+    parentName: string;
     email: string;
     phone: string;
     grade: string;
@@ -15,6 +15,7 @@ interface FormData {
 export function AdmissionsForm() {
     const [formData, setFormData] = useState<FormData>({
         name: '',
+        parentName: '',
         email: '',
         phone: '+91-',
         grade: '',
@@ -51,6 +52,7 @@ export function AdmissionsForm() {
             // Call the server action with mapped field names
             const result = await submitInquiry({
                 studentName: formData.name,
+                parentName: formData.parentName,
                 email: formData.email,
                 phone: formData.phone,
                 course: formData.grade,
@@ -62,6 +64,7 @@ export function AdmissionsForm() {
                 // Clear form on success
                 setFormData({
                     name: '',
+                    parentName: '',
                     email: '',
                     phone: '+91-',
                     grade: '',
@@ -107,7 +110,7 @@ export function AdmissionsForm() {
             {/* Name Field */}
             <div>
                 <label htmlFor="name" className="block text-sm font-medium text-anushtan-charcoal mb-2">
-                    Full Name <span className="text-red-500">*</span>
+                    Student&apos;s Full Name <span className="text-red-500">*</span>
                 </label>
                 <input
                     type="text"
@@ -118,6 +121,23 @@ export function AdmissionsForm() {
                     required
                     className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent transition-all bg-white text-anushtan-charcoal"
                     placeholder="Enter student's full name"
+                />
+            </div>
+
+            {/* Parent / Guardian Name Field */}
+            <div>
+                <label htmlFor="parentName" className="block text-sm font-medium text-anushtan-charcoal mb-2">
+                    Parent / Guardian Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                    type="text"
+                    id="parentName"
+                    name="parentName"
+                    value={formData.parentName}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-anushtan-border rounded-lg focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta focus:border-transparent transition-all bg-white text-anushtan-charcoal"
+                    placeholder="Enter parent or guardian's full name"
                 />
             </div>
 
@@ -199,7 +219,7 @@ export function AdmissionsForm() {
                     disabled={isSubmitting}
                     className="w-full px-8 py-4 bg-anushtan-terracotta text-white rounded-lg font-medium text-lg hover:bg-anushtan-terracotta/90 focus:outline-none focus:ring-2 focus:ring-anushtan-terracotta focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {isSubmitting ? 'Sending...' : 'Schedule a Visit'}
+                    {isSubmitting ? 'Sending...' : 'Request a Campus Visit'}
                 </button>
             </div>
 
@@ -207,7 +227,7 @@ export function AdmissionsForm() {
             {submitStatus === 'success' && (
                 <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-800">
                     <p className="font-medium">Inquiry sent successfully!</p>
-                    <p className="text-sm mt-1">We'll get back to you shortly to schedule your campus visit.</p>
+                    <p className="text-sm mt-1">We&apos;ll get back to you shortly to plan your campus visit.</p>
                 </div>
             )}
 

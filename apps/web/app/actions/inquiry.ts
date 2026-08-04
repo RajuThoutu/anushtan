@@ -5,6 +5,7 @@ import { sendQuestionnaire } from "@repo/utils/src/twilio";
 
 interface InquiryData {
     studentName: string;
+    parentName: string;
     email?: string;  // Made optional
     phone: string;
     course: string;
@@ -15,8 +16,7 @@ export async function submitInquiry(data: InquiryData): Promise<{ success: boole
     try {
         const result = await createInquiry({
             studentName: data.studentName,
-            // Form doesn't collect parent name, use placeholder
-            parentName: "Not Provided",
+            parentName: data.parentName,
             email: data.email || "",
             phone: data.phone,
             // Map 'course' (Grade) to 'currentClass'
@@ -28,8 +28,7 @@ export async function submitInquiry(data: InquiryData): Promise<{ success: boole
             status: "New"
         });
 
-        // Generate ID manually if capture failed? createInquiry returns { success: true, id: string }
-        const inquiryId = (result as any).id || "PENDING";
+        const inquiryId = result.id;
 
         // Trigger Twilio Workflow (Fire and forget)
         if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_FROM_NUMBER) {
@@ -51,7 +50,7 @@ export async function submitInquiry(data: InquiryData): Promise<{ success: boole
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         student_name: data.studentName,
-                        parent_name: "Not Provided",
+                        parent_name: data.parentName,
                         email: data.email || "",
                         phone: data.phone,
                         current_class: data.course,

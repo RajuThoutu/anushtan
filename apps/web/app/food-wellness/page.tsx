@@ -1,279 +1,198 @@
+import Image from "next/image";
+import Link from "next/link";
+import type { Metadata } from "next";
+import { Apple, ArrowRight, ChefHat, HeartPulse, Leaf, Sparkles, Sun } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { PageHeader } from "@/components/sections/PageHeader";
-import { SectionHeader } from "@repo/ui";
-import Image from "next/image";
-import { Droplets, Heart, Users, Utensils } from "lucide-react";
-import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Food & Wellness | Anushtan Indic School',
-    description: 'Holistic nutrition, student activities, physical wellness, and residential life at Anushtan.',
+    title: "Food & Wellness | Anushtan Indic School",
+    description: "Food, movement, nature, and everyday care at Anushtan Indic School.",
 };
+
+const everydayCare = [
+    {
+        title: "Seasonal food",
+        text: "Children meet familiar, seasonal foods as part of a living connection to place and climate.",
+        icon: Apple,
+        tone: "bg-[#f8ead6] text-[#a45d27]",
+    },
+    {
+        title: "Food as a life skill",
+        text: "Preparing food together helps children learn observation, measurement, patience, teamwork, and self-reliance.",
+        icon: ChefHat,
+        tone: "bg-[#eef1db] text-[#647042]",
+    },
+    {
+        title: "Knowledge from nature",
+        text: "Plants and familiar local ingredients open conversations about care, tradition, and everyday wellbeing.",
+        icon: Leaf,
+        tone: "bg-[#e4f0e8] text-[#397050]",
+    },
+    {
+        title: "Balance in the day",
+        text: "Movement, play, quiet attention, and a steady rhythm support a child&apos;s sense of ease and energy.",
+        icon: HeartPulse,
+        tone: "bg-[#e8eef7] text-[#4e6689]",
+    },
+];
+
+const reelMoments = [
+    ["Seasonal nourishment", "Thaati munjalu", "A small school moment that connects children with a seasonal fruit and the rhythms of the year."],
+    ["Cooking together", "Pesarattu making", "A hands-on food activity where making, sharing, and learning come together."],
+    ["Local knowledge", "Nallaram", "A reel exploring the uses of a familiar plant and the everyday wisdom held in nature."],
+];
 
 export default function FoodWellnessPage() {
     return (
-        <>
+        <div className="min-h-screen bg-[#fdfbf7]">
             <Navbar />
-            <PageHeader
-                title="Food & Wellness"
-                subtitle="Holistic nourishment, vibrant activities, and comprehensive well-being for every student."
-            />
 
-            {/* Sri Sarada Kitchen Partnership */}
-            <section className="py-16 bg-anushtan-parchment">
-                <div className="container-custom">
-                    <div className="grid md:grid-cols-2 gap-12 items-center">
-                        <div>
-                            <span className="text-anushtan-terracotta font-bold uppercase tracking-widest text-sm block mb-3">Our Catering Partner</span>
-                            <h2 className="font-heading text-4xl font-bold text-anushtan-charcoal mb-6">
-                                Sri Sarada Kitchen
-                            </h2>
-                            <div className="space-y-4 text-lg text-anushtan-charcoal/80 leading-relaxed">
-                                <p>
-                                    Our catering partner, Sri Sarada Kitchen, operates with modern, automated kitchen equipment that ensures the highest standards of hygiene and nutrient retention in food while maintaining consistency in taste across every meal.
-                                </p>
-                                <div className="grid grid-cols-3 gap-4 mt-6">
-                                    <div className="text-center p-4 bg-white rounded-lg border border-anushtan-border">
-                                        <div className="text-anushtan-terracotta font-bold text-2xl mb-1">100%</div>
-                                        <div className="text-sm text-anushtan-charcoal/70">Hygiene Standard</div>
-                                    </div>
-                                    <div className="text-center p-4 bg-white rounded-lg border border-anushtan-border">
-                                        <div className="text-anushtan-terracotta font-bold text-2xl mb-1">Fresh</div>
-                                        <div className="text-sm text-anushtan-charcoal/70">Daily Preparations</div>
-                                    </div>
-                                    <div className="text-center p-4 bg-white rounded-lg border border-anushtan-border">
-                                        <div className="text-anushtan-terracotta font-bold text-2xl mb-1">Modern</div>
-                                        <div className="text-sm text-anushtan-charcoal/70">Equipment</div>
-                                    </div>
+            <main>
+                <section className="overflow-hidden bg-[#304d3b] text-white">
+                    <div className="container-custom grid min-h-[620px] items-center gap-12 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-20">
+                        <div className="relative z-10 max-w-2xl">
+                            <span className="mb-6 inline-flex rounded-full border border-[#d9b66f]/45 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#f0d69f]">
+                                Food &amp; wellness
+                            </span>
+                            <p className="mb-5 text-sm font-semibold uppercase tracking-[0.2em] text-white/60">Everyday care at Anushtan</p>
+                            <h1 className="font-heading text-5xl font-bold leading-[0.98] md:text-7xl">
+                                Nourishment is part of <span className="text-[#f0d69f]">learning.</span>
+                            </h1>
+                            <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/80 md:text-xl">
+                                Food, movement, nature, and moments of quiet care help children arrive at school ready to participate, explore, and grow.
+                            </p>
+                            <div className="mt-10 flex flex-wrap gap-3 text-sm text-white/80">
+                                <span className="rounded-full border border-white/20 px-4 py-2">Seasonal</span>
+                                <span className="rounded-full border border-white/20 px-4 py-2">Hands-on</span>
+                                <span className="rounded-full border border-white/20 px-4 py-2">Rooted in care</span>
+                            </div>
+                        </div>
+
+                        <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
+                            <div className="absolute -inset-5 rounded-[2.5rem] border border-[#d9b66f]/35" />
+                            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] shadow-2xl">
+                                <Image
+                                    src="/kitchen-goshala.png"
+                                    alt="A warm, nature-connected setting representing Anushtan food and wellness"
+                                    fill
+                                    priority
+                                    className="object-cover"
+                                    sizes="(min-width: 1024px) 42vw, 90vw"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                                <div className="absolute inset-x-6 bottom-6 rounded-2xl border border-white/20 bg-black/35 p-5 backdrop-blur-sm">
+                                    <Sun className="mb-3 h-6 w-6 text-[#f0d69f]" />
+                                    <p className="font-heading text-xl font-bold">A child&apos;s wellbeing is built through small things, repeated with care.</p>
                                 </div>
                             </div>
                         </div>
-                        <div className="relative h-96 rounded-2xl overflow-hidden shadow-lg">
-                            <div className="absolute inset-0 bg-gradient-to-br from-anushtan-terracotta/20 to-transparent z-10" />
-                            <Utensils className="absolute inset-0 m-auto w-32 h-32 text-anushtan-terracotta/30" />
-                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* Indic Food Culture & Nutrition Philosophy */}
-            <section className="py-16 bg-white">
-                <div className="container-custom">
-                    <SectionHeader title="Indic Food Culture & Nutrition Philosophy" />
-                    <div className="max-w-4xl mx-auto space-y-8">
-                        <p className="text-lg text-anushtan-charcoal/80 leading-relaxed">
-                            We consciously introduce a wide range of Indic foods to help students experience the richness of native cereals, legumes, and spices. Our menu follows a balanced and familiar dietary structure for children.
+                <section className="border-b border-anushtan-border bg-white py-10">
+                    <div className="container-custom flex flex-col items-start justify-between gap-5 md:flex-row md:items-center">
+                        <p className="max-w-2xl text-lg leading-relaxed text-anushtan-charcoal/80">
+                            Recent school stories show food and wellness as lived experiences: preparing pesarattu, enjoying seasonal thaati munjalu, learning from plants, and moving with joy.
                         </p>
+                        <a
+                            href="https://www.instagram.com/anushtan_indicschool_siddipet/"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex shrink-0 items-center gap-2 font-semibold text-anushtan-terracotta transition-colors hover:text-anushtan-gold"
+                        >
+                            See school life on Instagram <ArrowRight className="h-4 w-4" />
+                        </a>
+                    </div>
+                </section>
 
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div className="bg-anushtan-parchment p-6 rounded-lg border border-anushtan-border">
-                                <h3 className="font-heading text-2xl font-bold text-anushtan-charcoal mb-4">Traditional Preparations</h3>
-                                <ul className="space-y-3 text-anushtan-charcoal/80">
-                                    <li className="flex items-start gap-2">
-                                        <div className="w-2 h-2 bg-anushtan-gold rounded-full mt-2"></div>
-                                        <span><strong>Ragi Java, Ragi Dosa, Ragi Idly</strong> – Ancient grain preparations</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <div className="w-2 h-2 bg-anushtan-gold rounded-full mt-2"></div>
-                                        <span><strong>A2 Desi Cow Milk</strong> – From our on-campus Goshala</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <div className="w-2 h-2 bg-anushtan-gold rounded-full mt-2"></div>
-                                        <span><strong>Indigenous Cuisines</strong> – Regularly included in menus</span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div className="bg-anushtan-parchment p-6 rounded-lg border border-anushtan-border">
-                                <h3 className="font-heading text-2xl font-bold text-anushtan-charcoal mb-4">Quality Standards</h3>
-                                <ul className="space-y-3 text-anushtan-charcoal/80">
-                                    <li className="flex items-start gap-2">
-                                        <div className="w-2 h-2 bg-anushtan-terracotta rounded-full mt-2"></div>
-                                        <span>Zero-sugar policy: Only jaggery and natural sweeteners</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <div className="w-2 h-2 bg-anushtan-terracotta rounded-full mt-2"></div>
-                                        <span>Junk food consciously avoided</span>
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <div className="w-2 h-2 bg-anushtan-terracotta rounded-full mt-2"></div>
-                                        <span>Healthy desserts and snacks offered occasionally</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div className="bg-gradient-to-r from-anushtan-gold/10 via-anushtan-terracotta/10 to-anushtan-gold/10 p-8 rounded-2xl border-2 border-anushtan-gold/30 text-center">
-                            <p className="text-anushtan-charcoal font-heading text-xl md:text-2xl font-semibold italic">
-                                "Our aim is to nurture in every child a natural appreciation for the Indic lifestyle and its time-tested wisdom."
+                <section className="py-24 md:py-32">
+                    <div className="container-custom">
+                        <div className="mb-14 max-w-3xl">
+                            <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-anushtan-gold">A whole-child rhythm</p>
+                            <h2 className="font-heading text-4xl font-bold leading-tight text-anushtan-charcoal md:text-6xl">Care that children can feel.</h2>
+                            <p className="mt-6 text-lg leading-relaxed text-anushtan-charcoal/75">
+                                Wellness is not one class or one menu. It is the everyday relationship between food, energy, attention, connection, and the natural world.
                             </p>
                         </div>
-                    </div>
-                </div>
-            </section>
 
-            {/* Child Wellness Team */}
-            <section className="py-16 bg-anushtan-parchment">
-                <div className="container-custom max-w-4xl mx-auto">
-                    <div className="text-center mb-8">
-                        <Heart className="w-16 h-16 text-anushtan-terracotta mx-auto mb-4" />
-                        <h2 className="font-heading text-3xl md:text-4xl font-bold text-anushtan-charcoal mb-4">
-                            Child Wellness Team
-                        </h2>
+                        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+                            {everydayCare.map((item) => {
+                                const Icon = item.icon;
+                                return (
+                                    <article key={item.title} className="group min-h-[275px] rounded-2xl border border-anushtan-border bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                                        <div className={`mb-8 flex h-14 w-14 items-center justify-center rounded-2xl ${item.tone}`}>
+                                            <Icon className="h-7 w-7" />
+                                        </div>
+                                        <h3 className="font-heading text-2xl font-bold text-anushtan-terracotta">{item.title}</h3>
+                                        <p className="mt-4 leading-relaxed text-anushtan-charcoal/80">{item.text}</p>
+                                    </article>
+                                );
+                            })}
+                        </div>
                     </div>
-                    <div className="text-lg text-anushtan-charcoal/80 leading-relaxed space-y-6 text-center">
-                        <p>
-                            Our Child Wellness Team works in close and regular consultation with qualified nutrition and mental health experts to thoughtfully design food menus and environment that support both the physical health and mental well-being of every child.
-                        </p>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            {/* Residential Living & Sahabhojan */}
-            <section className="py-16 bg-white">
-                <div className="container-custom">
-                    <SectionHeader title="Residential Living & Community" />
-                    <div className="max-w-4xl mx-auto space-y-8">
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div>
-                                <Users className="w-12 h-12 text-anushtan-gold mb-4" />
-                                <h3 className="font-heading text-2xl font-bold text-anushtan-charcoal mb-4">Hostel</h3>
-                                <p className="text-lg text-anushtan-charcoal/80 leading-relaxed">
-                                    Our residential students are an extended family of Team Anushtan, experiencing a strong sense of community and shared identity. We provide a nurturing environment where lifelong friendships are formed, with physical and mental well-being of every student placed at the highest priority by our management team.
-                                </p>
+                <section className="bg-[#efe5d2] py-24 md:py-28">
+                    <div className="container-custom">
+                        <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+                            <div className="max-w-2xl">
+                                <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-anushtan-terracotta">Seen in school life</p>
+                                <h2 className="font-heading text-4xl font-bold leading-tight text-anushtan-terracotta md:text-5xl">Small experiences. Lasting habits.</h2>
                             </div>
+                            <Sparkles className="h-10 w-10 text-anushtan-gold" />
+                        </div>
 
-                            <div>
-                                <Utensils className="w-12 h-12 text-anushtan-terracotta mb-4" />
-                                <h3 className="font-heading text-2xl font-bold text-anushtan-charcoal mb-4">Sahabhojan</h3>
-                                <p className="text-lg text-anushtan-charcoal/80 leading-relaxed">
-                                    Serving food with love and compassion, cultivating gratitude and community. Students serve each other, building bonds and fostering a culture of care.
-                                </p>
+                        <div className="grid gap-5 md:grid-cols-3">
+                            {reelMoments.map(([eyebrow, title, text], index) => (
+                                <article key={title} className="rounded-2xl bg-white p-8 shadow-sm">
+                                    <span className="text-sm font-bold tracking-[0.16em] text-anushtan-gold">0{index + 1} · {eyebrow}</span>
+                                    <h3 className="mt-5 font-heading text-3xl font-bold text-anushtan-charcoal">{title}</h3>
+                                    <p className="mt-4 leading-relaxed text-anushtan-charcoal/75">{text}</p>
+                                </article>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                <section className="py-24 md:py-28">
+                    <div className="container-custom grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+                        <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-xl">
+                            <Image src="/campus-classroom-1.jpg" alt="A calm learning environment at Anushtan" fill className="object-cover" sizes="(min-width: 1024px) 36vw, 90vw" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-anushtan-charcoal/40 to-transparent" />
+                        </div>
+                        <div>
+                            <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-anushtan-gold">A steady day</p>
+                            <h2 className="font-heading text-4xl font-bold leading-tight text-anushtan-charcoal md:text-5xl">More than what is on the plate.</h2>
+                            <p className="mt-6 text-lg leading-relaxed text-anushtan-charcoal/75">
+                                A child&apos;s sense of wellbeing grows through belonging, movement, meaningful work, and the confidence that comes from being seen and included.
+                            </p>
+                            <div className="mt-8 border-l-2 border-anushtan-gold pl-5 text-lg italic leading-relaxed text-anushtan-terracotta">
+                                Nourishing a child is also about making room for curiosity, calm, play, and connection.
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* Professional Sports Training */}
-            <section className="py-20 bg-anushtan-parchment">
-                <div className="container-custom">
-                    <div className="text-center mb-12">
-                        <span className="text-anushtan-terracotta font-bold uppercase tracking-widest text-sm block mb-3">
-                            Professional Sports Training
-                        </span>
-                        <h2 className="font-heading text-4xl md:text-5xl font-bold text-anushtan-charcoal mb-6">
-                            Sports, Skills & Student Development
-                        </h2>
-                        <div className="h-1 w-24 bg-anushtan-gold mx-auto mb-8"></div>
-                        <p className="text-2xl text-anushtan-terracotta font-semibold max-w-4xl mx-auto">
-                            Physical Education is Integral to Mental Discipline and Leadership
-                        </p>
+                <section className="pb-24 md:pb-28">
+                    <div className="container-custom overflow-hidden rounded-[2rem] bg-anushtan-terracotta px-7 py-12 text-white md:px-14 md:py-16">
+                        <div className="grid items-center gap-10 md:grid-cols-[1.25fr_0.75fr]">
+                            <div>
+                                <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-anushtan-gold">Come see school life</p>
+                                <h2 className="font-heading text-4xl font-bold leading-tight md:text-5xl">See how a fuller school day feels.</h2>
+                                <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/75">Visit the campus and experience the places where children learn, play, eat, and grow together.</p>
+                            </div>
+                            <div className="md:text-right">
+                                <Link href="/admissions" className="inline-flex items-center gap-2 rounded-md bg-white px-6 py-4 font-bold text-anushtan-terracotta shadow-md transition-all hover:-translate-y-0.5 hover:bg-anushtan-parchment hover:shadow-xl">
+                                    Plan a campus visit <ArrowRight className="h-5 w-5" />
+                                </Link>
+                            </div>
+                        </div>
                     </div>
-
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-                        <SportsFacilityCard
-                            name="Basketball Court"
-                            description="Professional court for team training and tournaments"
-                        />
-                        <SportsFacilityCard
-                            name="Skating Rink"
-                            description="Dedicated facility for skating and balance training"
-                        />
-                        <SportsFacilityCard
-                            name="Kabaddi & Kho-Kho Courts"
-                            description="Traditional Indian sports fostering agility and teamwork"
-                        />
-                        <SportsFacilityCard
-                            name="Horse Riding"
-                            description="Equestrian training and animal care experience"
-                        />
-                        <SportsFacilityCard
-                            name="Volleyball"
-                            description="Team coordination and athletic fitness"
-                        />
-                        <SportsFacilityCard
-                            name="Football Court"
-                            description="Full-size field for matches and practice"
-                        />
-                        <SportsFacilityCard
-                            name="Cricket Nets"
-                            description="Professional cricket practice facilities"
-                        />
-                        <SportsFacilityCard
-                            name="Indoor Games"
-                            description="Chess, table tennis, and other strategic games"
-                        />
-                    </div>
-                </div>
-            </section>
-
-            {/* Student Activities & Well-being */}
-            <section className="py-16 bg-white">
-                <div className="container-custom">
-                    <SectionHeader title="Student Activities & Well-being" />
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                        <ActivityCard
-                            title="Physical Activity & Health"
-                            description="Physical activity is integral, supporting vitality, coordination, resilience, and emotional regulation through regular movement, games, and practices."
-                        />
-                        <ActivityCard
-                            title="Arts, Expression & Creativity"
-                            description="Creative expression through music, visual arts, and storytelling supports cognitive flexibility, emotional articulation, and aesthetic sensitivity."
-                        />
-                        <ActivityCard
-                            title="Community Life & Responsibility"
-                            description="Students participate in shared community life where cooperation, respect, responsibility, and care for the environment are cultivated."
-                        />
-                        <ActivityCard
-                            title="Reflection & Inner Discipline"
-                            description="Quiet reflection, attention practices, and contemplative activities support emotional regulation, self-awareness, and inner stability."
-                        />
-                        <ActivityCard
-                            title="Daily Rhythm"
-                            description="A steady flow between focused academic engagement, physical movement, creative expression, social interaction, and quiet reflection."
-                        />
-                        <ActivityCard
-                            title="Student Well-being"
-                            description="Holistic approach recognizing the interconnection of physical health, emotional balance, social belonging, and intellectual engagement."
-                        />
-                    </div>
-                </div>
-            </section>
+                </section>
+            </main>
 
             <Footer />
-        </>
-    );
-}
-
-function SportsFacilityCard({ name, description }: { name: string; description: string }) {
-    return (
-        <div className="bg-white rounded-xl p-6 border border-anushtan-border shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
-            <div className="w-full aspect-video bg-gradient-to-br from-anushtan-terracotta/10 to-anushtan-gold/10 rounded-lg mb-4 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-anushtan-terracotta/5 group-hover:bg-anushtan-terracotta/10 transition-colors" />
-                <div className="text-4xl grayscale group-hover:grayscale-0 transition-all relative z-10">
-                    {name.includes('Basketball') && '🏀'}
-                    {name.includes('Skating') && '⛸️'}
-                    {name.includes('Kabaddi') && '🤼'}
-                    {name.includes('Horse') && '🐴'}
-                    {name.includes('Volleyball') && '🏐'}
-                    {name.includes('Football') && '⚽'}
-                    {name.includes('Cricket') && '🏏'}
-                    {name.includes('Indoor') && '♟️'}
-                </div>
-            </div>
-            <h3 className="font-heading text-lg font-bold text-anushtan-charcoal mb-2">{name}</h3>
-            <p className="text-sm text-anushtan-charcoal/70 leading-relaxed">{description}</p>
-        </div>
-    );
-}
-
-function ActivityCard({ title, description }: { title: string; description: string }) {
-    return (
-        <div className="bg-white p-6 rounded-lg border border-anushtan-border shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="font-heading text-xl font-bold text-anushtan-charcoal mb-3">{title}</h3>
-            <p className="text-anushtan-charcoal/80 leading-relaxed">{description}</p>
         </div>
     );
 }

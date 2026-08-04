@@ -92,7 +92,7 @@ export const HeroSection = () => {
                     <span className="absolute inline-flex h-full w-full rounded-full bg-anushtan-terracotta/20 animate-ping-slow" />
                     <div className="relative inline-block border border-anushtan-terracotta/30 bg-white/80 backdrop-blur-md px-6 py-2 rounded-full shadow-sm">
                         <span className="text-anushtan-terracotta font-bold tracking-[0.2em] text-sm uppercase">
-                            Admissions Opening for 2026
+                            2026–27 Academic Year
                         </span>
                     </div>
                 </div>
@@ -140,7 +140,7 @@ export const HeroSection = () => {
                         href="/admissions"
                         className="bg-anushtan-terracotta text-white hover:bg-anushtan-terracotta/90 border-0 px-10 py-8 text-xl tracking-wide shadow-lg shadow-anushtan-terracotta/20"
                     >
-                        Secure a Founding Batch Seat
+                        Plan a Campus Visit
                     </Button>
                     <Button
                         href="#trayi"
