@@ -35,6 +35,7 @@ export function Footer() {
                                 ["Academics", "/academics"],
                                 ["Food & Wellness", "/food-wellness"],
                                 ["Campus", "/campus"],
+                                ["Mandatory Public Disclosure", "/mandatory-public-disclosure"],
                             ]}
                         />
                         <div>
