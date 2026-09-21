@@ -94,8 +94,12 @@ export default function MandatoryPublicDisclosurePage() {
                                             View
                                         </a>
                                     ) : (
-                                        <span className="inline-flex min-h-11 items-center justify-center rounded-lg bg-anushtan-charcoal/5 px-4 text-sm font-semibold text-anushtan-charcoal/45 md:justify-self-end">
-                                            Link pending
+                                        <span
+                                            className="inline-flex min-h-11 cursor-not-allowed items-center justify-center rounded-lg border border-anushtan-terracotta/35 px-4 text-sm font-bold text-anushtan-terracotta/50 md:justify-self-end"
+                                            aria-disabled="true"
+                                            title="Document will be available soon"
+                                        >
+                                            View
                                         </span>
                                     )}
                                 </li>
