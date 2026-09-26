@@ -28,6 +28,7 @@ const generalInformation: Disclosure[] = [
     { title: "Land Certificate" },
     { title: "Students Strength", href: "/disclosures/student-strength.pdf" },
     { title: "Mandatory Disclosure" },
+    { title: "Self Declaration" },
 ];
 
 export default function MandatoryPublicDisclosurePage() {
