@@ -27,7 +27,7 @@ const generalInformation: Disclosure[] = [
     { title: "Recognition Certificate", href: "/disclosures/recognition-certificate.pdf" },
     { title: "Land Certificate", href: "/disclosures/land-certificate.pdf" },
     { title: "Students Strength", href: "/disclosures/student-strength.pdf" },
-    { title: "Mandatory Disclosure", href: "/disclosures/Mandatory-Disclosure.pdf" },
+    { title: "Mandatory Disclosure", href: "/disclosures/mandatory-disclosure.pdf" },
     { title: "Self Declaration", href: "/disclosures/self-declaration.pdf" },
 ];
 
